@@ -1,0 +1,43 @@
+package org.apereo.cas.mgmt.services.web.beans;
+
+import java.io.Serializable;
+
+/**
+ * Created by tsschmi on 3/17/17.
+ */
+public class Change implements Serializable {
+    String id;
+    String fileName;
+    String changeType;
+
+    public Change(String id, String fileName, String changeType) {
+        this.id = id;
+        this.fileName = fileName;
+        this.changeType = changeType;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(final String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getChangeType() {
+        return changeType;
+    }
+
+    public void setChangeType(final String changeType) {
+        this.changeType = changeType;
+    }
+
+}
