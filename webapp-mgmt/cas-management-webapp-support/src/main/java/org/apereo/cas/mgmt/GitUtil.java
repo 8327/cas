@@ -294,34 +294,74 @@ public class GitUtil {
         return note(getCommit(id));
     }
 
-    public Note note(RevObject com) throws Exception {
+    /**
+     * Returns the Note attached to the passed commit.
+     *
+     * @param com - RevObject of the commit.
+     * @return - Returns Note from the commit.
+     * @throws Exception - failed.
+     */
+    public Note note(final RevObject com) throws Exception {
         return git.notesShow()
                 .setObjectId(com)
                 .call();
     }
 
-    public List<History> history(String path) throws Exception {
+    /**
+     * Returns the history of a file in the repository.
+     *
+     * @param path - the file path
+     * @return - List of History objects
+     * @throws Exception - failed.
+     */
+    public List<History> history(final String path) throws Exception {
         return logs(path)
                 .map(r -> createHistory(r,path))
                 .filter(h -> h != null)
                 .collect(Collectors.toList());
     }
 
-    public Stream<RevCommit> logs(String path)  throws Exception {
+    /**
+     * Returns the logs for a file in the repository.
+     *
+     * @param path - The file path.
+     * @return - Stream of RevCommits the file is in.
+     * @throws Exception - failed.
+     */
+    public Stream<RevCommit> logs(final String path)  throws Exception {
         return StreamSupport.stream(git.log().addPath(path).call().spliterator(),false);
     }
 
+    /**
+     * Checksout a file into the working directory.
+     *
+     * @param path - The file path.
+     * @throws Exception - failed.
+     */
     public void checkoutFile(final String path) throws Exception {
         git.checkout()
                 .addPath(path)
                 .call();
     }
 
-    public Stream<RevCommit> commitLogs(RevCommit com) throws Exception {
+    /**
+     * Returns the logs for a specified commit.
+     *
+     * @param com - The commit to retrieive logs for.
+     * @return - Stream of RevCommits contained in the passed commit.
+     * @throws Exception - failed.
+     */
+    public Stream<RevCommit> commitLogs(final RevCommit com) throws Exception {
         return StreamSupport.stream(git.log().add(com).call().spliterator(), false);
     }
 
-    public void reset(RevCommit reset) throws Exception {
+    /**
+     * Peforms a hard reset on the repository to the passed commit.
+     *
+     * @param reset - the RevCommit to reset the repository to.
+     * @throws Exception - failed.
+     */
+    public void reset(final RevCommit reset) throws Exception {
         git.reset()
                 .setRef(reset.abbreviate(40).name())
                 .setMode(ResetCommand.ResetType.HARD)
