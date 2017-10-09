@@ -1,0 +1,14 @@
+<mat-menu #menuEl>
+  <button mat-menu-item (click)="selection.emit('viewChange')">
+    <mat-icon>eye</mat-icon>
+    <ng-container i18n>View</ng-container>
+  </button>
+  <button mat-menu-item (click)="selection.emit('viewDiff')">
+    <mat-icon>gears</mat-icon>
+    <ng-container i18n>Diff</ng-container>
+  </button>
+  <button mat-menu-item (click)="selection.emit('checkout')">
+    <mat-ion>check</mat-ion>
+    <ng-container i18n>Checkout</ng-container>
+  </button>
+</mat-menu>

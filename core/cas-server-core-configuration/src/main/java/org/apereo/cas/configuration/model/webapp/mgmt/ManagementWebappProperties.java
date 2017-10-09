@@ -73,6 +73,14 @@ public class ManagementWebappProperties implements Serializable {
      * </pre>
      */
     private Resource userPropertiesFile = new ClassPathResource("user-details.properties");
+
+    private String userReposDir;
+
+    private String servicesRepo;
+
+    private String publishedRepo;
+
+    private String syncScript;
     
     public Ldap getLdap() {
         return ldap;
@@ -146,6 +154,38 @@ public class ManagementWebappProperties implements Serializable {
         public void setLdapAuthz(final LdapAuthorizationProperties ldapAuthz) {
             this.ldapAuthz = ldapAuthz;
         }
+    }
+
+    public String getUserReposDir() {
+        return userReposDir;
+    }
+
+    public void setUserReposDir(String userReposDir) {
+        this.userReposDir = userReposDir;
+    }
+
+    public String getServicesRepo() {
+        return servicesRepo;
+    }
+
+    public void setServicesRepo(String servicesRepo) {
+        this.servicesRepo = servicesRepo;
+    }
+
+    public String getPublishedRepo() {
+        return publishedRepo;
+    }
+
+    public void setPublishedRepo(String publishedRepo) {
+        this.publishedRepo = publishedRepo;
+    }
+
+    public String getSyncScript() {
+        return syncScript;
+    }
+
+    public void setSyncScript(String syncScript) {
+        this.syncScript = syncScript;
     }
 }
 

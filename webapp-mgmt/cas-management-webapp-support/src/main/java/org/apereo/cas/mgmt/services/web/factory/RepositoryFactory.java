@@ -1,8 +1,8 @@
 package org.apereo.cas.mgmt.services.web.factory;
 
 import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.mgmt.services.web.GitUtil;
-import org.apereo.cas.mgmt.services.web.MgmtUser;
+import org.apereo.cas.mgmt.GitUtil;
+import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +32,17 @@ public class RepositoryFactory {
      * @return
      * @throws Exception
      */
-    public GitUtil getGit(MgmtUser user) throws Exception {
+    public GitUtil getGit(CasUserProfile user) throws Exception {
         return getGit(user,false);
     }
 
-    public GitUtil getGit(MgmtUser user, boolean returnMaster) throws Exception {
-        if (user.isAdmin())  {
+    public GitUtil getGit(CasUserProfile user, boolean returnMaster) throws Exception {
+        if (user.isAdministrator())  {
             return masterRepository();
         }
-        Path path = Paths.get(casProperties.getMgmt().getUserReposDir()+"/"+user.id());
+        Path path = Paths.get(casProperties.getMgmt().getUserReposDir()+"/"+user.getId());
         if (Files.exists(path)) {
-            return userRepository(user.id());
+            return userRepository(user.getId());
         }
         if (returnMaster) {
             return masterRepository();
@@ -52,7 +52,7 @@ public class RepositoryFactory {
 
     public GitUtil masterRepository() throws Exception {
         return new GitUtil(new Git(new FileRepositoryBuilder()
-                .setGitDir(new File(casProperties.getMgmt().getServiceRepo()))
+                .setGitDir(new File(casProperties.getMgmt().getServicesRepo()))
                 .setMustExist(true)
                 .readEnvironment()
                 .findGitDir()
@@ -81,7 +81,7 @@ public class RepositoryFactory {
     public void clone(String clone) {
         try {
             Git git = Git.cloneRepository()
-                    .setURI(casProperties.getMgmt().getServiceRepo())
+                    .setURI(casProperties.getMgmt().getServicesRepo())
                     .setDirectory(new File(clone))
                     .call();
         } catch (Exception e) {

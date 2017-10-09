@@ -368,14 +368,21 @@ public class GitUtil {
                 .call();
     }
 
-    public History createHistory(RevCommit r, String path) {
+    /**
+     * Creates a History object for the passed file in the passed commit.
+     *
+     * @param r - The commit to pull the History from.
+     * @param path - The file path.
+     * @return - History of the path for the passed commit.
+     */
+    public History createHistory(final RevCommit r, final String path) {
         try {
             TreeWalk treeWalk  = historyWalk(r,path);
             if (treeWalk.next()) {
                 History history = new History();
                 history.setId(treeWalk.getObjectId(0).abbreviate(40).name());
                 history.setCommit(r.abbreviate(40).name());
-                history.setPath(path = treeWalk.getPathString());
+                history.setPath(treeWalk.getPathString());
                 history.setMessage(r.getFullMessage());
                 history.setTime(new Date(r.getCommitTime() * 1000l).toString());
                 history.setCommitter(r.getCommitterIdent().getName());
@@ -387,7 +394,15 @@ public class GitUtil {
         return null;
     }
 
-    public TreeWalk historyWalk(RevCommit r, String path) throws Exception {
+    /**
+     * Returns a TreeWalk object for the passed commit and file path.
+     *
+     * @param r - The commit to start the walk from.
+     * @param path - The file path.
+     * @return - TreeWalk
+     * @throws Exception - failed.
+     */
+    public TreeWalk historyWalk(final RevCommit r, final String path) throws Exception {
         TreeWalk treeWalk = new TreeWalk(git.getRepository());
         treeWalk.addTree(r.getTree());
         treeWalk.setFilter(new HistoryTreeFilter(path));
@@ -397,9 +412,9 @@ public class GitUtil {
     /**
      * Method adds an untracked file to the git index.
      *
-     * @param file
+     * @param file - the file.
      */
-    public void addFile(String file) {
+    public void addFile(final String file) {
         try {
             git.add().addFilepattern(file).call();
         }catch(Exception e) {
@@ -407,11 +422,24 @@ public class GitUtil {
         }
     }
 
-    public void markAsSubmitted(RevObject c) throws Exception {
+    /**
+     * Marks a commit as being submitted for a pull request.
+     *
+     * @param c - The RevObject of the commit to mark as submitted.
+     * @throws Exception -failed.
+     */
+    public void markAsSubmitted(final RevObject c) throws Exception {
         appendNote(c,"SUBMITTED on "+new Date().toString()+"\n    ");
     }
 
-    public String noteText(RevObject com) throws Exception {
+    /**
+     * Returns a the Note of a commit as a String.
+     *
+     * @param com - The RevObkect of the commit to pull the note from.
+     * @return - Returns the note text as a String.
+     * @throws Exception -failed.
+     */
+    public String noteText(final RevObject com) throws Exception {
         Note note = note(com);
         if(note != null) {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -424,24 +452,27 @@ public class GitUtil {
     /**
      * Creates a Person Identity to add to the commit.
      *
-     * @param user
-     * @return
+     * @param user - CasUserProfile of the logged in user.
+     * @return - PersonIden object to be added to a commit.
      */
-    public PersonIdent getCommitterId(CasUserProfile user) {
+    public PersonIdent getCommitterId(final CasUserProfile user) {
         String displayName = user.getDisplayName();
         String email = user.getEmail();
         return new PersonIdent(user.getId() + " - " + displayName, email);
     }
 
+    /**
+     * Class used to define a TreeFilter to only pull history for a single path.
+     */
     public class HistoryTreeFilter extends TreeFilter {
         String path;
 
-        public HistoryTreeFilter(String path) {
+        public HistoryTreeFilter(final String path) {
             this.path = path;
 
         }
         @Override
-        public boolean include(TreeWalk treeWalk) throws MissingObjectException, IncorrectObjectTypeException, IOException {
+        public boolean include(final TreeWalk treeWalk) throws MissingObjectException, IncorrectObjectTypeException, IOException {
             return treeWalk.getPathString().equals(path);
         }
 
@@ -456,31 +487,67 @@ public class GitUtil {
         }
     }
 
+    /**
+     * Closes the git repository.
+     */
     public void close() {
         git.close();
     }
 
+    /**
+     * Method to determine if there is not wrapped repository.
+     *
+     * @return - true if no git repository is present.
+     */
     public boolean isNull() {
         return git == null;
     }
 
+    /**
+     * Returns a new ObjectReader for the repository.
+     *
+     * @return - ObjectReader.
+     */
     public ObjectReader objectReader() {
         return git.getRepository().newObjectReader();
     }
 
+    /**
+     * Returns the root path of the repository.
+     *
+     * @return -String representing the root directory.
+     */
     public String repoPath() {
         return git.getRepository().getDirectory().getParent().toString();
     }
 
+    /**
+     * Returns a stream of Branches that are contained in the repository.
+     *
+     * @return - Stream of Branch Refs
+     * @throws Exception - failed.
+     */
     public Stream<Ref> branches() throws Exception {
         return git.branchList().call().stream();
     }
 
+    /**
+     * Returns the repository wrapped by this utility.
+     *
+     * @return - Git repository.
+     */
     public Git getGit() {
         return git;
     }
 
-    public void writeNote(Note note, OutputStream output) throws Exception {
+    /**
+     * Pulls the text form a Note object and writes it to the passes Outputstream.
+     *
+     * @param note - The Note contained in the repository to read.
+     * @param output - The stream to ouput the note text.
+     * @throws Exception - failed.
+     */
+    public void writeNote(final Note note, final OutputStream output) throws Exception {
         git.getRepository().open(note.getData()).copyTo(output);
     }
 
@@ -490,19 +557,42 @@ public class GitUtil {
     }
     */
 
+    /**
+     * Pulls changes form the default remote repository into the wrapped repository.
+     *
+     * @throws Exception - failed.
+     */
     public void pull() throws Exception {
         git.pull().call();
     }
 
+    /**
+     * Fetches changed form the default remote repository into the wrapped repository.
+     *
+     * @throws Exception - failed.
+     */
     public void fetch() throws Exception {
         git.fetch().call();
     }
 
-    public int behindCount(String branch) throws Exception {
+    /**
+     * Returns how many commits behind a branch is from its upstream origin.
+     *
+     * @param branch - The branch to check.
+     * @return - int count of number commits behind.
+     * @throws Exception - failed.
+     */
+    public int behindCount(final String branch) throws Exception {
         return BranchTrackingStatus.of(git.getRepository(),branch).getBehindCount();
     }
 
-    public BranchMap mapBranches(Ref r) {
+    /**
+     * Returns a BranchMap for the commit passed as a Ref.
+     *
+     * @param r - Ref commit to generate the BranchMap for.
+     * @return - BranchMap.
+     */
+    public BranchMap mapBranches(final Ref r) {
         try {
             RevWalk revWalk = new RevWalk(git.getRepository());
             return new BranchMap(this,r,revWalk.parseCommit(git.getRepository().resolve(r.getName())));
@@ -512,7 +602,14 @@ public class GitUtil {
         return null;
     }
 
-    public List<DiffEntry> getDiffs(String branch) throws Exception {
+    /**
+     * Returns a list fo differences between the last two commits in a branch.
+     *
+     * @param branch - The branch to check for differences against.
+     * @return - List of DiffEntry.
+     * @throws Exception - failed.
+     */
+    public List<DiffEntry> getDiffs(final String branch) throws Exception {
         CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
         ObjectReader reader = git.getRepository().newObjectReader();
         oldTreeIter.reset(reader,git.getRepository().resolve(branch+"~1^{tree}"));
@@ -521,19 +618,51 @@ public class GitUtil {
         return git.diff().setOldTree(oldTreeIter).setNewTree(newTreeIter).call();
     }
 
-    public byte[] getFormatter(ObjectId oldId, ObjectId newId) throws Exception {
+    /**
+     * Overloaded method to return a formatted diff by using two ObjectIds.
+     *
+     * @param oldId - ObjectId.
+     * @param newId - ObectId.
+     * @return - Formatted diff in a byte[].
+     * @throws Exception -failed.
+     */
+    public byte[] getFormatter(final ObjectId oldId, final ObjectId newId) throws Exception {
         return getFormatter(rawText(oldId),rawText(newId));
     }
 
-    public byte[] getFormatter(RawText oldText, ObjectId newId) throws Exception {
+    /**
+     * Overloaded method to return a formatted diff by using a RawText and an ObjectId.
+     *
+     * @param oldText - RawText.
+     * @param newId - ObjectId.
+     * @return - Formatted diff in a byte[].
+     * @throws Exception -failed.
+     */
+    public byte[] getFormatter(final RawText oldText, final ObjectId newId) throws Exception {
         return getFormatter(oldText,rawText(newId));
     }
 
-    public byte[] getFormatter(ObjectId oldId, RawText newText) throws Exception {
+    /**
+     * Overloaded method to return a formatted diff by using a RawText and an ObjectId.
+     *
+     * @param oldId - ObjectId.
+     * @param newText - RawText.
+     * @return - Formatted diff in a byte[].
+     * @throws Exception - failed.
+     */
+    public byte[] getFormatter(final ObjectId oldId, final RawText newText) throws Exception {
         return getFormatter(rawText(oldId),newText);
     }
 
-    public byte[] getFormatter(RawText oldText, RawText newText) throws Exception {
+    /**
+     * Compares the RawText of two files and creates a formateted diff to return.
+     *
+     * @param oldText - RawText.
+     * @param newText - RawText.
+     * @return - Formatted diff in a byte[].
+     * @throws Exception -failed.
+     */
+    public byte[] getFormatter(final RawText oldText, final RawText newText) throws Exception {
         DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm((DiffAlgorithm.SupportedAlgorithm)git.getRepository().getConfig().getEnum("diff", (String)null, "algorithm", DiffAlgorithm.SupportedAlgorithm.HISTOGRAM));
         EditList editList = diffAlgorithm.diff(RawTextComparator.DEFAULT,oldText,newText);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -544,35 +673,73 @@ public class GitUtil {
         return bytes.toByteArray();
     }
 
-    public RawText rawText(ObjectId id) throws Exception {
+    /**
+     * Returns the RawText of file specified by ObjectId.
+     *
+     * @param id - ObjectId of a file.
+     * @return - RawText.
+     * @throws Exception - failed.
+     */
+    public RawText rawText(final ObjectId id) throws Exception {
         return new RawText(objectReader().open(id).getBytes());
     }
 
-    public RawText rawText(String path) throws Exception {
+    /**
+     * Returns the RawText of a file specified by its path.
+     *
+     * @param path - File path.
+     * @return - RawText.
+     * @throws Exception - failed.
+     */
+    public RawText rawText(final String path) throws Exception {
         File file = new File(git.getRepository().getWorkTree().getAbsolutePath()+"/"+path);
         return new RawText(FileUtils.readFileToByteArray(file));
     }
 
-    public RevCommit findCommitBeforeSubmit(String branchName) throws Exception {
+    /**
+     * Returns the last commit before the commit that was submitted as a pull request.
+     *
+     * @param branchName - Name given to the branch when submitted.
+     * @return - RevCommit of the previous commit.
+     * @throws Exception - failed.
+     */
+    public RevCommit findCommitBeforeSubmit(final String branchName) throws Exception {
         RevCommit com = findSubmitCommit(branchName);
         RevCommit before = commitLogs(com).skip(1).findFirst().get();
         return before;
     }
 
-    public RevCommit findSubmitCommit(String branchName) throws Exception {
+    /**
+     * Returns the commit used to submit the pull request.
+     *
+     * @param branchName - Name given to the branch when submitted.
+     * @return - RevCommit used to submit the pull request.
+     * @throws Exception - failed.
+     */
+    public RevCommit findSubmitCommit(final String branchName) throws Exception {
         return git.branchList().call().stream()
                 .map(r -> mapBranches(r))
                 .filter(r -> r.getRef().getName().contains(branchName.split("_")[1]))
                 .findFirst().get().revCommit;
     }
 
-    public void markAsReverted(String branch, CasUserProfile user) throws Exception {
+    /**
+     * Marks a pull request as being reverted by the person who submitted it.
+     *
+     * @param branch - Ref of the branch to revert.
+     * @param user - CasUserProfile of the logged in user.
+     * @throws Exception - failed.
+     */
+    public void markAsReverted(final String branch, final CasUserProfile user) throws Exception {
         RevWalk revWalk = new RevWalk(git.getRepository());
         RevCommit com = revWalk.parseCommit(git.getRepository().resolve(branch));
         String msg = "REVERTED by "+user.getId()+" on "+new Date().toString()+"\n    ";
         appendNote(com, msg);
     }
 
+    /**
+     * Rebases the wrapped repository to the remote it was created form.
+     */
     public void rebase() {
         try {
             git.pull().setRebase(true).call();
@@ -584,10 +751,10 @@ public class GitUtil {
     /**
      * Method determines if a branch has been rejected by an admin.
      *
-     * @param com
-     * @return
+     * @param com - RevObject of the commit.
+     * @return - trues if commit is marked as rejected.
      */
-    public boolean isRejected(RevObject com) {
+    public boolean isRejected(final RevObject com) {
         try {
             return noteText(com).contains("REJECTED");
         } catch (Exception e) {
@@ -599,10 +766,10 @@ public class GitUtil {
     /**
      * Method determines if a branch has been rejected by an admin.
      *
-     * @param com
-     * @return
+     * @param com - RevObject of the commit.
+     * @return - true if the commit is marked as reverted.
      */
-    public boolean isReverted(RevObject com) {
+    public boolean isReverted(final RevObject com) {
         try {
             return noteText(com).contains("REVERTED");
         } catch (Exception e) {
@@ -614,10 +781,10 @@ public class GitUtil {
     /**
      * Method determines if a branch has been accepted by an admin.
      *
-     * @param com
-     * @return
+     * @param com - RevObject of the commit.
+     * @return - true if the commit is marked as accpeted.
      */
-    public boolean isAccepted(RevObject com) {
+    public boolean isAccepted(final RevObject com) {
         try {
             return noteText(com).contains("ACCEPTED");
         } catch (Exception e) {
@@ -626,6 +793,12 @@ public class GitUtil {
         return false;
     }
 
+    /**
+     * Checks if the repository contains any deleted files in working directory that have not been committed.
+     *
+     * @return - Stream of DiffEntry
+     * @throws Exception - failed.
+     */
     public Stream<DiffEntry> checkForDeletes() throws Exception {
         FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
         CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
@@ -637,16 +810,19 @@ public class GitUtil {
                 .filter(d -> d.getChangeType() == DiffEntry.ChangeType.DELETE);
     }
 
+    /**
+     * Object used to represent the history of a branch.
+     */
     public class BranchMap {
         private Ref ref;
         private RevCommit revCommit;
         private GitUtil git;
 
-        public BranchMap(GitUtil git) {
+        public BranchMap(final GitUtil git) {
            this.git = git;
         }
 
-        public BranchMap(GitUtil git,Ref ref, RevCommit revCommit) {
+        public BranchMap(final GitUtil git, final Ref ref, final RevCommit revCommit) {
             this(git);
             this.ref = ref;
             this.revCommit = revCommit;
@@ -656,7 +832,7 @@ public class GitUtil {
             return ref;
         }
 
-        public void setRef(Ref ref) {
+        public void setRef(final Ref ref) {
             this.ref = ref;
         }
 
@@ -664,7 +840,7 @@ public class GitUtil {
             return revCommit;
         }
 
-        public void setRevCommit(RevCommit revCommit) {
+        public void setRevCommit(final RevCommit revCommit) {
             this.revCommit = revCommit;
         }
 

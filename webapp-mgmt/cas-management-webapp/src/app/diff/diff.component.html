@@ -1,0 +1,18 @@
+<div class="titleBar">
+  <div class="title">
+    <h1>
+      <i class="fa fa-gears"></i>
+      <ng-container i18n>View Diff</ng-container>
+    </h1>
+  </div>
+  <div class="nav">
+    <a (click)="goBack()" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i>
+      <ng-container i18n>Back</ng-container>
+    </a>
+  </div>
+</div>
+
+<agg-container container>
+  <agg-editor [file]="file" mode="diff" style="width:100%;height:100%;"></agg-editor>
+</agg-container>

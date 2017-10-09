@@ -1,0 +1,33 @@
+<div>
+  <h3 matDialogTitle i18n>Accept Request</h3>
+</div>
+<mat-dialog-content>
+  <mat-form-field class="textInput">
+     <textarea matInput required rows="5"
+               i18n-placeholder
+               placeholder="Enter an accept message"
+               [(ngModel)]="acceptMessage">
+    </textarea>
+  </mat-form-field>
+  <div id="acceptMessageError" style="color:red;display:none;">
+    <span i18n="management.services.table.modal.commit.required}">{{messages.management_services_table_modal_commit_required}}</span>
+  </div>
+  <div>
+    <span i18n>Changes to be merged:</span>
+  </div>
+  <ul *ngFor="let change of changes">
+    <li>{{ change.changeType + " - " + change.path }}</li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions style="float:right;">
+  <div>
+    <button mat-button matDialogClose>
+      <mat-icon>cancel</mat-icon>
+      <ng-container i18n>Cancel</ng-container>
+    </button>
+    <button mat-button matDialogClose="true">
+      <mat-icon>accept</mat-icon>
+      <ng-container i18n>Accept</ng-container>
+    </button>
+  </div>
+</mat-dialog-actions>

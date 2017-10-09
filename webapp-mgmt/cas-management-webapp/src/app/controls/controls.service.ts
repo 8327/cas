@@ -1,0 +1,100 @@
+/**
+ * Created by tsschmi on 2/28/17.
+ */
+
+import {Injectable} from "@angular/core";
+import {Change} from "../../domain/change";
+import {Note} from "../../domain/note";
+import {Commit} from "../../domain/commit";
+import {Service} from "../service";
+import {Http} from "@angular/http";
+
+@Injectable()
+export class ControlsService extends Service {
+
+  constructor (protected http: Http) {
+    super(http);
+  }
+
+  changes: Change[];
+  commits: Note[];
+
+  commit(msg: String): Promise<String> {
+    return this.get<String>('commit?msg='+msg);
+  }
+
+  publish(): Promise<String> {
+    return this.get<String>("publish");
+  }
+
+  submit(msg): Promise<String> {
+    return this.post<String>("submit", msg);
+  }
+
+  untracked(): Promise<Change[]> {
+    return this.get<Change[]>("untracked")
+      .then(resp => this.handleUntracked(resp));
+  }
+
+  handleUntracked(changes: Change[]): Change[] {
+    this.changes = changes;
+    if (this.changes.length == 0) {
+      this.changes = null;
+    }
+    return this.changes;
+  }
+
+  unpublished(): Promise<number> {
+    return this.get<number>("unpublished")
+  }
+
+  isChanged(id: String): Change {
+    let change: Change;
+    if(this.changes) {
+      this.changes.forEach((c) => {
+        if (c.id === id) {
+          change = c;
+        }
+      });
+      return change;
+    }
+  }
+
+  changeStyle(id: String): String {
+    let change : Change = this.isChanged(id);
+    if (change) {
+      switch(change.changeType) {
+        case 'MODIFY' :
+          return 'modified';
+        case 'DELETE' :
+          return 'deleted';
+        case 'ADD' :
+          return 'added';
+      }
+    }
+    return 'inherit';
+  }
+
+  revertable(id: String): boolean {
+    let change : Change = this.isChanged(id);
+    if (change) {
+      switch(change.changeType) {
+        case 'MODIFY' :
+        case 'DELETE' :
+          return true;
+      }
+    }
+    return false;
+  }
+
+  getCommits(): Promise<Commit[]> {
+    return this.get<Commit[]>("commitList")
+      .then(resp => this.handleCommits(resp));
+  }
+
+  handleCommits(commits: Commit[]): Commit[] {
+    this.commits = commits;
+    return commits;
+  }
+
+}

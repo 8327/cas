@@ -1,0 +1,27 @@
+<div class="modal" id="confirm-commit" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+     [ngClass]="{ 'show': showNote, 'fade': !showNote}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div id="commitModalLabel" class="modal-header">
+        <h3 i18n>Notes</h3>
+      </div>
+      <div class="modal-body">
+        <agg-container #container>
+          <agg-editor #editor [file]="note" style="width:100%;height:100%;"></agg-editor>
+        </agg-container>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" (click)="cancel()">
+          <ng-container i18n="management.services.table.modal.button.cancel">
+            {{messages.management_services_table_modal_button_cancel}}
+          </ng-container>
+        </button>
+        <button *ngIf="!viewOnly" class="btn btn-success btn-ok" (click)="saveNote();">
+          <ng-container i18n="management.services.table.modal.button.commit">
+            {{messages.management_services_table_modal_button_commit}}
+          </ng-container>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 package org.apereo.cas.mgmt.services.web.factory;
 
 import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.mgmt.services.web.MgmtUser;
+import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.services.DomainServicesManager;
 import org.apereo.cas.services.JsonServiceRegistryDao;
 import org.apereo.cas.services.ServicesManager;
@@ -35,16 +35,16 @@ public class ManagerFactory {
         this.servicesManager = servicesManager;
     }
 
-    public ServicesManager manager(final HttpServletRequest request, final MgmtUser user, boolean clone) throws Exception {
-        if(user.isAdmin()) {
+    public ServicesManager manager(final HttpServletRequest request, final CasUserProfile user, boolean clone) throws Exception {
+        if(user.isAdministrator()) {
             return this.servicesManager;
         }
 
-        Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.id());
+        Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.getId());
         if (clone && !Files.exists(path)) {
             repositoryFactory.clone(path.toString());
         } else if (Files.exists(path)) {
-            repositoryFactory.userRepository(user.id()).rebase();
+            repositoryFactory.userRepository(user.getId()).rebase();
         } else {
             return this.servicesManager;
         }
@@ -55,8 +55,7 @@ public class ManagerFactory {
             return manager;
         } else {
             JsonServiceRegistryDao dao = new JsonServiceRegistryDao(path,false,eventPublisher);
-            manager = new DomainServicesManager(dao);
-            manager.setApplicationEventPublisher(eventPublisher);
+            manager = new DomainServicesManager(dao, eventPublisher);
             manager.load();
             request.getSession().setAttribute("servicesManager",manager);
             return manager;

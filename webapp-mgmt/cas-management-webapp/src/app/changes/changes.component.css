@@ -1,0 +1,17 @@
+.titleBar {
+  display:inline-flex;
+  width:100%;
+}
+
+.title {
+  display:inline;
+  float:left;
+}
+
+.nav {
+  display:inline;
+  float:right;
+  margin-top:auto;
+  margin-bottom:auto;
+  margin-left:auto;
+}
