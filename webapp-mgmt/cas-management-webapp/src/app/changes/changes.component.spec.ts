@@ -7,12 +7,11 @@ import { ActivatedRoute } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 
 import { ChangesComponent } from './changes.component';
-import {AlertComponent} from "../alert/alert.component";
 import {DiffEntry} from "../../domain/diff-entry";
-import {Form} from "../../domain/form";
 import {ChangesService} from "./changes.service";
 import {Messages} from "../messages";
 import {ActivatedRouteStub} from "../../testing/router-stub";
+import {AbstractRegisteredService, RegexRegisteredService} from "../../domain/registered-service";
 
 
 let changesServiceStub = {
@@ -24,8 +23,8 @@ let changesServiceStub = {
     return Promise.resolve("");
   },
 
-  getChange(change: String): Promise<Form> {
-    return Promise.resolve(new Form());
+  getChange(change: String): Promise<AbstractRegisteredService> {
+    return Promise.resolve(new RegexRegisteredService());
   }
 };
 
@@ -42,7 +41,7 @@ describe('ChangesComponent', () => {
       imports: [
         RouterTestingModule
       ],
-      declarations: [ ChangesComponent, AlertComponent ],
+      declarations: [ ChangesComponent ],
       providers: [
         Messages,
         {provide: ChangesService, useValue: changesServiceStub},

@@ -11,7 +11,6 @@ import { DebugElement } from '@angular/core';
 
 import { PullComponent } from './pull.component';
 import {NotesComponent} from "../notes/notes.component";
-import {AlertComponent} from "../alert/alert.component";
 import {Editor} from "../editor.component";
 import {Container} from "../container";
 import {Change} from "../../domain/change";
@@ -83,7 +82,6 @@ describe('PullComponent', () => {
       declarations: [
         PullComponent,
         NotesComponent,
-        AlertComponent,
         Container,
         Editor
       ],

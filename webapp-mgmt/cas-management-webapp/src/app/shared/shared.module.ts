@@ -60,11 +60,11 @@ import {Editor} from "../editor.component";
     MatAutocompleteModule,
     MatSnackBarModule,
     MatPaginatorModule,
-    Container,
-    Editor
   ],
   declarations: [
     MyTooltipDirective,
+    Container,
+    Editor
   ],
   providers: [
   ],

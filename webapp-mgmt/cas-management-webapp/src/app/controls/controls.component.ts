@@ -78,7 +78,7 @@ export class ControlsComponent implements OnInit {
   }
 
   openModalPublish() {
-    this.submitComp.showSubmit();
+
   }
 
   publish(commits: Commit[]) {

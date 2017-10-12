@@ -5,8 +5,8 @@ import {Container} from "../container";
 import {Editor} from "../editor.component";
 import {Messages} from "../messages";
 import {DiffEntry} from "../../domain/diff-entry";
-import {Form} from "../../domain/form";
 import {ChangesService} from "../changes/changes.service";
+import {AbstractRegisteredService, RegexRegisteredService} from "../../domain/registered-service";
 
 let changesServiceStub = {
   getChanges(branch: String): Promise<DiffEntry[]> {
@@ -17,8 +17,8 @@ let changesServiceStub = {
     return Promise.resolve("");
   },
 
-  getChange(change: String): Promise<Form> {
-    return Promise.resolve(new Form())
+  getChange(change: String): Promise<AbstractRegisteredService> {
+    return Promise.resolve(new RegexRegisteredService())
   }
 };
 
