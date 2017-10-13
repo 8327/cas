@@ -182,7 +182,7 @@ public class CasManagementWebAppConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ManagerFactory managerFactory() {
-        return new ManagerFactory(servicesManager);
+        return new ManagerFactory(servicesManager, casProperties, repositoryFactory());
     }
 
     @Bean

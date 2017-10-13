@@ -14,7 +14,7 @@ export class UserProfile {
     familyName: String;
     displayName: String;
     username: String;
-    admin: boolean;
+    administrator: boolean;
 
     constructor() {
         this["@class"] = UserProfile.cName;

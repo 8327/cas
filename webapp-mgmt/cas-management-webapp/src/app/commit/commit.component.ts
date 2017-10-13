@@ -10,16 +10,17 @@ import {DiffEntry} from "../../domain/diff-entry";
 })
 export class CommitComponent implements OnInit {
 
-  @Input()
+  commitMessage: String;
+  changes: DiffEntry[];
   isAdmin: boolean;
 
-  commitMessage: String;
-
   constructor(public dialogRef: MatDialogRef<CommitComponent>,
-              @Inject(MAT_DIALOG_DATA) public changes: DiffEntry[],
+              @Inject(MAT_DIALOG_DATA) public data: [any],
               public messages: Messages) { }
 
   ngOnInit() {
+    this.changes = this.data[0];
+    this.isAdmin = this.data[1];
   }
 
 }

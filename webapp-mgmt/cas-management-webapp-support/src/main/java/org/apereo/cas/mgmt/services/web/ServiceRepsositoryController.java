@@ -4,6 +4,7 @@ import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.authentication.CasUserProfileFactory;
+import org.apereo.cas.mgmt.services.GitServicesManager;
 import org.apereo.cas.mgmt.services.web.beans.BranchActionData;
 import org.apereo.cas.mgmt.services.web.beans.BranchData;
 import org.apereo.cas.mgmt.services.web.beans.CNote;
@@ -58,6 +59,9 @@ public class ServiceRepsositoryController {
 	@Autowired
 	protected CasConfigurationProperties casProperties;
 
+	@Autowired
+	ServicesManager servicesManager;
+
 	Pattern domainPattern = Pattern.compile("^https?://([^:/]+)");
 
 	private final ManagerFactory managerFactory;
@@ -106,8 +110,33 @@ public class ServiceRepsositoryController {
     	if (!user.isAdministrator()) {
 			throw new Exception("Permission denied");
 		}
-		GitUtil git = repositoryFactory.publishedRepository();
-		git.pull();
+		//int commits = getPublishBehindCount();
+		GitUtil git = repositoryFactory.masterRepository();
+		//git.pull();
+		git.getUnpublishedCommits().forEach(commit -> {
+			System.out.println(commit);
+			try {
+				git.getDiffs(commit.getId()).forEach(l -> {
+					RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+					if(l.getChangeType() == DiffEntry.ChangeType.DELETE) {
+						try {
+							this.servicesManager.delete(ser.from(git.readObject(l.getOldId().toObjectId())).getId());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							this.servicesManager.save(ser.from(git.readObject(l.getNewId().toObjectId())));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			} catch (Exception e) {
+
+			}
+		});
+		git.setPublished();
     	runSyncScript();
 		return new ResponseEntity<>("Services published", HttpStatus.OK);
     }
@@ -154,11 +183,10 @@ public class ServiceRepsositoryController {
 	 * @throws Exception - failed.
 	 */
 	private int getPublishBehindCount() throws Exception {
-		final GitUtil pub = repositoryFactory.publishedRepository();
-		pub.fetch();
-		int behind = pub.behindCount("master");
-		pub.close();
-		return behind;
+		final GitUtil git = repositoryFactory.masterRepository();
+		System.out.println(git.getGit().getRepository().resolve("HEAD"));
+		System.out.println(git.getPublished().getPeeledObjectId());
+		return git.getGit().getRepository().resolve("HEAD").equals(git.getPublished().getPeeledObjectId()) ? 0 : 1;
 	}
 
 	/**
@@ -551,7 +579,7 @@ public class ServiceRepsositoryController {
 		if (git.isNull()) {
 			throw new Exception("No changes to revert");
 		}
-		final ServicesManager manager = managerFactory.manager(request,user,false);
+		final ServicesManager manager = managerFactory.manager(request,user);
 		insertService(git,path,manager);
 		git.checkoutFile(path);
 		return new ResponseEntity<>("File Reverted", HttpStatus.OK);

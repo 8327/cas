@@ -1,20 +1,12 @@
 <div>
-    <button mat-button (click)="newService()">
-      <mat-icon>add_circle</mat-icon>
-      <ng-container i18n="management.services.header.navbar.navitem.addNewService">
-        {{ messages.management_services_header_navbar_navitem_addNewService }}
-      </ng-container>
-    </button>
-    <button mat-button id="commit" *ngIf="isAdmin"
-            [ngClass]="{'btn-warning' : service.changes != null, 'btn-success disabled' : service.changes == null}"
+    <button mat-button id="commit" *ngIf="isAdmin && service.changes"
             (click)="openModalCommit()">
-      <mat-icon>gears</mat-icon>
+      <mat-icon>input</mat-icon>
       <ng-container i18n>Commit</ng-container>
     </button>
-    <button mat-button *ngIf="isAdmin" id="publish"
-            [ngClass]="{'btn-warning' : publishDirty, 'btn-success' : !publishDirty}"
+    <button mat-button *ngIf="isAdmin && publishDirty" id="publish"
             (click)="openModalPublish()">
-      <mat-icon>gears</mat-icon>
+      <mat-icon>launch</mat-icon>
       <ng-container i18n>Publish</ng-container>
     </button>
     <button mat-button *ngIf="!isAdmin && service.changes != null"

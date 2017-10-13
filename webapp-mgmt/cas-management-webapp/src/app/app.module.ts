@@ -17,6 +17,10 @@ import { SearchComponent } from './search/search.component';
 import {SearchService} from "./search/SearchService";
 
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
+import {ControlsComponent} from "./controls/controls.component";
+import {ControlsService} from "./controls/controls.service";
+import {UserService} from "./user.service";
+import {CommitComponent} from "./commit/commit.component";
 
 
 @NgModule({
@@ -38,11 +42,13 @@ import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
     SearchComponent
   ],
   entryComponents: [
-    DeleteComponent
+    DeleteComponent,
   ],
   providers: [
     Messages,
     SearchService,
+    ControlsService,
+    UserService,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
   ],
   bootstrap: [AppComponent]

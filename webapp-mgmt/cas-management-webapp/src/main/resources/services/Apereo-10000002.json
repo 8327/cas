@@ -1,30 +1,61 @@
 {
-  "@class" : "org.apereo.cas.services.RegexRegisteredService",
-  "serviceId" : "^https://www.apereo.org",
-  "name" : "Apereo",
-  "theme" : "apereo",
-  "id" : 10000002,
-  "description" : "Apereo foundation sample service",
-  "proxyPolicy" : {
-    "@class" : "org.apereo.cas.services.RefuseRegisteredServiceProxyPolicy"
-  },
-  "evaluationOrder" : 1,
-  "usernameAttributeProvider" : {
-    "@class" : "org.apereo.cas.services.DefaultRegisteredServiceUsernameProvider"
-  },
-  "logoutType" : "BACK_CHANNEL",
-  "attributeReleasePolicy" : {
-    "@class" : "org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy",
-    "principalAttributesRepository" : {
-      "@class" : "org.apereo.cas.authentication.principal.DefaultPrincipalAttributesRepository"
-    },
-    "authorizedToReleaseCredentialPassword" : false,
-    "authorizedToReleaseProxyGrantingTicket" : false
-  },
-  "accessStrategy" : {
-    "@class" : "org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy",
-    "enabled" : true,
-    "ssoEnabled" : true
-  },
-  "logo" : "images/logo_cas.png"
+  @class: org.apereo.cas.services.RegexRegisteredService
+  serviceId: ^https://www.apereo.org
+  name: Apereo
+  theme: apereo
+  id: 10000002
+  description: Apereo foundation sample service
+  expirationPolicy:
+  {
+    @class: org.apereo.cas.services.DefaultRegisteredServiceExpirationPolicy
+    deleteWhenExpired: false
+    notifyWhenDeleted: false
+  }
+  proxyPolicy:
+  {
+    @class: org.apereo.cas.services.RefuseRegisteredServiceProxyPolicy
+  }
+  evaluationOrder: 1
+  usernameAttributeProvider:
+  {
+    @class: org.apereo.cas.services.DefaultRegisteredServiceUsernameProvider
+    canonicalizationMode: NONE
+    encryptUsername: false
+  }
+  logoutType: BACK_CHANNEL
+  attributeReleasePolicy:
+  {
+    @class: org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy
+    principalAttributesRepository:
+    {
+      @class: org.apereo.cas.authentication.principal.DefaultPrincipalAttributesRepository
+      expiration: 2
+      timeUnit: HOURS
+    }
+    consentPolicy:
+    {
+      @class: org.apereo.cas.services.consent.DefaultRegisteredServiceConsentPolicy
+      enabled: true
+    }
+    authorizedToReleaseCredentialPassword: false
+    authorizedToReleaseProxyGrantingTicket: false
+    excludeDefaultAttributes: false
+    authorizedToReleaseAuthenticationAttributes: true
+  }
+  multifactorPolicy:
+  {
+    @class: org.apereo.cas.services.DefaultRegisteredServiceMultifactorPolicy
+    failureMode: NOT_SET
+    bypassEnabled: false
+  }
+  logo: images/logo_cas.png
+  accessStrategy:
+  {
+    @class: org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy
+    order: 0
+    enabled: true
+    ssoEnabled: true
+    requireAllAttributes: true
+    caseInsensitive: false
+  }
 }

@@ -6,8 +6,10 @@ import org.apereo.cas.authentication.principal.WebApplicationService;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.authentication.CasUserProfileFactory;
+import org.apereo.cas.mgmt.services.GitServicesManager;
 import org.apereo.cas.mgmt.services.web.beans.FormData;
 import org.apereo.cas.mgmt.services.web.beans.RegisteredServiceItem;
+import org.apereo.cas.mgmt.services.web.factory.ManagerFactory;
 import org.apereo.cas.services.RegexRegisteredService;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.services.ServicesManager;
@@ -16,6 +18,7 @@ import org.apereo.cas.util.RegexUtils;
 import org.apereo.services.persondir.IPersonAttributeDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +61,9 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     private final Service defaultService;
 
     private CasConfigurationProperties casProperties;
+
+    @Autowired
+    ManagerFactory managerFactory;
 
     /**
      * Instantiates a new manage registered services multi action controller.
@@ -136,14 +142,17 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      * @return the response entity
      */
     @GetMapping(value = "/deleteRegisteredService")
-    public ResponseEntity<String> deleteRegisteredService(@RequestParam("id") final long idAsLong) {
-        final RegisteredService svc = this.servicesManager.findServiceBy(this.defaultService);
+    public ResponseEntity<String> deleteRegisteredService(final HttpServletRequest request,
+                                                          final HttpServletResponse response,
+                                                          @RequestParam("id") final long idAsLong) throws Exception {
+        GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
+        final RegisteredService svc = manager.findServiceBy(this.defaultService);
         if (svc == null || svc.getId() == idAsLong) {
             return new ResponseEntity<>("The default service " + this.defaultService.getId() + " cannot be deleted. "
                     + "The definition is required for accessing the application.", HttpStatus.BAD_REQUEST);
         }
 
-        final RegisteredService r = this.servicesManager.delete(idAsLong);
+        final RegisteredService r = manager.delete(idAsLong);
         if (r == null) {
             return new ResponseEntity<>("Service id " + idAsLong + " cannot be found.", HttpStatus.BAD_REQUEST);
         }
@@ -173,8 +182,10 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      * @throws Exception the exception
      */
     @GetMapping(value = "/domains")
-    public ResponseEntity<Collection<String>> getDomains() throws Exception {
-        final Collection<String> data = this.servicesManager.getDomains();
+    public ResponseEntity<Collection<String>> getDomains(final HttpServletRequest request,
+                                                         final HttpServletResponse response) throws Exception {
+        GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
+        final Collection<String> data = manager.getDomains();
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
@@ -201,10 +212,13 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      * @return the services
      */
     @GetMapping(value = "/getServices")
-    public ResponseEntity<List<RegisteredServiceItem>> getServices(@RequestParam final String domain) {
+    public ResponseEntity<List<RegisteredServiceItem>> getServices(final HttpServletRequest request,
+                                                                   final HttpServletResponse response,
+                                                                   @RequestParam final String domain) throws Exception {
         ensureDefaultServiceExists();
+        final GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
         final List<RegisteredServiceItem> serviceItems = new ArrayList<>();
-        final List<RegisteredService> services = new ArrayList<>(this.servicesManager.getServicesForDomain(domain));
+        final List<RegisteredService> services = new ArrayList<>(manager.getServicesForDomain(domain));
         serviceItems.addAll(services.stream().map(this::createServiceItem).collect(Collectors.toList()));
         return new ResponseEntity<>(serviceItems, HttpStatus.OK);
     }
@@ -217,10 +231,13 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      * @return - the resulting services
      */
     @GetMapping(value = "/search")
-    public ResponseEntity<List<RegisteredServiceItem>> search(@RequestParam final String query) {
+    public ResponseEntity<List<RegisteredServiceItem>> search(final HttpServletRequest request,
+                                                              final HttpServletResponse response,
+                                                              @RequestParam final String query) throws Exception {
+        final GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
         final Pattern pattern = RegexUtils.createPattern("^.*" + query + ".*$");
         final List<RegisteredServiceItem> serviceBeans = new ArrayList<>();
-        final List<RegisteredService> services = this.servicesManager.getAllServices()
+        final List<RegisteredService> services = manager.getAllServices()
                 .stream()
                 .filter(service -> pattern.matcher(service.getServiceId()).lookingAt()
                         || pattern.matcher(service.getName()).lookingAt()
@@ -259,21 +276,22 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     @PostMapping(value = "/updateOrder", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void updateOrder(final HttpServletRequest request, final HttpServletResponse response,
-                            @RequestBody final RegisteredServiceItem[] svcs) {
+                            @RequestBody final RegisteredServiceItem[] svcs) throws Exception {
+        GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
         final String id = svcs[0].getAssignedId();
-        final RegisteredService svcA = this.servicesManager.findServiceBy(Long.parseLong(id));
+        final RegisteredService svcA = manager.findServiceBy(Long.parseLong(id));
         if (svcA == null) {
             throw new IllegalArgumentException("Service " + id + " cannot be found");
         }
         final String id2 = svcs[1].getAssignedId();
-        final RegisteredService svcB = this.servicesManager.findServiceBy(Long.parseLong(id2));
+        final RegisteredService svcB = manager.findServiceBy(Long.parseLong(id2));
         if (svcB == null) {
             throw new IllegalArgumentException("Service " + id2 + " cannot be found");
         }
         svcA.setEvaluationOrder(svcs[0].getEvalOrder());
         svcB.setEvaluationOrder(svcs[1].getEvalOrder());
-        this.servicesManager.save(svcA);
-        this.servicesManager.save(svcB);
+        manager.save(svcA);
+        manager.save(svcB);
     }
 
     private RegisteredServiceItem createServiceItem(final RegisteredService service) {

@@ -52,7 +52,7 @@ public class RepositoryFactory {
 
     public GitUtil masterRepository() throws Exception {
         return new GitUtil(new Git(new FileRepositoryBuilder()
-                .setGitDir(new File(casProperties.getMgmt().getServicesRepo()))
+                .setGitDir(new File(casProperties.getMgmt().getServicesRepo()+ "/.git"))
                 .setMustExist(true)
                 .readEnvironment()
                 .findGitDir()
@@ -61,7 +61,7 @@ public class RepositoryFactory {
 
     public GitUtil publishedRepository() throws Exception {
         return new GitUtil(new Git(new FileRepositoryBuilder()
-                .setGitDir(new File(casProperties.getMgmt().getPublishedRepo()))
+                .setGitDir(new File(casProperties.getMgmt().getPublishedRepo()+"/.git"))
                 .setMustExist(true)
                 .readEnvironment()
                 .findGitDir()
@@ -81,7 +81,7 @@ public class RepositoryFactory {
     public void clone(String clone) {
         try {
             Git git = Git.cloneRepository()
-                    .setURI(casProperties.getMgmt().getServicesRepo())
+                    .setURI(casProperties.getMgmt().getServicesRepo()+"/.git")
                     .setDirectory(new File(clone))
                     .call();
         } catch (Exception e) {

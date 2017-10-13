@@ -70,6 +70,12 @@ public class GitUtil {
                 .collect(Collectors.toList());
     }
 
+    public List<Commit> getUnpublishedCommits() throws Exception {
+        return StreamSupport.stream(git.log().addRange(getPublished().getPeeledObjectId(),git.getRepository().resolve("HEAD"))
+                .call().spliterator(),false).map(c -> new Commit(c.abbreviate(40).name(),c.getFullMessage()))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Creates a branch with the passed name and commit id from wich to start the branch.
      *
@@ -457,8 +463,27 @@ public class GitUtil {
      */
     public PersonIdent getCommitterId(final CasUserProfile user) {
         String displayName = user.getDisplayName();
-        String email = user.getEmail();
+        String email = user.getEmail() != null ? user.getEmail() : "mgmt@cas.com";
         return new PersonIdent(user.getId() + " - " + displayName, email);
+    }
+
+    public void setPublished() {
+        try {
+            git.tagDelete().setTags("published").call();
+            git.tag().setName("published").call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Ref getPublished() {
+        try {
+            Ref ref = git.tagList().call().get(0);
+            return git.getRepository().peel(ref);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

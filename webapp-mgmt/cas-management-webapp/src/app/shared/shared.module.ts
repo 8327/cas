@@ -32,6 +32,9 @@ import {
 import {CdkTableModule} from "@angular/cdk/table";
 import {Container} from "../container";
 import {Editor} from "../editor.component";
+import {CommitComponent} from "../commit/commit.component";
+import {ControlsComponent} from "../controls/controls.component";
+import {PublishComponent} from "../publish/publish.component";
 
 @NgModule({
   imports: [
@@ -64,7 +67,14 @@ import {Editor} from "../editor.component";
   declarations: [
     MyTooltipDirective,
     Container,
-    Editor
+    Editor,
+    ControlsComponent,
+    CommitComponent,
+    PublishComponent
+  ],
+  entryComponents: [
+    CommitComponent,
+    PublishComponent
   ],
   providers: [
   ],
@@ -94,7 +104,9 @@ import {Editor} from "../editor.component";
     MatSnackBarModule,
     MatPaginatorModule,
     Container,
-    Editor
+    Editor,
+    ControlsComponent,
+    CommitComponent
   ]
 })
 export class SharedModule {

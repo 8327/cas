@@ -5,7 +5,8 @@ import {ControlsService} from "./controls.service";
 import {UserService} from "../user.service";
 import {PublishComponent} from "../publish/publish.component";
 import {Commit} from "../../domain/commit";
-import {MatSnackBar} from "@angular/material";
+import {MatDialog, MatSnackBar} from "@angular/material";
+import {CommitComponent} from "../commit/commit.component";
 
 @Component({
   selector: 'app-controls',
@@ -27,10 +28,11 @@ export class ControlsComponent implements OnInit {
               public service: ControlsService,
               private router: Router,
               private userService: UserService,
+              public dialog: MatDialog,
               public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.userService.getUser().then(resp => this.isAdmin = resp.admin);
+    this.userService.getUser().then(resp => this.isAdmin = resp.administrator);
     this.service.untracked();
     this.unpublished();
   }
@@ -40,16 +42,21 @@ export class ControlsComponent implements OnInit {
   }
 
   openModalCommit() {
-    this.showCommit = true;
-  }
-
-  closeModalCommit() {
-    this.showCommit = false;
+      let dialogRef = this.dialog.open(CommitComponent,{
+          data: [this.service.changes, this.isAdmin],
+          width: '500px',
+          position: {top: '100px'}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+              this.commit(result);
+          }
+      });
   }
 
   commit(msg: String) {
     if(msg === 'CANCEL') {
-      this.closeModalCommit();
+      return;
     } else if (!this.isAdmin) {
       this.submit(msg);
     } else {
@@ -62,7 +69,6 @@ export class ControlsComponent implements OnInit {
   }
 
   handleCommit(resp: String) {
-    this.closeModalCommit();
     this.publishDirty = true;
     this.userAhead = true;
     this.service.untracked().then();
@@ -78,7 +84,15 @@ export class ControlsComponent implements OnInit {
   }
 
   openModalPublish() {
-
+      let dialogRef = this.dialog.open(PublishComponent,{
+          width: '500px',
+          position: {top: '100px'}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+              this.publish(result);
+          }
+      });
   }
 
   publish(commits: Commit[]) {
@@ -113,7 +127,6 @@ export class ControlsComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.closeModalCommit();
     this.publishDirty = true;
     this.userAhead = true;
     this.service.untracked().then();

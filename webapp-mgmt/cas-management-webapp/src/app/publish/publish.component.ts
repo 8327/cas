@@ -2,6 +2,7 @@ import {Component, OnInit, Inject} from '@angular/core';
 import {Messages} from "../messages";
 import {Commit} from "../../domain/commit";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {ControlsService} from "../controls/controls.service";
 
 @Component({
   selector: 'app-publish',
@@ -11,10 +12,13 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 
 export class PublishComponent implements OnInit {
 
+    commits: Commit[];
+
     constructor(public dialogRef: MatDialogRef<PublishComponent>,
-                @Inject(MAT_DIALOG_DATA) public changes: Commit[],
-                public messages: Messages) { }
+                public messages: Messages,
+                public controlsService: ControlsService) { }
 
     ngOnInit() {
+        this.controlsService.getCommits().then(resp => this.commits = resp);
     }
 }

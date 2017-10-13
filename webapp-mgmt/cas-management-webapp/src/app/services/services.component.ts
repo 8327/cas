@@ -8,6 +8,7 @@ import {MatDialog, MatPaginator, MatSnackBar} from "@angular/material";
 import {DeleteComponent} from "../delete/delete.component";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
+import {ControlsService} from "../controls/controls.service";
 
 @Component({
   selector: 'app-services',
@@ -31,7 +32,8 @@ export class ServicesComponent implements OnInit,AfterViewInit {
               private service: ServiceViewService,
               private location: Location,
               public dialog: MatDialog,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              public controlsService: ControlsService) {
     this.dataTable = [];
   }
 
@@ -102,6 +104,7 @@ export class ServicesComponent implements OnInit,AfterViewInit {
 
   refresh() {
     this.getServices();
+    this.controlsService.untracked();
   }
 
   getServices() {
