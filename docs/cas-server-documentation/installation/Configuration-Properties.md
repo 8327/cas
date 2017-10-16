@@ -2465,6 +2465,8 @@ To learn more about this topic, [please review this guide](Trusted-Authenticatio
 # cas.authn.trusted.principalAttribute=
 # cas.authn.trusted.returnNull=false
 # cas.authn.trusted.name=
+
+# cas.authn.trusted.remotePrincipalHeader=
 ```
 
 ## WS-Fed Delegated Authentication
@@ -2502,7 +2504,6 @@ strategies when collecting principal attributes:
 # cas.authn.wsfed[0].encryptionCertificate=classpath:certificate.crt
 # cas.authn.wsfed[0].encryptionPrivateKeyPassword=NONE
 ```
-
 
 ## Multifactor Authentication
 
@@ -3575,7 +3576,7 @@ Delegate authentication to an generic OAuth2 server.
 Delegate authentication to an external OpenID Connect server.
 
 ```properties
-# cas.authn.pac4j.oidc[0].type=GOOGLE|AZURE|GENERIC
+# cas.authn.pac4j.oidc[0].type=KEYCLOAK|GOOGLE|AZURE|GENERIC
 # cas.authn.pac4j.oidc[0].discoveryUri=
 # cas.authn.pac4j.oidc[0].maxClockSkew=
 # cas.authn.pac4j.oidc[0].scope=
@@ -4693,6 +4694,36 @@ are kept inside the runtime environment memory.
 # cas.ticket.registry.inMemory.crypto.alg=AES
 ```
 
+### JMS Ticket Registry
+
+To learn more about this topic, [please review this guide](Messaging-JMS-Ticket-Registry.html).
+
+#### JMS Ticket Registry ActiveMQ
+
+```properties
+# spring.activemq.broker-url=tcp://192.168.1.210:9876
+# spring.activemq.user=admin
+# spring.activemq.password=secret
+# spring.activemq.pool.enabled=true
+# spring.activemq.pool.max-connections=50
+```
+
+#### JMS Ticket Registry Artemis
+
+```properties
+# spring.artemis.mode=native
+# spring.artemis.host=192.168.1.210
+# spring.artemis.port=9876
+# spring.artemis.user=admin
+# spring.artemis.password=secret
+```
+
+#### JMS Ticket Registry JNDI
+
+```properties
+# spring.jms.jndi-name=java:/MyConnectionFactory
+```
+
 ### Ehcache Ticket Registry
 
 To learn more about this topic, [please review this guide](Ehcache-Ticket-Registry.html).
@@ -4957,6 +4988,23 @@ applicable to STs.
 ```
 
 ## TGT Expiration Policy
+
+Ticket expiration policies are activated in the following conditions:
+
+- If the timeout values for the default policy are all set to zero or less, CAS shall ensure tickets are *never* considered expired.
+- Disabling a policy requires that all its timeout settings be set to a value equal or less than zero.
+- If not ticket expiration policy is determined, CAS shall ensure the ticket are *always* considered expired.
+
+<div class="alert alert-info"><strong>Keep What You Need!</strong><p>You are encouraged to only keep and maintain properties and settings needed for a particular policy. It is <strong>UNNECESSARY</strong> to grab a copy of all fields or keeping a copy as a reference while leaving them commented out. This strategy would ultimately lead to poor upgrades increasing chances of breaking changes and a messy deployment at that.</p></div>
+
+Ticket expiration policies are activated in the following order:
+
+1. Tickets are never expired, if and when settings for the default policy are configured accordingly.
+2. Timeout
+3. Default
+4. Throttled Timeout
+5. Hard Timeout
+6. Tickets always expire immediately.
 
 ### Default
 
