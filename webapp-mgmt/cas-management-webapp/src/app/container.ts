@@ -6,7 +6,7 @@ import {Component, AfterViewInit, ViewChild, ElementRef, HostListener} from '@an
 @Component({
     selector: 'agg-container',
     template: `
-       <div #container [style.height.px]="height">
+       <div #container>
           <ng-content></ng-content>
        </div>
     `
@@ -14,15 +14,15 @@ import {Component, AfterViewInit, ViewChild, ElementRef, HostListener} from '@an
 
 export class Container implements AfterViewInit {
 
-  height:Number;
-  @ViewChild('container')
-  container:ElementRef;
+  //height:Number;
+  //@ViewChild('container')
+  //container:ElementRef;
 
   ngAfterViewInit() {
-      this.resize();
+      //this.resize();
   }
 
-  @HostListener('window:resize') resize() {
-      this.height = (window.innerHeight - this.container.nativeElement.offsetTop -180);
-  }
+  //@HostListener('window:resize') resize() {
+  //    this.height = (window.innerHeight - this.container.nativeElement.offsetTop -180);
+  //}
 }

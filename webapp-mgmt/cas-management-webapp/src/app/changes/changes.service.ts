@@ -32,4 +32,11 @@ export class ChangesService extends Service {
     return this.get<AbstractRegisteredService>("viewChange?id=" + change);
   }
 
+  getJSON(change: String): Promise<AbstractRegisteredService> {
+    return this.http.get("viewChange?id=" + change)
+      .toPromise()
+      .then(resp => resp.json())
+      .catch(this.handleError);
+  }
+
 }

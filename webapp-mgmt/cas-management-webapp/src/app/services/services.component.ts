@@ -9,6 +9,7 @@ import {DeleteComponent} from "../delete/delete.component";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
 import {ControlsService} from "../controls/controls.service";
+import {RevertComponent} from "../revert/revert.component";
 
 @Component({
   selector: 'app-services',
@@ -21,6 +22,7 @@ export class ServicesComponent implements OnInit,AfterViewInit {
   deleteItem: ServiceItem;
   domain: String;
   selectedItem: ServiceItem;
+  revertItem: ServiceItem;
   servicesDatabase = new ServicesDatabase();
 
   @ViewChild("paginator")
@@ -63,17 +65,20 @@ export class ServicesComponent implements OnInit,AfterViewInit {
     }).subscribe((d) => setTimeout(() => this.dataTable = d,0));
   }
 
-  serviceEdit(selectedItem: String) {
-    this.router.navigate(['/form',selectedItem, {duplicate: false}]);
+  serviceEdit(item?: ServiceItem) {
+    if (item) {
+      this.selectedItem = item;
+    }
+    this.router.navigate(['/form',this.selectedItem.assignedId, {duplicate: false, change: false}]);
   }
 
-  serviceDuplicate(selectedItem: String) {
-    this.router.navigate(['/form',selectedItem, {duplicate: true}]);
+  serviceDuplicate() {
+    this.router.navigate(['/form',this.selectedItem.assignedId, {duplicate: true, change: false}]);
   }
 
-  openModalDelete(selectedItem: ServiceItem) {
+  openModalDelete() {
     let dialogRef = this.dialog.open(DeleteComponent,{
-      data: selectedItem,
+      data: this.selectedItem,
       width: '500px',
       position: {top: '100px'}
     });
@@ -82,7 +87,21 @@ export class ServicesComponent implements OnInit,AfterViewInit {
         this.delete();
       }
     });
-    this.deleteItem = selectedItem;
+    this.deleteItem = this.selectedItem;
+  };
+
+  openModalRevert() {
+    let dialogRef = this.dialog.open(RevertComponent,{
+      data: this.selectedItem,
+      width: '500px',
+      position: {top: '100px'}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.revert();
+      }
+    });
+    this.revertItem = this.selectedItem;
   };
 
   delete() {
@@ -101,6 +120,23 @@ export class ServicesComponent implements OnInit,AfterViewInit {
     });
     this.refresh();
   }
+
+  history() {
+    let fileName: string = (this.selectedItem.name + '-' + this.selectedItem.assignedId + ".json").replace(/ /g,"");
+    this.router.navigate(['/history',fileName]);
+  }
+
+  revert() {
+    let fileName: string = (this.revertItem.name + '-' + this.revertItem.assignedId + ".json").replace(/ /g,"");
+    if(this.controlsService.changeStyle(this.revertItem.assignedId) === 'deleted') {
+      this.service.revertDelete(fileName)
+          .then(resp => this.refresh());
+    } else {
+      this.service.revert(fileName)
+          .then(resp => this.refresh());
+    }
+  }
+
 
   refresh() {
     this.getServices();
@@ -137,6 +173,10 @@ export class ServicesComponent implements OnInit,AfterViewInit {
       b.evalOrder = index;
       this.service.updateOrder(a,b).then(resp => this.refresh());
     }
+  }
+
+  json() {
+
   }
 
 }

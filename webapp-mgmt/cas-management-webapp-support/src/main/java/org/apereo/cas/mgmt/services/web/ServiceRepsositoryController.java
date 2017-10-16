@@ -405,13 +405,13 @@ public class ServiceRepsositoryController {
 	 * @throws Exception - failed
 	 */
 	@GetMapping(value="/viewChange")
-	public ResponseEntity<String> viewChange(final HttpServletResponse response,
+	public ResponseEntity<RegisteredService> viewChange(final HttpServletResponse response,
 											 final HttpServletRequest request,
                         				     final @RequestParam String id) throws Exception {
 		final CasUserProfile user = casUserProfileFactory.from(request, response);
 		final GitUtil git = repositoryFactory.getGit(user,true);
 
-		return new ResponseEntity<>(git.readObject(id), HttpStatus.OK);
+		return new ResponseEntity<>(new RegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
 	}
 
 	/**

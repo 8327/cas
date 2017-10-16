@@ -89,7 +89,7 @@
           <context context-type="linenumber">11</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/diff/diff.component.ts</context>
+          <context context-type="sourcefile">app/diff/json.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
         <context-group purpose="location">
@@ -498,7 +498,7 @@
         <source>View Diff</source>
         <target>Ver Diferencia</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/diff/diff.component.ts</context>
+          <context context-type="sourcefile">app/diff/json.component.ts</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>

@@ -9,7 +9,6 @@ import { SharedModule } from "../shared/shared.module";
 import { HistoryComponent } from "./history.component";
 import { HistoryResolve } from "./history.resolover";
 import { HistoryService } from "./history.service";
-import { HistoryMenuComponent } from './menu/menu.component';
 
 @NgModule({
   imports: [
@@ -20,7 +19,6 @@ import { HistoryMenuComponent } from './menu/menu.component';
   ],
   declarations: [
     HistoryComponent,
-    HistoryMenuComponent
   ],
   providers: [
     HistoryResolve,

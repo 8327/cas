@@ -8,7 +8,6 @@ import { HttpModule } from '@angular/http';
 import {PullComponent} from "./pull.component";
 import {PullService} from "./pull.service";
 import {SharedModule} from "../shared/shared.module";
-import { PullMenuComponent } from './menu/menu.component';
 
 @NgModule({
   imports: [
@@ -18,8 +17,7 @@ import { PullMenuComponent } from './menu/menu.component';
     SharedModule
   ],
   declarations: [
-    PullComponent,
-    PullMenuComponent
+    PullComponent
   ],
   providers: [
     PullService

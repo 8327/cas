@@ -5,7 +5,7 @@ declare var ace: any;
 @Component({
     selector: 'agg-editor',
     template: `
-         <div id="editor" style="width:100%;height:100%;" (window:resize)="onResize($event)"></div>
+         <div id="editor" style="width:100%;height:100%;"></div>
     `
 })
 
@@ -22,7 +22,7 @@ export class Editor implements OnInit {
     var Vim = ace.require("ace/keyboard/vim");
     this.editor.session.setMode(new XmlMode());
     this.editor.setKeyboardHandler(Vim.handler);
-    this.onResize(null);
+    //this.onResize(null);
     this.editor.setFontSize(14);
   }
 

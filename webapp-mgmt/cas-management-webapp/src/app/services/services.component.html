@@ -1,5 +1,5 @@
 <div style="display:flex;margin-bottom:10px;">
-  <div style="padding-top: 3px;">
+  <div style="margin-left:25px;padding-top: 3px;">
     <mat-icon style="padding-top: 3px;">build</mat-icon>
     <h4 style="display: inline;position: relative;top: -5px;">
       <ng-container i18n>
@@ -20,7 +20,7 @@
         <mat-icon>menu</mat-icon>
     </div>
     <div style="padding-right:20px;flex: 0 0 200px;font-weight: 700;text-overflow: ellipsis">
-      <a (click)="serviceEdit(item.assignedId)">
+      <a (click)="serviceEdit(item)">
         {{item.name}}
       </a>
     </div>
@@ -39,31 +39,39 @@
 </mat-paginator>
 
 <mat-menu #serviceMenu>
-  <button mat-menu-item (click)="serviceEdit( selectedItem.assignedId )">
+  <button mat-menu-item (click)="serviceEdit()">
     <mat-icon>edit</mat-icon>
     <ng-container i18n="management.services.table.button.edit">
       {{ messages.management_services_table_button_edit }}
     </ng-container>
   </button>
-  <button mat-menu-item (click)="serviceDuplicate( selectedItem.assignedId )">
+  <button mat-menu-item (click)="serviceDuplicate()">
     <mat-icon>content_copy</mat-icon>
     <ng-container i18n="management.services.table.button.duplicate">
       {{ messages.management_services_table_button_duplicate }}
     </ng-container>
   </button>
-  <button mat-menu-item (click)="openModalDelete(selectedItem)">
+  <button mat-menu-item (click)="openModalDelete()">
     <mat-icon>delete</mat-icon>
     <ng-container i18n="management.services.table.button.delete">
       {{ messages.management_services_table_button_delete }}
     </ng-container>
   </button>
-  <button mat-menu-item (click)="moveUp(selectedItem)" *ngIf="servicesDatabase.data.indexOf(selectedItem) > 0">
+  <button mat-menu-item (click)="history()">
+    <mat-icon>history</mat-icon>
+    <ng-container i18n>History</ng-container>
+  </button>
+
+  <button mat-menu-item (click)="openModalRevert()">
+    <mat-icon>undo</mat-icon>
+    <ng-container i18n>Revert</ng-container>
+  </button>
+  <button mat-menu-item (click)="moveUp()" *ngIf="servicesDatabase.data.indexOf(selectedItem) > 0">
     <mat-icon>arrow_upward</mat-icon>
     <ng-container>Move Up</ng-container>
   </button>
-  <button mat-menu-item (click)="moveDown(selectedItem)" *ngIf="servicesDatabase.data.indexOf(selectedItem) < servicesDatabase.data.length - 1">
+  <button mat-menu-item (click)="moveDown()" *ngIf="servicesDatabase.data.indexOf(selectedItem) < servicesDatabase.data.length - 1">
     <mat-icon>arrow_downward</mat-icon>
     <ng-container>Move Down</ng-container>
   </button>
 </mat-menu>
-

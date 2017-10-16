@@ -21,6 +21,12 @@ import {ControlsComponent} from "./controls/controls.component";
 import {ControlsService} from "./controls/controls.service";
 import {UserService} from "./user.service";
 import {CommitComponent} from "./commit/commit.component";
+import {HistoryModule} from "./history/history.module";
+import {RevertComponent} from "./revert/revert.component";
+import {ChangesModule} from "./changes/changes.module";
+import {DiffComponent} from "./diff/diff.component";
+import {DiffModule} from "./diff/diff.module";
+import {JSONModule} from "./json/json.module";
 
 
 @NgModule({
@@ -31,6 +37,10 @@ import {CommitComponent} from "./commit/commit.component";
     HttpModule,
     DomainsModule,
     ServicesModule,
+    HistoryModule,
+    JSONModule,
+    ChangesModule,
+    DiffModule,
     FormModule,
     SharedModule,
     AppRoutingModule
@@ -39,10 +49,12 @@ import {CommitComponent} from "./commit/commit.component";
     AppComponent,
     HeaderComponent,
     DeleteComponent,
-    SearchComponent
+    SearchComponent,
+    RevertComponent
   ],
   entryComponents: [
     DeleteComponent,
+    RevertComponent
   ],
   providers: [
     Messages,

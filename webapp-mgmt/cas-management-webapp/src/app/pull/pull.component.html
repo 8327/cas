@@ -67,7 +67,7 @@
         </ng-container>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-button [matMenuTriggerFor]="menuEl" (click)="selectedItem = row">
+        <button mat-button [matMenuTriggerFor]="pullMenu" (click)="selectedItem = row">
           <mat-icon>menu</mat-icon>
         </button>
       </mat-cell>
@@ -90,5 +90,26 @@
 <app-reject (reject)="reject($event)" [showReject]="showReject"></app-reject>
 <app-accept (accept)="accept($event)" [showAccept]="showAccept" [changes]="changes"></app-accept>
 
-<app-pull-menu #menu (selection)="handleSelection($event)"></app-pull-menu>
+<mat-menu #pullMenu>
+  <button mat-menu-item (click)="review()">
+    <mat-icon>eye</mat-icon>
+    <ng-container i18n>Review</ng-container>
+  </button>
+  <button mat-menu-item (click)="acceptBranchModal()">
+    <mat-icon>check</mat-icon>
+    <ng-container i18n>Accept</ng-container>
+  </button>
+  <button mat-menu-item (click)="rejectBranchModal()">
+    <mat-icon>reject</mat-icon>
+    <ng-container i18n>Reject</ng-container>
+  </button>
+  <button mat-menu-item (click)="getNotes()">
+    <mat-icon>eye</mat-icon>
+    <ng-container i18n>View Notes</ng-container>
+  </button>
+  <button mat-menu-item (click)="addNote()">
+    <mat-icon>pencil</mat-icon>
+    <ng-container i18n>Add Note</ng-container>
+  </button>
+</mat-menu>
 

@@ -6,7 +6,6 @@ import {History} from "../../domain/history";
 import {Location} from "@angular/common";
 import {DiffEntry} from "../../domain/diff-entry";
 import {ChangesService} from "../changes/changes.service";
-import {HistoryMenuComponent} from "./menu/menu.component";
 import {MatPaginator, MatSnackBar} from "@angular/material";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {DataSource} from "@angular/cdk/collections";
@@ -26,9 +25,6 @@ export class HistoryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   fileName: String;
-
-  @ViewChild("menu")
-  menuComp: HistoryMenuComponent;
 
   selectedItem: History;
 
@@ -59,39 +55,29 @@ export class HistoryComponent implements OnInit {
     this.location.back();
   }
 
-  handleSelection(selection: String) {
-    switch (selection) {
-      case 'viewChange' :
-        this.viewChange();
-        break;
-      case 'checkout' :
-        this.checkout();
-        break;
-      case 'viewDiff' :
-        this.viewDiff();
-        break;
-    }
-  }
-
   viewChange() {
-    this.router.navigate(['/view',this.menuComp.selectedItem.id]);
+    this.router.navigate(['/form',this.selectedItem.id, {duplicate: false, change: true}]);
   }
 
   checkout() {
-    this.service.checkout(this.menuComp.selectedItem.commit as string,this.menuComp.selectedItem.path)
-      .then(resp => setTimeout(() => {
-        this.location.back()
-      },500));
+    this.service.checkout(this.selectedItem.commit as string,this.selectedItem.path)
+      .then(resp => this.snackBar.open('Service successfully restored from history.', 'dismiss', {
+        duration: 5000
+      }));
   }
 
   viewDiff() {
     let diff: DiffEntry = new DiffEntry();
-    diff.newId = this.menuComp.selectedItem.id;
+    diff.newId = this.selectedItem.id;
     diff.oldId = this.database.data[0].id;
-    diff.path = this.menuComp.selectedItem.path;
+    diff.path = this.selectedItem.path;
     diff.diff = "HISTORY";
     this.changeService.currentDiff = diff;
     this.router.navigate(['/diff']);
+  }
+
+  viewJSON() {
+    this.router.navigate(['/json',this.selectedItem.id]);
   }
 
 }

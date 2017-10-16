@@ -21,6 +21,14 @@ export class ServiceViewService extends Service {
     return this.get<String>("deleteRegisteredService?id=" + id);
   }
 
+  revert(fileName: string): Promise<String> {
+    return this.get<String>("revert?path="+fileName);
+  }
+
+  revertDelete(fileName: string): Promise<String> {
+    return this.get<String>("revertDelete?path="+fileName);
+  }
+
   updateOrder(a: ServiceItem, b: ServiceItem): Promise<String> {
     return this.post<String>("updateOrder",[a, b]);
   }

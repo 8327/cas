@@ -7,6 +7,11 @@ import {ServicesComponent} from "./services/services.component";
 import {ServicesResolve} from "./services/services.resolover";
 import {DomainsComponent} from "./domains/domains.component";
 import {SearchComponent} from "./search/search.component";
+import {HistoryComponent} from "./history/history.component";
+import {HistoryResolve} from "./history/history.resolover";
+import {DiffComponent} from "./diff/diff.component";
+import {JSONComponent} from "./json/json.component";
+import {JSONResolver} from "./json/json.resolover";
 
 @NgModule({
   imports: [
@@ -25,7 +30,25 @@ import {SearchComponent} from "./search/search.component";
       {
         path: 'search/:query',
         component: SearchComponent
-      }
+      },
+      {
+        path: 'history/:fileName',
+        component: HistoryComponent,
+        resolve: {
+            resp: HistoryResolve
+        }
+      },
+      {
+        path: 'diff',
+        component: DiffComponent
+      },
+      {
+        path: 'json/:fileId',
+        component: JSONComponent,
+        resolve: {
+          resp: JSONResolver
+        }
+      },
     ]),
   ],
   exports: [ RouterModule ]

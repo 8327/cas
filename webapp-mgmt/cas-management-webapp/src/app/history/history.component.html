@@ -1,6 +1,6 @@
 <div style="display:flex;margin-bottom:10px;">
-  <div style="padding-top: 10px;">
-    <mat-icon style="padding-top: 3px;">clock</mat-icon>
+  <div style="margin-left:25px;padding-top: 10px;">
+    <mat-icon style="padding-top: 3px;">history</mat-icon>
     <h4 style="display: inline;position: relative;top: -5px;">
       <ng-container i18n>
         History
@@ -36,7 +36,7 @@
         </ng-container>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        {{ row.comitter }}
+        {{ row.committer }}
       </mat-cell>
     </ng-container>
 
@@ -76,3 +76,22 @@
                  [pageSizeOptions]="[5, 10, 25, 100]">
   </mat-paginator>
 </div>
+
+<mat-menu #historyMenu>
+  <button mat-menu-item (click)="viewChange()">
+    <mat-icon>visibility</mat-icon>
+    <ng-container i18n>View</ng-container>
+  </button>
+  <button mat-menu-item (click)="viewDiff()">
+    <mat-icon>compare_arrows</mat-icon>
+    <ng-container i18n>View Diff</ng-container>
+  </button>
+  <button mat-menu-item (click)="viewJSON()">
+    <mat-icon>code</mat-icon>
+    <ng-container>JSON</ng-container>
+  </button>
+  <button mat-menu-item (click)="checkout()">
+    <mat-icon>file_download</mat-icon>
+    <ng-container i18n>Checkout</ng-container>
+  </button>
+</mat-menu>

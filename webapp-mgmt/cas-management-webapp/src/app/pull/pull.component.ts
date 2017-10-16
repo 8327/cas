@@ -7,7 +7,6 @@ import { Location } from "@angular/common";
 import {NotesService} from "../notes/notes.service";
 import {ChangesService} from "../changes/changes.service";
 import {DiffEntry} from "../../domain/diff-entry";
-import {PullMenuComponent} from "./menu/menu.component";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {DataSource} from "@angular/cdk/collections";
 import {Observable} from "rxjs/Observable";
@@ -36,9 +35,7 @@ export class PullComponent implements OnInit {
   showAccept: boolean;
   changes: DiffEntry[];
 
-  @ViewChild("menu")
-  menuComp: PullMenuComponent;
-
+  selectedItem: Branch;
   showPending: boolean = true;
   showAccepted: boolean;
   showRejected: boolean;
@@ -58,11 +55,11 @@ export class PullComponent implements OnInit {
   }
 
   viewChanges() {
-    this.router.navigate(['/changes',this.menuComp.selectedItem.name]);
+    this.router.navigate(['/changes',this.selectedItem.name]);
   }
 
   acceptBranchModal() {
-    this.acceptBranch = this.menuComp.selectedItem;
+    this.acceptBranch = this.selectedItem;
     this.changeService.getChanges(this.acceptBranch.id)
       .then(resp => this.handleChanges(resp));
   }
@@ -84,7 +81,7 @@ export class PullComponent implements OnInit {
 
   rejectBranchModal() {
     this.showReject = true;
-    this.rejectBranch = this.menuComp.selectedItem;
+    this.rejectBranch = this.selectedItem;
   }
 
   reject(note: String) {
@@ -106,7 +103,7 @@ export class PullComponent implements OnInit {
   }
 
   addNote() {
-    this.noteBranch = this.menuComp.selectedItem.id;
+    this.noteBranch = this.selectedItem.id;
     this.note = "";
     this.showNote = true;
   }
@@ -117,7 +114,7 @@ export class PullComponent implements OnInit {
   }
 
   getNotes() {
-    this.notesService.getNotes(this.menuComp.selectedItem.id)
+    this.notesService.getNotes(this.selectedItem.id)
       .then(resp => this.handleNote(resp));
   }
 
@@ -153,25 +150,6 @@ export class PullComponent implements OnInit {
     }
   }
 
-  handleSelection(selection: String) {
-    switch (selection) {
-      case "review" :
-        this.viewChanges();
-        break;
-      case "acceptBranchModal" :
-        this.acceptBranchModal();
-        break;
-      case "rejectBranchModal" :
-        this.rejectBranchModal();
-        break;
-      case "getNotes" :
-        this.getNotes();
-        break;
-      case "addNote" :
-        this.addNote();
-        break;
-    }
-  }
 }
 
 export class BranchDatabase {

@@ -45,6 +45,7 @@ export class FormComponent implements OnInit {
 
   id: String;
   duplicate: boolean;
+  change: boolean;
   path: String;
 
   @ViewChild('tabGroup')
@@ -72,15 +73,34 @@ export class FormComponent implements OnInit {
       this.route.params.subscribe((params) => {
         this.id = params['id'];
         this.duplicate = params['duplicate'];
+        this.change = params['change'];
         this.goto(Tabs.BASICS);
       });
     });
   }
 
   goto(tab:Tabs) {
-    let route: any[] = [this.path,this.id,{duplicate: this.duplicate}];
+    let route: any[] = [this.path,this.id,{duplicate: this.duplicate, change: this.change}];
     route.push({outlets: {form: [this.tabRoute(tab)]}});
     this.router.navigate(route,{skipLocationChange: true} );
+  }
+
+  saveFn() {
+    this.saveForm();
+    this.data.save.emit();
+    this.data.submitted = true;
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  isNew() {
+    return this.data.service.id == -1;
+  }
+
+  isView() {
+    return this.change;
   }
 
   loadService(form: AbstractRegisteredService) {
