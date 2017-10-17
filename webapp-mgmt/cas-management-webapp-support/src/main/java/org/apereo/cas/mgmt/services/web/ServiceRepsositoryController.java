@@ -4,7 +4,6 @@ import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.authentication.CasUserProfileFactory;
-import org.apereo.cas.mgmt.services.GitServicesManager;
 import org.apereo.cas.mgmt.services.web.beans.BranchActionData;
 import org.apereo.cas.mgmt.services.web.beans.BranchData;
 import org.apereo.cas.mgmt.services.web.beans.CNote;
@@ -576,7 +575,7 @@ public class ServiceRepsositoryController {
 		if (git.isNull()) {
 			throw new Exception("No changes to revert");
 		}
-		final ServicesManager manager = managerFactory.manager(request,user);
+		final ServicesManager manager = managerFactory.from(request,user);
 		insertService(git,path,manager);
 		git.checkoutFile(path);
 		return new ResponseEntity<>("File Reverted", HttpStatus.OK);
@@ -607,7 +606,7 @@ public class ServiceRepsositoryController {
 	}
 
 	/**
-	 * Restores a service into the service manager at its original location.
+	 * Restores a service into the service from at its original location.
 	 *
 	 * @param git - GitUtil
 	 * @param path - path of the file
@@ -618,7 +617,7 @@ public class ServiceRepsositoryController {
 		RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
 		RegisteredService svc = ser.from(git.readObject(git.history(path).get(0).getId()));
 		String domain = getDomain(svc.getServiceId());
-		//manager.insertService(domain,svc.getEvaluationOrder());
+		//from.insertService(domain,svc.getEvaluationOrder());
 	}
 
 	/**

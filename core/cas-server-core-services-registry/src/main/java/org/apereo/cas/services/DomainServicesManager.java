@@ -28,7 +28,7 @@ public class DomainServicesManager extends AbstractServicesManager {
 
     private static final long serialVersionUID = -8581398063126547772L;
 
-    private static final String DEFAULT_DOMAIN_NAME = "default";
+    protected static final String DEFAULT_DOMAIN_NAME = "default";
 
     private final Map<String, TreeSet<RegisteredService>> domains = new ConcurrentHashMap<>();
 
@@ -89,7 +89,7 @@ public class DomainServicesManager extends AbstractServicesManager {
     }
 
 
-    private String extractDomain(final String service) {
+    protected String extractDomain(final String service) {
         final Matcher extractor = this.domainExtractor.matcher(service.toLowerCase());
         return extractor.lookingAt() ? validateDomain(extractor.group(1)) : "default";
     }

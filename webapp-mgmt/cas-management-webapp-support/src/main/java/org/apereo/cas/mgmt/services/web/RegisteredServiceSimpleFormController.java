@@ -41,7 +41,7 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     /**
      * Instantiates a new registered service simple form controller.
      *
-     * @param servicesManager          the services manager
+     * @param servicesManager          the services from
      */
     public RegisteredServiceSimpleFormController(final ServicesManager servicesManager) {
         super(servicesManager);
@@ -57,7 +57,7 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     public ResponseEntity<String> saveService(final HttpServletRequest request,
                                               final HttpServletResponse response,
                                               @RequestBody final RegisteredService service) throws Exception {
-        final GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
+        final GitServicesManager manager = managerFactory.from(request,casUserProfileFactory.from(request,response));
         if (service.getEvaluationOrder() < 0) {
             service.setEvaluationOrder(manager.getAllServices().size());
         }
@@ -77,7 +77,7 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     public ResponseEntity<RegisteredService> getServiceById(final HttpServletRequest request,
                                                             final HttpServletResponse response,
                                                             @RequestParam(value = "id", required = false) final Long id) throws Exception {
-        final GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
+        final GitServicesManager manager = managerFactory.from(request,casUserProfileFactory.from(request,response));
         final RegisteredService service;
         if (id == -1) {
             service = new RegexRegisteredService();
