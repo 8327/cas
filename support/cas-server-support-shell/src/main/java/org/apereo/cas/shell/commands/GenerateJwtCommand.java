@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 public class GenerateJwtCommand implements CommandMarker {
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateJwtCommand.class);
+    private static final int SEP_LENGTH = 8;
+    
     private static final int DEFAULT_SIGNING_SECRET_SIZE = 256;
     private static final int DEFAULT_ENCRYPTION_SECRET_SIZE = 48;
     private static final String DEFAULT_SIGNING_ALGORITHM = "HS256";
@@ -64,28 +66,28 @@ public class GenerateJwtCommand implements CommandMarker {
             @CliOption(key = {"signingSecretSize"},
                     help = "Size of the signing secret",
                     optionContext = "Size of the signing secret",
-                    specifiedDefaultValue = "256",
-                    unspecifiedDefaultValue = "256") final int signingSecretSize,
+                    specifiedDefaultValue = "" + DEFAULT_SIGNING_SECRET_SIZE,
+                    unspecifiedDefaultValue = "" + DEFAULT_SIGNING_SECRET_SIZE) final int signingSecretSize,
             @CliOption(key = {"signingSecretSize"},
                     help = "Size of the encryption secret",
                     optionContext = "Size of the encryption secret",
-                    specifiedDefaultValue = "48",
-                    unspecifiedDefaultValue = "48") final int encryptionSecretSize,
+                    specifiedDefaultValue = "" + DEFAULT_ENCRYPTION_SECRET_SIZE,
+                    unspecifiedDefaultValue = "" + DEFAULT_ENCRYPTION_SECRET_SIZE) final int encryptionSecretSize,
             @CliOption(key = {"signingAlgorithm"},
                     help = "Algorithm to use for signing",
                     optionContext = "Algorithm to use for signing",
-                    specifiedDefaultValue = "HS256",
-                    unspecifiedDefaultValue = "HS256") final String signingAlgorithm,
+                    specifiedDefaultValue = DEFAULT_SIGNING_ALGORITHM,
+                    unspecifiedDefaultValue = DEFAULT_SIGNING_ALGORITHM) final String signingAlgorithm,
             @CliOption(key = {"encryptionAlgorithm"},
                     help = "Algorithm to use for encryption",
                     optionContext = "Algorithm to use for encryption",
-                    specifiedDefaultValue = "DIR",
-                    unspecifiedDefaultValue = "DIR") final String encryptionAlgorithm,
+                    specifiedDefaultValue = DEFAULT_ENCRYPTION_ALGORITHM,
+                    unspecifiedDefaultValue = DEFAULT_ENCRYPTION_ALGORITHM) final String encryptionAlgorithm,
             @CliOption(key = {"encryptionMethod"},
                     help = "Method to use for encryption",
                     optionContext = "Method to use for encryption",
-                    specifiedDefaultValue = "A256GCM",
-                    unspecifiedDefaultValue = "A256GCM") final String encryptionMethod,
+                    specifiedDefaultValue = DEFAULT_ENCRYPTION_METHOD,
+                    unspecifiedDefaultValue = DEFAULT_ENCRYPTION_METHOD) final String encryptionMethod,
             @CliOption(key = {"subject"},
                     help = "Subject to use for the JWT",
                     optionContext = "Subject to use for the JWT",
@@ -98,19 +100,26 @@ public class GenerateJwtCommand implements CommandMarker {
 
         final CommonProfile profile = new CommonProfile();
         profile.setId(subject);
+
+        LOGGER.debug(StringUtils.repeat('=', SEP_LENGTH));
+        LOGGER.info("\nGenerating JWT for subject [{}] with signing key size [{}], signing algorithm [{}], "
+                + "encryption key size [{}], encryption method [{}] and encryption algorithm [{}]\n", 
+                subject, signingSecretSize, signingAlgorithm, encryptionSecretSize, encryptionMethod, encryptionAlgorithm);
+        LOGGER.debug(StringUtils.repeat('=', SEP_LENGTH));
+        
         final String token = g.generate(profile);
-        LOGGER.info("JWT:\n{}", token);
+        LOGGER.info("==== JWT ====\n{}", token);
     }
 
     private void configureJwtEncryption(final int encryptionSecretSize, final String encryptionAlgorithm,
                                         final String encryptionMethod, final JwtGenerator<CommonProfile> g) {
-        if (encryptionSecretSize > 0 || StringUtils.isBlank(encryptionMethod) || StringUtils.isBlank(encryptionAlgorithm)) {
-            LOGGER.info("No encryption algorithm specified, so the generated JWT will not be encrypted");
+        if (encryptionSecretSize <= 0 || StringUtils.isBlank(encryptionMethod) || StringUtils.isBlank(encryptionAlgorithm)) {
+            LOGGER.info("No encryption algorithm or size specified, so the generated JWT will not be encrypted");
             return;
         }
 
         final String encryptionSecret = RandomStringUtils.randomAlphanumeric(encryptionSecretSize);
-        LOGGER.info("Encryption Secret:\n[{}]", encryptionSecret);
+        LOGGER.info("==== Encryption Secret ====\n{}\n", encryptionSecret);
 
         final String acceptedEncAlgs = Arrays.stream(JWEAlgorithm.class.getDeclaredFields())
                 .filter(f -> f.getType().equals(JWEAlgorithm.class))
@@ -148,12 +157,17 @@ public class GenerateJwtCommand implements CommandMarker {
 
         final EncryptionMethod encMethod = EncryptionMethod.parse(encryptionMethod);
         g.setEncryptionConfiguration(new SecretEncryptionConfiguration(encryptionSecret, algorithm, encMethod));
-        
+
     }
 
     private void configureJwtSigning(final int signingSecretSize, final String signingAlgorithm, final JwtGenerator<CommonProfile> g) {
+        if (signingSecretSize <= 0 || StringUtils.isBlank(signingAlgorithm)) {
+            LOGGER.info("No signing algorithm or size specified, so the generated JWT will not be encrypted");
+            return;
+        }
+
         final String signingSecret = RandomStringUtils.randomAlphanumeric(signingSecretSize);
-        LOGGER.info("Signing Secret:\n[{}]", signingSecret);
+        LOGGER.info("==== Signing Secret ====\n{}\n", signingSecret);
 
         final String acceptedSigningAlgs = Arrays.stream(JWSAlgorithm.class.getDeclaredFields())
                 .filter(f -> f.getType().equals(JWSAlgorithm.class))
