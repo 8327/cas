@@ -51,19 +51,11 @@ public class ManagerFactory {
             }catch (Exception e) {
                 e.printStackTrace();
             }
-            /*
-            try {
-                Git.cloneRepository().setURI(casProperties.getMgmt().getServicesRepo())
-                        .setDirectory(new File(casProperties.getMgmt().getPublishedRepo()))
-                        .call();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            */
         }
     }
 
     public GitServicesManager manager(final HttpServletRequest request, final CasUserProfile user) throws Exception {
+        /*
         if(user.isAdministrator()) {
             return new GitServicesManager(casProperties.getMgmt().getServicesRepo());
         }
@@ -74,12 +66,13 @@ public class ManagerFactory {
         } else {
             repositoryFactory.userRepository(user.getId()).rebase();
         }
+        */
 
         GitServicesManager manager = (GitServicesManager)request.getSession().getAttribute("servicesManager");
         if (manager != null) {
             manager.load();
         } else {
-            manager = new GitServicesManager(path.getFileName().toString());
+            manager = new GitServicesManager(casProperties.getMgmt().getServicesRepo());
             request.getSession().setAttribute("servicesManager",manager);
         }
 
