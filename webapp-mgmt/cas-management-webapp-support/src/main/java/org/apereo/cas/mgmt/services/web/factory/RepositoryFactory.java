@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Created by tsschmi on 3/2/17.
@@ -33,9 +30,15 @@ public class RepositoryFactory {
      * @throws Exception
      */
     public GitUtil getGit(CasUserProfile user) throws Exception {
-        return getGit(user,false);
+        return masterRepository();
+        //return getGit(user,false);
     }
 
+    public GitUtil getGit(CasUserProfile user, boolean returnMaster) throws Exception {
+        return masterRepository();
+    }
+
+    /*
     public GitUtil getGit(CasUserProfile user, boolean returnMaster) throws Exception {
         if (user.isAdministrator())  {
             return masterRepository();
@@ -49,6 +52,7 @@ public class RepositoryFactory {
         }
         return new GitUtil(null);
     }
+    */
 
     public GitUtil masterRepository() throws Exception {
         return new GitUtil(new Git(new FileRepositoryBuilder()
@@ -59,15 +63,7 @@ public class RepositoryFactory {
                 .build()));
     }
 
-    public GitUtil publishedRepository() throws Exception {
-        return new GitUtil(new Git(new FileRepositoryBuilder()
-                .setGitDir(new File(casProperties.getMgmt().getPublishedRepo()+"/.git"))
-                .setMustExist(true)
-                .readEnvironment()
-                .findGitDir()
-                .build()));
-    }
-
+    /*
     public GitUtil userRepository(String user) throws Exception {
         String path = casProperties.getMgmt().getUserReposDir()+"/"+user+"/.git";
         return new GitUtil(new Git(new FileRepositoryBuilder()
@@ -77,6 +73,7 @@ public class RepositoryFactory {
                 .findGitDir()
                 .build()));
     }
+    */
 
     public void clone(String clone) {
         try {

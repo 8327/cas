@@ -18,7 +18,7 @@ import {Observable} from "rxjs/Observable";
 })
 export class HistoryComponent implements OnInit {
 
-  displayedColumns = ['message','committer','time','actions'];
+  displayedColumns = ['actions','message','committer','time'];
   database = new HistoryDatabase();
   dataSource: HistoryDataSource | null;
 

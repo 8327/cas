@@ -19,46 +19,46 @@
   <mat-table #table [dataSource]="dataSource">
 
     <ng-container matColumnDef="message">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef [ngClass]="'messageWidth'">
         <ng-container i18n>
           Message
         </ng-container>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      <mat-cell *matCellDef="let row" [ngClass]="'messageWidth'">
         {{ row.message }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="committer">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef [ngClass]="'committerWidth'">
         <ng-container i18n>
           Committer
         </ng-container>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      <mat-cell *matCellDef="let row" [ngClass]="'committerWidth'">
         {{ row.committer }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="time">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef [ngClass]="'timeWidth'">
         <ng-container i18n>
           Time
         </ng-container>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      <mat-cell *matCellDef="let row" [ngClass]="'timeWidth'">
         {{ row.time }}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef [ngClass]="'actionWidth'">
         <ng-container i18n>
-          Actions
+           &nbsp;
         </ng-container>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <button mat-button [matMenuTriggerFor]="historyMenu" (click)="selectedItem = row">
+      <mat-cell *matCellDef="let row" [ngClass]="'actionWidth'">
+        <button mat-icon-button [matMenuTriggerFor]="historyMenu" (click)="selectedItem = row">
           <mat-icon>menu</mat-icon>
         </button>
       </mat-cell>

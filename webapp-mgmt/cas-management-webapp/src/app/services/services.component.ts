@@ -10,6 +10,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
 import {ControlsService} from "../controls/controls.service";
 import {RevertComponent} from "../revert/revert.component";
+import {DataSource} from "@angular/cdk/table";
 
 @Component({
   selector: 'app-services',
@@ -17,13 +18,13 @@ import {RevertComponent} from "../revert/revert.component";
   styleUrls: ['./services.component.css']
 })
 export class ServicesComponent implements OnInit,AfterViewInit {
-
-  dataTable: ServiceItem[];
   deleteItem: ServiceItem;
   domain: String;
   selectedItem: ServiceItem;
   revertItem: ServiceItem;
-  servicesDatabase = new ServicesDatabase();
+  serviceDatabase = new ServiceDatabase();
+  dataSource: ServiceDataSource | null;
+  displayedColumns = ['actions','name','serviceId','description'];
 
   @ViewChild("paginator")
   paginator: MatPaginator;
@@ -36,10 +37,10 @@ export class ServicesComponent implements OnInit,AfterViewInit {
               public dialog: MatDialog,
               public snackBar: MatSnackBar,
               public controlsService: ControlsService) {
-    this.dataTable = [];
   }
 
   ngOnInit() {
+    this.dataSource = new ServiceDataSource(this.serviceDatabase,this.paginator);
     this.route.data
       .subscribe((data: { resp: ServiceItem[]}) => {
         if (!data.resp) {
@@ -47,22 +48,13 @@ export class ServicesComponent implements OnInit,AfterViewInit {
             duration: 5000
           });
         }
-        this.servicesDatabase.load(data.resp);
+        this.serviceDatabase.load(data.resp);
       });
     this.route.params.subscribe((params) => this.domain = params['domain']);
   }
 
   ngAfterViewInit() {
-    const displayDataChanges = [
-      this.servicesDatabase.dataChange,
-      this.paginator.page,
-    ];
 
-    Observable.merge(...displayDataChanges).map(() => {
-      const data = this.servicesDatabase.data.slice();
-      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.splice(startIndex, this.paginator.pageSize);
-    }).subscribe((d) => setTimeout(() => this.dataTable = d,0));
   }
 
   serviceEdit(item?: ServiceItem) {
@@ -145,7 +137,7 @@ export class ServicesComponent implements OnInit,AfterViewInit {
 
   getServices() {
     this.service.getServices(this.domain)
-      .then(resp => this.servicesDatabase.load(resp))
+      .then(resp => this.serviceDatabase.load(resp))
       .catch((e: any) => this.snackBar.open(this.messages.management_services_status_listfail,'Dismiss', {
         duration: 5000
       }));
@@ -156,9 +148,9 @@ export class ServicesComponent implements OnInit,AfterViewInit {
   }
 
   moveUp(a: ServiceItem) {
-    let index: number = this.servicesDatabase.data.indexOf(a);
+    let index: number = this.serviceDatabase.data.indexOf(a);
     if(index > 0) {
-      let b: ServiceItem = this.servicesDatabase.data[index - 1];
+      let b: ServiceItem = this.serviceDatabase.data[index - 1];
       a.evalOrder = index-1;
       b.evalOrder = index;
       this.service.updateOrder(a,b).then(resp => this.refresh());
@@ -166,22 +158,28 @@ export class ServicesComponent implements OnInit,AfterViewInit {
   }
 
   moveDown(a: ServiceItem) {
-    let index: number = this.servicesDatabase.data.indexOf(a);
-    if(index < this.servicesDatabase.data.length -1) {
-      let b: ServiceItem = this.servicesDatabase.data[index + 1];
+    let index: number = this.serviceDatabase.data.indexOf(a);
+    if(index < this.serviceDatabase.data.length -1) {
+      let b: ServiceItem = this.serviceDatabase.data[index + 1];
       a.evalOrder = index+1;
       b.evalOrder = index;
       this.service.updateOrder(a,b).then(resp => this.refresh());
     }
   }
 
-  json() {
-
+  showMoveDown(): boolean {
+    if (!this.selectedItem) {
+      return false;
+    }
+    let index = this.serviceDatabase.data.indexOf(this.selectedItem);
+    return index < this.serviceDatabase.data.length - 1
+           && this.serviceDatabase.data[index + 1].status !== 'DELETE'
+           && this.selectedItem && this.selectedItem.status !== 'DELETE';
   }
 
 }
 
-export class ServicesDatabase {
+export class ServiceDatabase {
   dataChange: BehaviorSubject<ServiceItem[]> = new BehaviorSubject<ServiceItem[]>([]);
   get data(): ServiceItem[] { return this.dataChange.value; }
 
@@ -200,4 +198,27 @@ export class ServicesDatabase {
     copiedData.push(service);
     this.dataChange.next(copiedData);
   }
+
+}
+
+export class ServiceDataSource extends DataSource<any> {
+
+  constructor(private _serviceDatabase: ServiceDatabase, private _paginator: MatPaginator) {
+    super();
+  }
+
+  connect(): Observable<ServiceItem[]> {
+    const displayDataChanges = [
+      this._serviceDatabase.dataChange,
+      this._paginator.page,
+    ];
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this._serviceDatabase.data.slice();
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
+    });
+  }
+
+  disconnect() {}
 }

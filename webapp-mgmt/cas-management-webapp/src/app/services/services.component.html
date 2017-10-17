@@ -13,7 +13,7 @@
     <app-controls></app-controls>
   </div>
 </div>
-
+<!--
 <mat-card *ngFor="let item of dataTable; let i = index;" style="margin-bottom: 1px;margin-right:25px;margin-left:25px;">
   <div style="display: flex;">
     <div style="padding-right:20px" [matMenuTriggerFor]="serviceMenu" (click)="selectedItem = item">
@@ -37,40 +37,115 @@
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25, 100]">
 </mat-paginator>
+-->
+<div style="margin-right:25px;margin-left:25px;">
+  <mat-table #table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'actionWidth'">
+        <ng-container i18n>
+          &nbsp;
+        </ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [ngClass]="'actionWidth'">
+        <button mat-icon-button [matMenuTriggerFor]="serviceMenu" (click)="selectedItem = row">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'statusWidth'">
+        <ng-container i18n>Status</ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [ngClass]="'statusWidth'">
+        <span *ngIf="row.status === 'ADDED'" style="color:green;">A</span>
+        <span *ngIf="row.status === 'MODIFIED'" style="color:blue;">M</span>
+        <span *ngIf="row.status === 'DELETED'" style="color:red;">D</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'nameWidth'">
+        <ng-container i18n>
+          Name
+        </ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [ngClass]="'nameWidth'">
+        <a (click)="serviceEdit(row.assignedId)">
+          {{ row.name }}
+        </a>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="serviceId">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'serviceIdWidth'">
+        <ng-container i18n>
+          Service Url
+        </ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [ngClass]="'serviceIdWidth'">
+        {{ row.serviceId }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'descriptionWidth'">
+        <ng-container i18n>
+          Description
+        </ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [ngClass]="'descriptionWidth'">
+        {{ row.description }}
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="row.status"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [length]="serviceDatabase.data.length"
+                 [pageIndex]="0"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
 
 <mat-menu #serviceMenu>
-  <button mat-menu-item (click)="serviceEdit()">
+  <button mat-menu-item (click)="serviceEdit()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>edit</mat-icon>
     <ng-container i18n="management.services.table.button.edit">
       {{ messages.management_services_table_button_edit }}
     </ng-container>
   </button>
-  <button mat-menu-item (click)="serviceDuplicate()">
+  <button mat-menu-item (click)="serviceDuplicate()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>content_copy</mat-icon>
     <ng-container i18n="management.services.table.button.duplicate">
       {{ messages.management_services_table_button_duplicate }}
     </ng-container>
   </button>
-  <button mat-menu-item (click)="openModalDelete()">
+  <button mat-menu-item (click)="openModalDelete()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>delete</mat-icon>
     <ng-container i18n="management.services.table.button.delete">
       {{ messages.management_services_table_button_delete }}
     </ng-container>
   </button>
-  <button mat-menu-item (click)="history()">
+  <button mat-menu-item (click)="history()" *ngIf="selectedItem && selectedItem.status !== 'ADD'">
     <mat-icon>history</mat-icon>
     <ng-container i18n>History</ng-container>
   </button>
 
-  <button mat-menu-item (click)="openModalRevert()">
+  <button mat-menu-item (click)="openModalRevert()" *ngIf="selectedItem && selectedItem.status !== 'ADD'">
     <mat-icon>undo</mat-icon>
     <ng-container i18n>Revert</ng-container>
   </button>
-  <button mat-menu-item (click)="moveUp()" *ngIf="servicesDatabase.data.indexOf(selectedItem) > 0">
+  <button mat-menu-item (click)="moveUp(selectedItem)" *ngIf="serviceDatabase.data.indexOf(selectedItem) > 0 && selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>arrow_upward</mat-icon>
     <ng-container>Move Up</ng-container>
   </button>
-  <button mat-menu-item (click)="moveDown()" *ngIf="servicesDatabase.data.indexOf(selectedItem) < servicesDatabase.data.length - 1">
+  <button mat-menu-item (click)="moveDown(selectedItem)" *ngIf="showMoveDown()">
     <mat-icon>arrow_downward</mat-icon>
     <ng-container>Move Down</ng-container>
   </button>

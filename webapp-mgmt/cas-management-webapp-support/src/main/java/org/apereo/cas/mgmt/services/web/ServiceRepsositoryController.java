@@ -114,7 +114,6 @@ public class ServiceRepsositoryController {
 		GitUtil git = repositoryFactory.masterRepository();
 		//git.pull();
 		git.getUnpublishedCommits().forEach(commit -> {
-			System.out.println(commit);
 			try {
 				git.getDiffs(commit.getId()).forEach(l -> {
 					RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
@@ -184,8 +183,6 @@ public class ServiceRepsositoryController {
 	 */
 	private int getPublishBehindCount() throws Exception {
 		final GitUtil git = repositoryFactory.masterRepository();
-		System.out.println(git.getGit().getRepository().resolve("HEAD"));
-		System.out.println(git.getPublished().getPeeledObjectId());
 		return git.getGit().getRepository().resolve("HEAD").equals(git.getPublished().getPeeledObjectId()) ? 0 : 1;
 	}
 

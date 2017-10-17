@@ -1,18 +1,16 @@
-
-
-.titleBar {
-  display:inline-flex;
-  width:100%;
+.messageWidth {
+  flex: 1 1 auto;
 }
 
-.title {
-  display:inline;
-  width:100%;
-  float:left;
+.committerWidth {
+  flex: 0 0 240px;
 }
 
-.nav {
-  display:inline;
-  float:right;
-  margin:auto;
+.timeWidth {
+  flex: 0 0 240px;
 }
+
+.actionWidth {
+  flex: 0 0 50px;
+}
+

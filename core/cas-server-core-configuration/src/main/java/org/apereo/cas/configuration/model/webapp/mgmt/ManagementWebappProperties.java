@@ -74,12 +74,14 @@ public class ManagementWebappProperties implements Serializable {
      */
     private Resource userPropertiesFile = new ClassPathResource("user-details.properties");
 
-    private String userReposDir;
+    /**
+     * A writtable location where the Git repository will be created to track changes
+     */
+    private String servicesRepo = "/etc/cas/services-repo";
 
-    private String servicesRepo;
-
-    private String publishedRepo;
-
+    /**
+     * Path to executable bean shell script to sync server nodes.
+     */
     private String syncScript;
     
     public Ldap getLdap() {
@@ -156,28 +158,12 @@ public class ManagementWebappProperties implements Serializable {
         }
     }
 
-    public String getUserReposDir() {
-        return userReposDir;
-    }
-
-    public void setUserReposDir(String userReposDir) {
-        this.userReposDir = userReposDir;
-    }
-
     public String getServicesRepo() {
         return servicesRepo;
     }
 
     public void setServicesRepo(String servicesRepo) {
         this.servicesRepo = servicesRepo;
-    }
-
-    public String getPublishedRepo() {
-        return publishedRepo;
-    }
-
-    public void setPublishedRepo(String publishedRepo) {
-        this.publishedRepo = publishedRepo;
     }
 
     public String getSyncScript() {

@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div style="flex: 1 1 auto"></div>
-    <div *ngIf="!change">
+    <div *ngIf="change === 'false'">
       <button mat-button (click)="saveFn();">
         <mat-icon>save</mat-icon>
         <ng-container i18n="services.form.button.save">
@@ -24,7 +24,7 @@
         </ng-container>
       </button>
     </div>
-    <div *ngIf="change">
+    <div *ngIf="change === 'true'">
       <button mat-button (click)="goBack();">
         <mat-icon>arrow_back</mat-icon>
       </button>

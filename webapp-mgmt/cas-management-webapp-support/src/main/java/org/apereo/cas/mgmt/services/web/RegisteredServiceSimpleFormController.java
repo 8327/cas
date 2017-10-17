@@ -58,6 +58,9 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
                                               final HttpServletResponse response,
                                               @RequestBody final RegisteredService service) throws Exception {
         final GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
+        if (service.getEvaluationOrder() < 0) {
+            service.setEvaluationOrder(manager.getAllServices().size());
+        }
         final RegisteredService newSvc = manager.save(service);
         LOGGER.info("Saved changes to service [{}]", service.getId());
         return new ResponseEntity<>(String.valueOf(newSvc.getId()), HttpStatus.OK);

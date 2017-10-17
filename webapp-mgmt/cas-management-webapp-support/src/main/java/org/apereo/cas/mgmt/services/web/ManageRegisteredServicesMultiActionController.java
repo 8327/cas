@@ -4,18 +4,24 @@ import org.apereo.cas.authentication.principal.Service;
 import org.apereo.cas.authentication.principal.ServiceFactory;
 import org.apereo.cas.authentication.principal.WebApplicationService;
 import org.apereo.cas.configuration.CasConfigurationProperties;
+import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.authentication.CasUserProfileFactory;
 import org.apereo.cas.mgmt.services.GitServicesManager;
+import org.apereo.cas.mgmt.services.web.beans.Change;
 import org.apereo.cas.mgmt.services.web.beans.FormData;
 import org.apereo.cas.mgmt.services.web.beans.RegisteredServiceItem;
 import org.apereo.cas.mgmt.services.web.factory.ManagerFactory;
+import org.apereo.cas.mgmt.services.web.factory.RepositoryFactory;
 import org.apereo.cas.services.RegexRegisteredService;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.services.ServicesManager;
+import org.apereo.cas.services.util.RegisteredServiceJsonSerializer;
 import org.apereo.cas.util.DigestUtils;
 import org.apereo.cas.util.RegexUtils;
 import org.apereo.services.persondir.IPersonAttributeDao;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.lib.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +35,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import sun.reflect.annotation.ExceptionProxy;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -62,8 +72,13 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
 
     private CasConfigurationProperties casProperties;
 
+    private Map<String,Change> uncommitted;
+
     @Autowired
     ManagerFactory managerFactory;
+
+    @Autowired
+    RepositoryFactory repositoryFactory;
 
     /**
      * Instantiates a new manage registered services multi action controller.
@@ -138,8 +153,11 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      * the default service that is the management app itself cannot be deleted
      * or the user will be locked out.
      *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
      * @param idAsLong the id
      * @return the response entity
+     * @throws Exception - failed
      */
     @GetMapping(value = "/deleteRegisteredService")
     public ResponseEntity<String> deleteRegisteredService(final HttpServletRequest request,
@@ -162,11 +180,10 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     /**
      * Method to show the RegisteredServices.
      *
-     * @param response the response
      * @return the Model and View to go to after the services are loaded.
      */
     @GetMapping(value = "/manage.html")
-    public ModelAndView manage(final HttpServletResponse response) {
+    public ModelAndView manage() {
         ensureDefaultServiceExists();
         final Map<String, Object> model = new HashMap<>();
         model.put("defaultServiceUrl", this.defaultService.getId());
@@ -178,6 +195,8 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     /**
      * Gets domains.
      *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
      * @return the domains
      * @throws Exception the exception
      */
@@ -208,27 +227,63 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     /**
      * Gets services.
      *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
      * @param domain the domain for which services will be retrieved
      * @return the services
+     * @throws Exception - failed
      */
     @GetMapping(value = "/getServices")
     public ResponseEntity<List<RegisteredServiceItem>> getServices(final HttpServletRequest request,
                                                                    final HttpServletResponse response,
                                                                    @RequestParam final String domain) throws Exception {
         ensureDefaultServiceExists();
-        final GitServicesManager manager = managerFactory.manager(request,casUserProfileFactory.from(request,response));
+        final CasUserProfile casUserProfile = casUserProfileFactory.from(request,response);
+        final GitServicesManager manager = managerFactory.manager(request,casUserProfile);
+        final GitUtil git = repositoryFactory.masterRepository();
+        if (git.isNull()) {
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+        }
+        this.uncommitted = git.scanWorkingDiffs().stream()
+                .map(d -> createChange(d,git))
+                .collect(Collectors.toMap(Change::getId, Function.identity()));
         final List<RegisteredServiceItem> serviceItems = new ArrayList<>();
         final List<RegisteredService> services = new ArrayList<>(manager.getServicesForDomain(domain));
         serviceItems.addAll(services.stream().map(this::createServiceItem).collect(Collectors.toList()));
+        serviceItems.addAll(checkForDeleted(git));
         return new ResponseEntity<>(serviceItems, HttpStatus.OK);
     }
 
+    private List<RegisteredServiceItem> checkForDeleted(final GitUtil git) {
+        try {
+            return git.checkForDeletes()
+                    .map(d -> getService(git, d))
+                    .collect(Collectors.toList());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    private RegisteredServiceItem getService(final GitUtil git, final DiffEntry d) {
+        try {
+            String json = git.readObject(d.getOldId().toObjectId());
+            RegisteredServiceJsonSerializer serializer = new RegisteredServiceJsonSerializer();
+            return createServiceItem(serializer.from(json));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     /**
      * Method will filter all services in the register using the passed string a regular expression against the
      * service name, service id, and service description.
      *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
      * @param query - a string representing text to search for
      * @return - the resulting services
+     * @throws Exception - failed
      */
     @GetMapping(value = "/search")
     public ResponseEntity<List<RegisteredServiceItem>> search(final HttpServletRequest request,
@@ -272,6 +327,7 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      * @param request  the request
      * @param response the response
      * @param svcs     the services to be updated
+     * @throws Exception - failed
      */
     @PostMapping(value = "/updateOrder", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -301,8 +357,65 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
         serviceItem.setName(service.getName());
         serviceItem.setServiceId(service.getServiceId());
         serviceItem.setDescription(DigestUtils.abbreviate(service.getDescription()));
+        if (uncommitted.containsKey(String.valueOf(service.getId()))) {
+            serviceItem.setStatus(uncommitted.get(String.valueOf(service.getId())).getChangeType());
+        }
         return serviceItem;
     }
 
+    /**
+     * Factory method used to create a Change object to be returned to the client.
+     *
+     * @param entry - DiffEntry
+     * @param git - GitUtil
+     * @return - Change
+     */
+    private Change createChange(final DiffEntry entry, final GitUtil git) {
+        try {
+            if (entry.getChangeType() == DiffEntry.ChangeType.DELETE) {
+                return createDeleteChange(git,entry.getOldId().toObjectId(),entry.getOldPath());
+            } else {
+                return createModifyChange(git,entry.getNewPath(),entry.getChangeType());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Creates a change for a delete file.
+     *
+     * @param git - GitUtil
+     * @param id - ObjectId of the commit
+     * @param path - path fo the file deleted.
+     * @return - Change
+     * @throws Exception - failed
+     */
+    private Change createDeleteChange(final GitUtil git, final ObjectId id, final String path) throws Exception {
+        String json = git.readObject(id.toObjectId());
+        RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+        return new Change(String.valueOf(ser.from(json).getId()),
+                path,
+                DiffEntry.ChangeType.DELETE.toString());
+    }
+
+    /**
+     * Creates a change for a modified file.
+     *
+     * @param git - GitUtil
+     * @param path - path of the file
+     * @param changeType - ChangeType flag
+     * @return - Change
+     * @throws Exception - failed
+     */
+    private Change createModifyChange(final GitUtil git, final String path, final DiffEntry.ChangeType changeType) throws Exception {
+        String file = git.repoPath() + "/" + path;
+        String json = new String(Files.readAllBytes(Paths.get(file)));
+        RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+        return new Change(String.valueOf(ser.from(json).getId()),
+                path,
+                changeType.toString());
+    }
 }
 

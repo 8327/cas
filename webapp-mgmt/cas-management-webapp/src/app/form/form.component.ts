@@ -44,8 +44,8 @@ enum Tabs {
 export class FormComponent implements OnInit {
 
   id: String;
-  duplicate: boolean;
-  change: boolean;
+  duplicate: String = "false";
+  change: String = "false"
   path: String;
 
   @ViewChild('tabGroup')
@@ -72,8 +72,8 @@ export class FormComponent implements OnInit {
       this.path = url[0].path;
       this.route.params.subscribe((params) => {
         this.id = params['id'];
-        this.duplicate = params['duplicate'];
-        this.change = params['change'];
+        this.duplicate = params['duplicate'] || "false";
+        this.change = params['change'] || "false";
         this.goto(Tabs.BASICS);
       });
     });
@@ -93,14 +93,6 @@ export class FormComponent implements OnInit {
 
   goBack() {
     this.location.back();
-  }
-
-  isNew() {
-    return this.data.service.id == -1;
-  }
-
-  isView() {
-    return this.change;
   }
 
   loadService(form: AbstractRegisteredService) {
