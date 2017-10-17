@@ -30,7 +30,6 @@ import {
   MatPaginatorModule
 } from "@angular/material";
 import {CdkTableModule} from "@angular/cdk/table";
-import {Container} from "../container";
 import {Editor} from "../editor.component";
 import {CommitComponent} from "../commit/commit.component";
 import {ControlsComponent} from "../controls/controls.component";
@@ -66,7 +65,6 @@ import {PublishComponent} from "../publish/publish.component";
   ],
   declarations: [
     MyTooltipDirective,
-    Container,
     Editor,
     ControlsComponent,
     CommitComponent,
@@ -103,7 +101,6 @@ import {PublishComponent} from "../publish/publish.component";
     MatAutocompleteModule,
     MatSnackBarModule,
     MatPaginatorModule,
-    Container,
     Editor,
     ControlsComponent,
     CommitComponent

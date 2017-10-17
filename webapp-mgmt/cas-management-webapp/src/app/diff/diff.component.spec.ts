@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Location, LocationStrategy } from "@angular/common";
 import { DiffComponent } from './diff.component';
-import {Container} from "../container";
 import {Editor} from "../editor.component";
 import {Messages} from "../messages";
 import {DiffEntry} from "../../domain/diff-entry";
@@ -32,7 +31,7 @@ describe('DiffComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiffComponent, Container, Editor],
+      declarations: [ DiffComponent, Editor],
       providers: [
         Messages,
         {provide: ChangesService, useValue: changesServiceStub},

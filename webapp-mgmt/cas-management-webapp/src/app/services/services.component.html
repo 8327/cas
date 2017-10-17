@@ -72,7 +72,7 @@
         </ng-container>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [ngClass]="'nameWidth'">
-        <a (click)="serviceEdit(row.assignedId)">
+        <a (click)="serviceEdit(row)">
           {{ row.name }}
         </a>
       </mat-cell>

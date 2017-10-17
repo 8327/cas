@@ -18,12 +18,12 @@ export class Editor implements OnInit {
     this.editor = ace.edit("editor");
     this.editor.getSession().setUseWrapMode(true);
     this.editor.setPrintMarginColumn(180);
-    var XmlMode = ace.require("ace/mode/"+this.mode).Mode;
+    var EditorMode = ace.require("ace/mode/"+this.mode).Mode;
     var Vim = ace.require("ace/keyboard/vim");
-    this.editor.session.setMode(new XmlMode());
+    this.editor.session.setMode(new EditorMode());
     this.editor.setKeyboardHandler(Vim.handler);
-    //this.onResize(null);
     this.editor.setFontSize(14);
+    this.editor.$blockScrolling = Infinity;
   }
 
   @Input()
