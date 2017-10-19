@@ -15,7 +15,7 @@ import org.apereo.cas.mgmt.services.web.factory.ManagerFactory;
 import org.apereo.cas.mgmt.services.web.factory.RepositoryFactory;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.services.ServicesManager;
-import org.apereo.cas.services.util.RegisteredServiceJsonSerializer;
+import org.apereo.cas.services.util.DefaultRegisteredServiceJsonSerializer;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.ObjectId;
@@ -115,7 +115,7 @@ public class ServiceRepsositoryController {
 		git.getUnpublishedCommits().forEach(commit -> {
 			try {
 				git.getDiffs(commit.getId()).forEach(l -> {
-					RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+					DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
 					if(l.getChangeType() == DiffEntry.ChangeType.DELETE) {
 						try {
 							this.servicesManager.delete(ser.from(git.readObject(l.getOldId().toObjectId())).getId());
@@ -407,7 +407,7 @@ public class ServiceRepsositoryController {
 		final CasUserProfile user = casUserProfileFactory.from(request, response);
 		final GitUtil git = repositoryFactory.getGit(user,true);
 
-		return new ResponseEntity<>(new RegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
+		return new ResponseEntity<>(new DefaultRegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
 	}
 
 	/**
@@ -614,7 +614,7 @@ public class ServiceRepsositoryController {
 	 * @throws Exception - failed
 	 */
 	private void insertService(final GitUtil git, String path, final ServicesManager manager) throws Exception {
-		RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
 		RegisteredService svc = ser.from(git.readObject(git.history(path).get(0).getId()));
 		String domain = getDomain(svc.getServiceId());
 		//from.insertService(domain,svc.getEvaluationOrder());
@@ -695,7 +695,7 @@ public class ServiceRepsositoryController {
 	 */
 	private Change createDeleteChange(final GitUtil git, final ObjectId id, final String path) throws Exception {
 		String json = git.readObject(id.toObjectId());
-		RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
 		return new Change(String.valueOf(ser.from(json).getId()),
 				          path,
 				          DiffEntry.ChangeType.DELETE.toString());
@@ -713,7 +713,7 @@ public class ServiceRepsositoryController {
 	private Change createModifyChange(final GitUtil git, final String path, final DiffEntry.ChangeType changeType) throws Exception {
 		String file = git.repoPath() + "/" + path;
 		String json = new String(Files.readAllBytes(Paths.get(file)));
-		RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
 		return new Change(String.valueOf(ser.from(json).getId()),
 				          path,
 				          changeType.toString());

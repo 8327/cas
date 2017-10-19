@@ -107,6 +107,17 @@ const childRoutes: Routes = [
         }
       },
       {
+        path: 'view/:id',
+        component: FormComponent,
+        resolve: {
+          resp: FormResolve
+        },
+        children: childRoutes,
+        data: {
+          view: true
+        }
+      },
+      {
         path: 'form/:id',
         component: FormComponent,
         resolve: {

@@ -18,7 +18,7 @@ export class FormResolve implements Resolve<AbstractRegisteredService> {
 
     if(!param || param === '-1') {
       return new Promise((resolve,reject) => resolve(new RegexRegisteredService()));
-    } else if (change == 'true') {
+    } else if (route.data.view) {
       return this.changeService.getChange(param).then(resp => {return resp;});
     } else {
       return this.service.getService(param).then(resp => {

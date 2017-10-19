@@ -5,7 +5,7 @@ import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.services.web.beans.RegisteredServiceItem;
 import org.apereo.cas.mgmt.services.web.factory.RepositoryFactory;
 import org.apereo.cas.services.*;
-import org.apereo.cas.services.util.RegisteredServiceJsonSerializer;
+import org.apereo.cas.services.util.DefaultRegisteredServiceJsonSerializer;
 import org.apereo.cas.util.DigestUtils;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.slf4j.Logger;
@@ -89,7 +89,7 @@ public class GitServicesManager extends DomainServicesManager {
     private RegisteredServiceItem getService(final GitUtil git, final DiffEntry d) {
         try {
             String json = git.readObject(d.getOldId().toObjectId());
-            RegisteredServiceJsonSerializer serializer = new RegisteredServiceJsonSerializer();
+            DefaultRegisteredServiceJsonSerializer serializer = new DefaultRegisteredServiceJsonSerializer();
             return createServiceItem(serializer.from(json));
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +112,7 @@ public class GitServicesManager extends DomainServicesManager {
 
     private Pair<Integer, String> createChange(final DiffEntry entry, final GitUtil git) {
         try {
-            RegisteredServiceJsonSerializer ser = new RegisteredServiceJsonSerializer();
+            DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
             RegisteredService svc;
             if (entry.getChangeType() == DiffEntry.ChangeType.DELETE) {
                 svc = ser.from(git.readObject(entry.getOldId().toObjectId()));

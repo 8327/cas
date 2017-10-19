@@ -56,7 +56,7 @@ export class HistoryComponent implements OnInit {
   }
 
   viewChange() {
-    this.router.navigate(['/form',this.selectedItem.id, {duplicate: false, change: true}]);
+    this.router.navigate(['/view',this.selectedItem.id]);
   }
 
   checkout() {

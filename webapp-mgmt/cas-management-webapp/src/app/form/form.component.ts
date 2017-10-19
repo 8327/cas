@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {Messages} from "../messages";
-import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
+import {ActivatedRoute, ActivatedRouteSnapshot, Router, UrlSegment} from "@angular/router";
 import {Location} from "@angular/common";
 import {FormService} from "./form.service";
 import {Data} from "./data";
@@ -44,6 +44,7 @@ enum Tabs {
 export class FormComponent implements OnInit {
 
   id: String;
+  view: boolean;
 
   @ViewChild('tabGroup')
   tabGroup: MatTabGroup;
@@ -58,18 +59,15 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.view = this.route.snapshot.data.view;
     this.route.data
       .subscribe((data: { resp: AbstractRegisteredService}) => {
         if (data.resp) {
           this.loadService(data.resp);
+          this.goto(Tabs.BASICS)
         }
       });
 
-    this.route.url.subscribe((url: UrlSegment[]) => {
-      this.route.params.subscribe((params) => {
-        this.goto(Tabs.BASICS);
-      });
-    });
   }
 
   goto(tab:Tabs) {

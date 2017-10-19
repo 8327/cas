@@ -78,8 +78,8 @@ public class ManageRegisteredServicesMultiActionControllerTests {
 
         this.servicesManager.save(r);
 
-        this.controller.manage();
         final MockHttpServletResponse response = new MockHttpServletResponse();
+        this.controller.manage(response);
         final MockHttpServletRequest request = new MockHttpServletRequest();
         this.controller.deleteRegisteredService(request,response,1200);
 
@@ -127,8 +127,7 @@ public class ManageRegisteredServicesMultiActionControllerTests {
         r.setEvaluationOrder(2);
 
         this.servicesManager.save(r);
-
-        final ModelAndView mv = this.controller.manage();
+        final ModelAndView mv = this.controller.manage(new MockHttpServletResponse());
 
         assertTrue(mv.getModel().containsKey("defaultServiceUrl"));
         assertTrue(mv.getModel().containsKey("status"));
