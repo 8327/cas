@@ -33,7 +33,6 @@ export class ServicesComponent implements OnInit,AfterViewInit {
               private route: ActivatedRoute,
               private router: Router,
               private service: ServiceViewService,
-              private location: Location,
               public dialog: MatDialog,
               public snackBar: MatSnackBar,
               public controlsService: ControlsService) {
