@@ -75,6 +75,7 @@ import {PublishComponent} from "../publish/publish.component";
     PublishComponent
   ],
   providers: [
+    ControlsService
   ],
   exports: [
     MyTooltipDirective,

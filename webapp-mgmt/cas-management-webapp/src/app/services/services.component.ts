@@ -176,6 +176,13 @@ export class ServicesComponent implements OnInit,AfterViewInit {
            && this.serviceDatabase.data[index + 1].status !== 'DELETE'
            && this.selectedItem && this.selectedItem.status !== 'DELETE';
   }
+  showMoveUp(): boolean {
+    if (!this.selectedItem) {
+      return false;
+    }
+    let index = this.serviceDatabase.data.indexOf(this.selectedItem);
+    return index > 0;
+  }
 
 }
 
