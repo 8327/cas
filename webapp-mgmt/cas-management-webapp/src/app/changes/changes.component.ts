@@ -45,10 +45,6 @@ export class ChangesComponent implements OnInit {
   viewChange(diff: DiffEntry) {
     this.router.navigate(['/view',diff.newId]);
   }
-
-  goBack() {
-    this.location.back();
-  }
 }
 
 export class ChangesDatabase {

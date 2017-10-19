@@ -49,10 +49,6 @@ export class DomainsComponent implements OnInit {
     this.router.navigate(['services', domain]);
   }
 
-  goBack() {
-    this.location.back();
-  }
-
 }
 
 export class DomainDatabase {

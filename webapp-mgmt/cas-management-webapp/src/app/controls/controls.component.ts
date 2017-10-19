@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import {Component, OnInit, Input, ViewChild, Output, EventEmitter} from '@angular/core';
 import { Router } from "@angular/router";
 import {Messages} from "../messages";
 import {ControlsService} from "./controls.service";
@@ -7,6 +7,7 @@ import {PublishComponent} from "../publish/publish.component";
 import {Commit} from "../../domain/commit";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {CommitComponent} from "../commit/commit.component";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-controls',
@@ -25,12 +26,16 @@ export class ControlsComponent implements OnInit {
   @ViewChild('publishModal')
   submitComp: PublishComponent;
 
+  @Output()
+  save: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(public messages: Messages,
               public service: ControlsService,
               private router: Router,
               private userService: UserService,
               public dialog: MatDialog,
-              public snackBar: MatSnackBar) { }
+              public snackBar: MatSnackBar,
+              public location: Location) { }
 
   ngOnInit() {
     this.showEdit = this.router.url.includes("form");
@@ -39,8 +44,8 @@ export class ControlsComponent implements OnInit {
     this.unpublished();
   }
 
-  newService() {
-    this.router.navigate(["form",-1]);
+  goBack() {
+    this.location.back();
   }
 
   openModalCommit() {

@@ -1,6 +1,6 @@
 <div>
-  <div *ngIf="showEdit">
-    <button mat-button (click)="saveFn();">
+  <div style="display:inline;" *ngIf="showEdit">
+    <button mat-button (click)="save.emit();">
       <mat-icon>save</mat-icon>
         <ng-container i18n="services.form.button.save">
             {{ messages.services_form_button_save }}
@@ -13,12 +13,7 @@
         </ng-container>
     </button>
   </div>
-  <div *ngIf="!showEdit">
-    <button mat-button (click)="goBack()">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-  </div>
-  <div>
+  <div style="display:inline;">
     <button mat-button id="commit" *ngIf="isAdmin && service.changes"
             (click)="openModalCommit()">
       <mat-icon>input</mat-icon>
@@ -32,6 +27,11 @@
     <button mat-button *ngIf="!isAdmin && service.changes != null"
             (click)="callSubmit()">
       <ng-container i18n>Submit Changes</ng-container>
+    </button>
+  </div>
+  <div style="display:inline;" *ngIf="!showEdit">
+    <button mat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
     </button>
   </div>
 </div>

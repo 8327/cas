@@ -34,6 +34,7 @@ import {Editor} from "../editor.component";
 import {CommitComponent} from "../commit/commit.component";
 import {ControlsComponent} from "../controls/controls.component";
 import {PublishComponent} from "../publish/publish.component";
+import {ControlsService} from "../controls/controls.service";
 
 @NgModule({
   imports: [

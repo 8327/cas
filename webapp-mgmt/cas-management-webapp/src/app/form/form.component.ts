@@ -67,7 +67,6 @@ export class FormComponent implements OnInit {
           this.goto(Tabs.BASICS)
         }
       });
-
   }
 
   goto(tab:Tabs) {
@@ -75,14 +74,10 @@ export class FormComponent implements OnInit {
     this.router.navigate(route,{skipLocationChange: true, relativeTo: this.route} );
   }
 
-  saveFn() {
+  save() {
     this.saveForm();
     this.data.save.emit();
     this.data.submitted = true;
-  }
-
-  goBack() {
-    this.location.back();
   }
 
   loadService(form: AbstractRegisteredService) {

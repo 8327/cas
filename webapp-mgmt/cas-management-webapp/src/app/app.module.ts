@@ -62,7 +62,6 @@ import {InitComponent} from "app/init.component";
   providers: [
     Messages,
     SearchService,
-    ControlsService,
     UserService,
     HeaderService,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}

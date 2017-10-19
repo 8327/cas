@@ -51,10 +51,6 @@ export class HistoryComponent implements OnInit {
     this.route.params.subscribe((params) => this.fileName = params['fileName']);
   }
 
-  goBack() {
-    this.location.back();
-  }
-
   viewChange() {
     this.router.navigate(['/view',this.selectedItem.id]);
   }

@@ -33,7 +33,4 @@ export class JSONComponent implements AfterViewInit, OnInit {
 
   }
 
-  goBack() {
-   this.location.back();
-  }
 }

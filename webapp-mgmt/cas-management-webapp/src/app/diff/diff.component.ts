@@ -26,8 +26,4 @@ export class DiffComponent implements AfterViewInit, OnInit {
   ngOnInit(){
 
   }
-
-  goBack() {
-   this.location.back();
-  }
 }
