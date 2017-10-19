@@ -7,6 +7,7 @@ import {ServicesComponent} from "./services/services.component";
 import {ServicesResolve} from "./services/services.resolover";
 import {DomainsComponent} from "./domains/domains.component";
 import {SearchComponent} from "./search/search.component";
+import {InitComponent} from "./init.component";
 import {HistoryComponent} from "./history/history.component";
 import {HistoryResolve} from "./history/history.resolover";
 import {DiffComponent} from "./diff/diff.component";
@@ -48,6 +49,10 @@ import {JSONResolver} from "./json/json.resolover";
         resolve: {
           resp: JSONResolver
         }
+      },
+      {
+        path: 'manage.html',
+        component: InitComponent
       },
     ]),
   ],

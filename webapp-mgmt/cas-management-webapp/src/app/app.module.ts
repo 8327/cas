@@ -27,6 +27,8 @@ import {ChangesModule} from "./changes/changes.module";
 import {DiffComponent} from "./diff/diff.component";
 import {DiffModule} from "./diff/diff.module";
 import {JSONModule} from "./json/json.module";
+import {HeaderService} from "./header/header.service";
+import {InitComponent} from "app/init.component";
 
 
 @NgModule({
@@ -50,7 +52,8 @@ import {JSONModule} from "./json/json.module";
     HeaderComponent,
     DeleteComponent,
     SearchComponent,
-    RevertComponent
+    RevertComponent,
+    InitComponent
   ],
   entryComponents: [
     DeleteComponent,
@@ -61,6 +64,7 @@ import {JSONModule} from "./json/json.module";
     SearchService,
     ControlsService,
     UserService,
+    HeaderService,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
   ],
   bootstrap: [AppComponent]

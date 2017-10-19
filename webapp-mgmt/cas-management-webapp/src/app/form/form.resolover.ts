@@ -15,8 +15,6 @@ export class FormResolve implements Resolve<AbstractRegisteredService> {
 
   resolve(route: ActivatedRouteSnapshot): Promise<AbstractRegisteredService> {
     let param: string = route.params['id'];
-    let dup: string = route.params['duplicate'];
-    let change: string = route.params['change'];
 
     if(!param || param === '-1') {
       return new Promise((resolve,reject) => resolve(new RegexRegisteredService()));
@@ -25,7 +23,7 @@ export class FormResolve implements Resolve<AbstractRegisteredService> {
     } else {
       return this.service.getService(param).then(resp => {
         if (resp) {
-          if (dup === "true") {
+          if (route.data.duplicate) {
             resp.id = -1;
           }
           return resp;
