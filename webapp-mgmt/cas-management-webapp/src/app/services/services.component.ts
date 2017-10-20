@@ -8,6 +8,7 @@ import {MatDialog, MatPaginator, MatSnackBar} from "@angular/material";
 import {DeleteComponent} from "../delete/delete.component";
 import {ControlsService} from "../controls/controls.service";
 import {Database, Datasource} from "../database";
+import {RevertComponent} from "../revert/revert.component";
 
 @Component({
   selector: 'app-services',
