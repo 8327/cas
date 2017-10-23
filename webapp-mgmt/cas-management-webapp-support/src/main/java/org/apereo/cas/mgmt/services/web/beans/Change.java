@@ -11,12 +11,14 @@ public class Change implements Serializable {
     String changeType;
     String serviceName;
     String oldId;
+    String newId;
 
-    public Change(String id, String fileName, String changeType, String serviceName, String oldId) {
+    public Change(String id, String fileName, String changeType, String serviceName, String oldId, String newId) {
         this.id = id;
         this.fileName = fileName;
         this.changeType = changeType;
         this.serviceName = serviceName;
+        this.newId = newId;
         this.oldId = oldId;
     }
 
@@ -58,5 +60,13 @@ public class Change implements Serializable {
 
     public void setOldId(String oldId) {
         this.oldId = oldId;
+    }
+
+    public String getNewId() {
+        return newId;
+    }
+
+    public void setNewId(String newId) {
+        this.newId = newId;
     }
 }

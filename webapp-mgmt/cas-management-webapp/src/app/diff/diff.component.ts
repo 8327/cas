@@ -3,6 +3,7 @@ import {ChangesService} from "../changes/changes.service";
 import { Location } from "@angular/common";
 import {Messages} from "../messages";
 import { Editor } from "../editor.component";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-diff',
@@ -16,10 +17,12 @@ export class DiffComponent implements AfterViewInit, OnInit {
   @ViewChild('editor')
   editor: Editor;
 
-  constructor(public messages: Messages, private service: ChangesService, private location: Location) { }
+  constructor(public messages: Messages,
+              private service: ChangesService,
+              private route: ActivatedRoute) { }
 
   ngAfterViewInit() {
-    this.service.getDiff(this.service.currentDiff)
+    this.service.viewDiff(this.route.snapshot.params['oldId'],this.route.snapshot.params['newId'])
       .then(diff => this.file = diff);
   }
 

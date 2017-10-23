@@ -109,9 +109,7 @@ public class ServiceRepsositoryController {
     	if (!user.isAdministrator()) {
 			throw new Exception("Permission denied");
 		}
-		//int commits = getPublishBehindCount();
 		GitUtil git = repositoryFactory.masterRepository();
-		//git.pull();
 		git.getUnpublishedCommits().forEach(commit -> {
 			try {
 				git.getDiffs(commit.getId()).forEach(l -> {
@@ -353,42 +351,22 @@ public class ServiceRepsositoryController {
 
 	/**
 	 * Method returns a String representation in diff format for the changes between the submitted file and what is
-	 * currently in the services-repo.  This method looks for the most recent version in directory for case of working
-	 * local changes being present.
-	 *
-	 * @param request - HttpServletRequest
-	 * @param response - HttpServletResponse
-	 * @param diff - Diff
-	 * @throws Exception - failed
-	 */
-	@PostMapping(value = "/viewHistoryDiff", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void viewHistoryDiff(final HttpServletRequest request,
-								final HttpServletResponse response,
-								final @RequestBody Diff diff) throws Exception {
-		final CasUserProfile user = casUserProfileFactory.from(request, response);
-		final GitUtil git = repositoryFactory.getGit(user,true);
-		ObjectId newId = AbbreviatedObjectId.fromString(diff.getNewId()).toObjectId();
-		response.getOutputStream().write(git.getFormatter(newId, git.rawText(diff.getPath())));
-	}
-
-	/**
-	 * Method returns a String representation in diff format for the changes between the submitted file and what is
 	 * currently in the services-repo.
 	 *
 	 * @param request - HttpServletRequest
 	 * @param response - HttpServletResponse
-	 * @param diff - Diff
+     * @param ids - Array of ids to compare
 	 * @throws Exception - failed
 	 */
 	@PostMapping(value = "/viewDiff", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void viewDiff(final HttpServletRequest request,
 						 final HttpServletResponse response,
-						 final @RequestBody Diff diff) throws Exception {
+						 final @RequestBody String[] ids) throws Exception {
 		final CasUserProfile user = casUserProfileFactory.from(request, response);
 		final GitUtil git = repositoryFactory.getGit(user, true);
-		final ObjectId oldId = AbbreviatedObjectId.fromString(diff.getOldId()).toObjectId();
-		final ObjectId newId = AbbreviatedObjectId.fromString(diff.getNewId()).toObjectId();
-		response.getOutputStream().write(git.getFormatter(newId, oldId));
+		final ObjectId oldId = ObjectId.fromString(ids[0]);
+		final ObjectId newId = ObjectId.fromString(ids[1]);
+		response.getOutputStream().write(git.getFormatter(oldId, newId));
 	}
 
 	/**
@@ -409,6 +387,7 @@ public class ServiceRepsositoryController {
 
 		return new ResponseEntity<>(new DefaultRegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
 	}
+
 
 	/**
 	 * Method will merge the submitted pull request into the services-repo.
@@ -674,9 +653,9 @@ public class ServiceRepsositoryController {
 	private Change createChange(final DiffEntry entry, final GitUtil git) {
 		try {
 			if (entry.getChangeType() == DiffEntry.ChangeType.DELETE) {
-				return createDeleteChange(git,entry.getOldId().toObjectId(),entry.getOldPath());
+				return createDeleteChange(git,entry);
 			} else {
-				return createModifyChange(git,entry.getNewPath(),entry.getChangeType(),entry.getOldId().toObjectId());
+				return createModifyChange(git,entry);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -688,41 +667,41 @@ public class ServiceRepsositoryController {
 	 * Creates a change for a delete file.
 	 *
 	 * @param git - GitUtil
-	 * @param id - ObjectId of the commit
-	 * @param path - path fo the file deleted.
+	 * @param entry - DiffEntry for the change.
 	 * @return - Change
 	 * @throws Exception - failed
 	 */
-	private Change createDeleteChange(final GitUtil git, final ObjectId id, final String path) throws Exception {
-		String json = git.readObject(id.toObjectId());
+	private Change createDeleteChange(final GitUtil git, final DiffEntry entry) throws Exception {
+		String json = git.readObject(entry.getOldId().toObjectId());
 		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
 		RegisteredService svc = ser.from(json);
 		return new Change(String.valueOf(svc.getId()),
-				          path,
+				          entry.getOldPath(),
 				          DiffEntry.ChangeType.DELETE.toString(),
 				          svc.getName(),
-				          ObjectId.toString(id));
+				          ObjectId.toString(entry.getOldId().toObjectId()),
+				          null);
 	}
 
 	/**
 	 * Creates a change for a modified file.
 	 *
 	 * @param git - GitUtil
-	 * @param path - path of the file
-	 * @param changeType - ChangeType flag
+	 * @param entry - DiffEntry for the change
 	 * @return - Change
 	 * @throws Exception - failed
 	 */
-	private Change createModifyChange(final GitUtil git, final String path, final DiffEntry.ChangeType changeType, final ObjectId oldId) throws Exception {
-		String file = git.repoPath() + "/" + path;
+	private Change createModifyChange(final GitUtil git, final DiffEntry entry) throws Exception {
+		String file = git.repoPath() + "/" + entry.getNewPath();
 		String json = new String(Files.readAllBytes(Paths.get(file)));
 		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
 		RegisteredService svc = ser.from(json);
 		return new Change(String.valueOf(svc.getId()),
-				          path,
-				          changeType.toString(),
+				          entry.getNewPath(),
+				          entry.getChangeType().toString(),
 				          svc.getName(),
-				          ObjectId.toString(oldId));
+				          ObjectId.toString(entry.getOldId().toObjectId()),
+				          ObjectId.toString(entry.getNewId().toObjectId()));
 	}
 
 	/**

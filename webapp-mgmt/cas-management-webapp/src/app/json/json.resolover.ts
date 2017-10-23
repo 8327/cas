@@ -18,7 +18,7 @@ export class JSONResolver implements Resolve<AbstractRegisteredService> {
     if(!param) {
       return new Promise((resolve,reject) => resolve(null));
     } else {
-      return this.service.getJSON(param).then(resp => resp ? resp : null);
+      return this.service.getChange(param).then(resp => resp ? resp : null);
     }
   }
 }

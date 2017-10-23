@@ -61,13 +61,7 @@ export class HistoryComponent implements OnInit {
   }
 
   viewDiff() {
-    let diff: DiffEntry = new DiffEntry();
-    diff.newId = this.selectedItem.id;
-    diff.oldId = this.database.data[0].id;
-    diff.path = this.selectedItem.path;
-    diff.diff = "HISTORY";
-    this.changeService.currentDiff = diff;
-    this.router.navigate(['/diff']);
+    this.router.navigate(['/diff',{oldId: this.database.data[0].id, newId: this.selectedItem.id}]);
   }
 
   viewJSON() {

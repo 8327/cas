@@ -75,7 +75,7 @@
 </div>
 
 <mat-menu #changeMenu>
-  <button mat-menu-item (click)="viewDiff()">
+  <button mat-menu-item (click)="viewDiff()" *ngIf="selectedItem && selectedItem.changeType === 'MODIFY'">
     <mat-icon>compare_arrows</mat-icon>
     <ng-container i18n>View Diff</ng-container>
   </button>
@@ -83,7 +83,7 @@
     <mat-icon>code</mat-icon>
     <ng-container>JSON</ng-container>
   </button>
-  <button mat-menu-item (click)="revert()">
+  <button mat-menu-item (click)="openModalRevert()">
     <mat-icon>undo</mat-icon>
     <ng-container>Revert</ng-container>
   </button>

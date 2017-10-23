@@ -69,17 +69,12 @@ export class LocalChangesComponent implements OnInit {
   }
 
   viewDiff() {
-    let diff: DiffEntry = new DiffEntry();
-    diff.newId = this.selectedItem.id;
-    diff.oldId = this.selectedItem.oldId;
-    diff.path = this.selectedItem.fileName;
-    diff.diff = "HISTORY";
-    this.changeService.currentDiff = diff;
-    this.router.navigate(['/diff']);
+    this.router.navigate(['/diff', {oldId: this.selectedItem.oldId,newId: this.selectedItem.newId}]);
   }
 
   viewJSON() {
-    this.router.navigate(['/json',this.selectedItem.id]);
+    let id = this.selectedItem.changeType === 'DELETE' ? this.selectedItem.oldId : this.selectedItem.newId;
+    this.router.navigate(['/json',id]);
   }
 
 }

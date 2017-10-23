@@ -1,6 +1,8 @@
 package org.apereo.cas.mgmt;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharSet;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.services.web.beans.Commit;
 import org.apereo.cas.mgmt.services.web.beans.History;
@@ -32,11 +34,10 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
+import org.yaml.snakeyaml.reader.StreamReader;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -189,6 +190,18 @@ public class GitUtil {
         return formatter.scan(oldTreeIter, workTreeIterator);
     }
 
+    public String readFromWorkingTree(String id) throws Exception {
+        return readFormWorkingTree(ObjectId.fromString(id));
+    }
+
+    public String readFormWorkingTree(ObjectId id) throws Exception {
+        FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
+        while(!workTreeIterator.eof() && !workTreeIterator.getEntryObjectId().equals(id)) {
+            workTreeIterator.next(1);
+        }
+        return IOUtils.toString(workTreeIterator.openEntryStream(), Charset.defaultCharset());
+    }
+
     /**
      * Returns a RawText representation of a file in the passed repository.  Used in creating diffs.
      *
@@ -211,10 +224,13 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public String readObject(final String id) throws Exception {
+        return readFormWorkingTree(ObjectId.fromString(id));
+        /*
         ObjectReader reader = git.getRepository().newObjectReader();
         AbbreviatedObjectId aid = AbbreviatedObjectId.fromString(id);
         ObjectId oid = reader.resolve(aid).iterator().next();
         return new String(reader.open(oid).getBytes());
+        */
     }
 
     /**
@@ -226,7 +242,11 @@ public class GitUtil {
      */
     public String readObject(final ObjectId id) throws Exception {
         ObjectReader reader = git.getRepository().newObjectReader();
-        return new String(reader.open(id).getBytes());
+        if (reader.has(id)) {
+            return new String(reader.open(id).getBytes());
+        } else {
+            return readFormWorkingTree(id);
+        }
     }
 
 
@@ -706,7 +726,11 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public RawText rawText(final ObjectId id) throws Exception {
-        return new RawText(objectReader().open(id).getBytes());
+        if (objectReader().has(id)) {
+            return new RawText(objectReader().open(id).getBytes());
+        } else {
+            return new RawText(readFormWorkingTree(id).getBytes());
+        }
     }
 
     /**

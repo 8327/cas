@@ -8,4 +8,5 @@ export class Change {
   changeType: String;
   serviceName: String;
   oldId: String;
+  newId: String;
 }
