@@ -102,8 +102,10 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
      */
     @GetMapping("/manage.html")
     public ModelAndView manage(final HttpServletResponse response) {
+        ensureDefaultServiceExists();
         final Map<String, Object> model = new HashMap<>();
         model.put(STATUS, HttpServletResponse.SC_OK);
+        model.put("defaultServiceUrl", this.defaultService.getId());
         return new ModelAndView("manage", model);
     }
 

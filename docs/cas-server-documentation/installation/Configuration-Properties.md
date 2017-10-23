@@ -82,7 +82,7 @@ The above configuration also applies to online git-based repositories such as Gi
 
 ### Vault
 
-Load settings from [HasiCorp's Vault](Configuration-Properties-Security.html).
+Load settings from [HashiCorp's Vault](Configuration-Properties-Security.html).
 
 ```properties
 # spring.cloud.vault.host=127.0.0.1
@@ -906,7 +906,7 @@ to be a JSON map as such:
 
 ### Ruby/Python/Javascript/Groovy
 
-Similiar to the Groovy option but more versatile, this option takes advantage of Java's native scripting API to invoke Groovy, Python or Javascript scripting engines to compile a pre-defined script o resolve attributes. The following settings are relevant:
+Similar to the Groovy option but more versatile, this option takes advantage of Java's native scripting API to invoke Groovy, Python or Javascript scripting engines to compile a pre-defined script o resolve attributes. The following settings are relevant:
 
 ```properties
 # cas.authn.attributeRepository.script[0].location=file:/etc/cas/script.groovy
@@ -1979,7 +1979,7 @@ You may receive unexpected LDAP failures, when CAS is configured to authenticate
 # cas.authn.ldap[0].order=0
 ```
 
-### LDAP Passoword Encoding & Principal Transformation
+### LDAP Password Encoding & Principal Transformation
 
 ```properties
 # cas.authn.ldap[0].passwordEncoder.type=NONE|DEFAULT|STANDARD|BCRYPT|SCRYPT|PBKDF2|com.example.CustomPasswordEncoder
@@ -2367,6 +2367,7 @@ prior to production rollouts.</p></div>
 ```properties
 # cas.authn.accept.users=
 # cas.authn.accept.name=
+# cas.authn.accept.credentialCriteria=
 
 # cas.authn.accept.passwordEncoder.type=NONE|DEFAULT|STANDARD|BCRYPT|SCRYPT|PBKDF2
 # cas.authn.accept.passwordEncoder.characterEncoding=
@@ -2719,7 +2720,7 @@ To learn more about this topic, [please review this guide](GoogleAuthenticator-A
 # cas.authn.mfa.gauth.label=
 # cas.authn.mfa.gauth.timeStepSize=30
 # cas.authn.mfa.gauth.rank=0
-# cas.authn.mfa.gauth.trustedDeviceEnabled=true
+# cas.authn.mfa.gauth.trustedDeviceEnabled=false
 # cas.authn.mfa.gauth.name=
 
 # cas.authn.mfa.gauth.cleaner.enabled=true
@@ -2792,7 +2793,7 @@ To learn more about this topic, [please review this guide](YubiKey-Authenticatio
 # cas.authn.mfa.yubikey.secretKey=
 # cas.authn.mfa.yubikey.rank=0
 # cas.authn.mfa.yubikey.apiUrls=
-# cas.authn.mfa.yubikey.trustedDeviceEnabled=true
+# cas.authn.mfa.yubikey.trustedDeviceEnabled=false
 # cas.authn.mfa.yubikey.name=
 
 # cas.authn.mfa.yubikey.bypass.principalAttributeName=bypass|skip
@@ -2862,7 +2863,7 @@ To learn more about this topic, [please review this guide](RADIUS-Authentication
 # cas.authn.mfa.radius.failoverOnAuthenticationFailure=false
 # cas.authn.mfa.radius.failoverOnException=false
 # cas.authn.mfa.radius.rank=0
-# cas.authn.mfa.radius.trustedDeviceEnabled=true
+# cas.authn.mfa.radius.trustedDeviceEnabled=false
 # cas.authn.mfa.radius.name=
 
 # cas.authn.mfa.radius.client.socketTimeout=0
@@ -2900,7 +2901,7 @@ To learn more about this topic, [please review this guide](DuoSecurity-Authentic
 # cas.authn.mfa.duo[0].duoApplicationKey=
 # cas.authn.mfa.duo[0].duoIntegrationKey=
 # cas.authn.mfa.duo[0].duoApiHost=
-# cas.authn.mfa.duo[0].trustedDeviceEnabled=true
+# cas.authn.mfa.duo[0].trustedDeviceEnabled=false
 # cas.authn.mfa.duo[0].id=mfa-duo
 # cas.authn.mfa.duo[0].name=
 
@@ -3008,6 +3009,20 @@ To learn more about this topic, [please review this guide](FIDO-U2F-Authenticati
 # cas.authn.mfa.u2f.jpa.pool.maxWait=2000
 ```
 
+### FIDO U2F REST
+
+```properties
+# cas.authn.mfa.u2f.rest.url=https://somewhere.fido.org
+# cas.authn.mfa.u2f.rest.basicAuthUsername=
+# cas.authn.mfa.u2f.rest.basicAuthPassword=
+```
+
+### FIDO U2F Groovy
+
+```properties
+# cas.authn.mfa.u2f.groovy.location=file:/etc/cas/config/fido.groovy
+```
+
 ### Swivel Secure
 
 To learn more about this topic, [please review this guide](SwivelSecure-Authentication.html).
@@ -3062,7 +3077,7 @@ To learn more about this topic, [please review this guide](AuthyAuthenticator-Au
 # cas.authn.mfa.authy.mailAttribute=mail
 # cas.authn.mfa.authy.countryCode=1
 # cas.authn.mfa.authy.forceVerification=true
-# cas.authn.mfa.authy.trustedDeviceEnabled=true
+# cas.authn.mfa.authy.trustedDeviceEnabled=false
 # cas.authn.mfa.authy.name=
 
 # cas.authn.mfa.authy.bypass.principalAttributeName=bypass|skip
