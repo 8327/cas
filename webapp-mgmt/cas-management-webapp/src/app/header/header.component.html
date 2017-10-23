@@ -34,10 +34,15 @@
         {{ messages.management_services_header_navbar_navitem_addNewService }}
       </span>
   </button>
+  <button mat-menu-item routerLink="/localChanges">
+    <mat-icon>history</mat-icon>
+    <ng-container i18n>Local Changes</ng-container>
+  </button>
   <button mat-menu-item target="_self" id="logoutUrlLink" (click)="logout()">
     <mat-icon>exit_to_app</mat-icon>
     <ng-container i18n="management.services.header.navbar.navitem.logout">
       {{ messages.management_services_header_navbar_navitem_logout }}
     </ng-container>
   </button>
+</mat-menu>
 

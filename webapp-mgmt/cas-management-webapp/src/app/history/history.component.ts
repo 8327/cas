@@ -7,9 +7,7 @@ import {Location} from "@angular/common";
 import {DiffEntry} from "../../domain/diff-entry";
 import {ChangesService} from "../changes/changes.service";
 import {MatPaginator, MatSnackBar} from "@angular/material";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {DataSource} from "@angular/cdk/collections";
-import {Observable} from "rxjs/Observable";
+import {Database, Datasource} from "../database";
 
 @Component({
   selector: 'app-history',
@@ -19,8 +17,8 @@ import {Observable} from "rxjs/Observable";
 export class HistoryComponent implements OnInit {
 
   displayedColumns = ['actions','message','committer','time'];
-  database = new HistoryDatabase();
-  dataSource: HistoryDataSource | null;
+  database: Database<History> = new Database<History>();
+  dataSource: Datasource<History> | null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -38,7 +36,7 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new HistoryDataSource(this.database, this.paginator);
+    this.dataSource = new Datasource(this.database, this.paginator);
     this.route.data
       .subscribe((data: { resp: History[]}) => {
         this.database.load(data.resp);
@@ -75,48 +73,6 @@ export class HistoryComponent implements OnInit {
   viewJSON() {
     this.router.navigate(['/json',this.selectedItem.id]);
   }
-
 }
 
-export class HistoryDatabase {
-    dataChange: BehaviorSubject<History[]> = new BehaviorSubject<History[]>([]);
-    get data(): History[] { return this.dataChange.value; }
 
-    constructor() {
-    }
-
-    load(histories: History[]) {
-        this.dataChange.next([]);
-        for(let history of histories) {
-            this.addService(history);
-        }
-    }
-
-    addService(history: History) {
-        const copiedData = this.data.slice();
-        copiedData.push(history);
-        this.dataChange.next(copiedData);
-    }
-}
-
-export class HistoryDataSource extends DataSource<any> {
-
-    constructor(private _changesDatabase: HistoryDatabase, private _paginator: MatPaginator) {
-        super();
-    }
-
-    connect(): Observable<History[]> {
-        const displayDataChanges = [
-            this._changesDatabase.dataChange,
-            this._paginator.page,
-        ];
-
-        return Observable.merge(...displayDataChanges).map(() => {
-            const data = this._changesDatabase.data.slice();
-            const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-            return data.splice(startIndex, this._paginator.pageSize);
-        });
-    }
-
-    disconnect() {}
-}

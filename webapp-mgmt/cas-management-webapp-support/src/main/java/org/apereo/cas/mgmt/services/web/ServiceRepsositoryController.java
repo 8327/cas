@@ -676,7 +676,7 @@ public class ServiceRepsositoryController {
 			if (entry.getChangeType() == DiffEntry.ChangeType.DELETE) {
 				return createDeleteChange(git,entry.getOldId().toObjectId(),entry.getOldPath());
 			} else {
-				return createModifyChange(git,entry.getNewPath(),entry.getChangeType());
+				return createModifyChange(git,entry.getNewPath(),entry.getChangeType(),entry.getOldId().toObjectId());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -696,9 +696,12 @@ public class ServiceRepsositoryController {
 	private Change createDeleteChange(final GitUtil git, final ObjectId id, final String path) throws Exception {
 		String json = git.readObject(id.toObjectId());
 		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
-		return new Change(String.valueOf(ser.from(json).getId()),
+		RegisteredService svc = ser.from(json);
+		return new Change(String.valueOf(svc.getId()),
 				          path,
-				          DiffEntry.ChangeType.DELETE.toString());
+				          DiffEntry.ChangeType.DELETE.toString(),
+				          svc.getName(),
+				          ObjectId.toString(id));
 	}
 
 	/**
@@ -710,13 +713,16 @@ public class ServiceRepsositoryController {
 	 * @return - Change
 	 * @throws Exception - failed
 	 */
-	private Change createModifyChange(final GitUtil git, final String path, final DiffEntry.ChangeType changeType) throws Exception {
+	private Change createModifyChange(final GitUtil git, final String path, final DiffEntry.ChangeType changeType, final ObjectId oldId) throws Exception {
 		String file = git.repoPath() + "/" + path;
 		String json = new String(Files.readAllBytes(Paths.get(file)));
 		DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
-		return new Change(String.valueOf(ser.from(json).getId()),
+		RegisteredService svc = ser.from(json);
+		return new Change(String.valueOf(svc.getId()),
 				          path,
-				          changeType.toString());
+				          changeType.toString(),
+				          svc.getName(),
+				          ObjectId.toString(oldId));
 	}
 
 	/**

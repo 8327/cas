@@ -70,7 +70,7 @@ public class GitServicesManager extends DomainServicesManager {
         final List<RegisteredServiceItem> serviceItems = new ArrayList<>();
         final List<RegisteredService> services = new ArrayList<>(getServicesForDomain(domain));
         serviceItems.addAll(services.stream().map(this::createServiceItem).collect(Collectors.toList()));
-        serviceItems.addAll(checkForDeleted(git));
+        //serviceItems.addAll(checkForDeleted(git));
         return serviceItems;
 
     }

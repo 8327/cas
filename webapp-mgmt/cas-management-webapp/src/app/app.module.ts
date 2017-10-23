@@ -29,6 +29,7 @@ import {DiffModule} from "./diff/diff.module";
 import {JSONModule} from "./json/json.module";
 import {HeaderService} from "./header/header.service";
 import {InitComponent} from "app/init.component";
+import { LocalChangesComponent } from './local-changes/local-changes.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import {InitComponent} from "app/init.component";
     DeleteComponent,
     SearchComponent,
     RevertComponent,
-    InitComponent
+    InitComponent,
+    LocalChangesComponent
   ],
   entryComponents: [
     DeleteComponent,

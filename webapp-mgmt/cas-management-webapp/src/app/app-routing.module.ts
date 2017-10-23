@@ -13,6 +13,7 @@ import {HistoryResolve} from "./history/history.resolover";
 import {DiffComponent} from "./diff/diff.component";
 import {JSONComponent} from "./json/json.component";
 import {JSONResolver} from "./json/json.resolover";
+import {LocalChangesComponent} from "./local-changes/local-changes.component";
 
 @NgModule({
   imports: [
@@ -49,6 +50,10 @@ import {JSONResolver} from "./json/json.resolover";
         resolve: {
           resp: JSONResolver
         }
+      },
+      {
+        path: 'localChanges',
+        component: LocalChangesComponent
       },
       {
         path: 'manage.html',

@@ -9,11 +9,15 @@ public class Change implements Serializable {
     String id;
     String fileName;
     String changeType;
+    String serviceName;
+    String oldId;
 
-    public Change(String id, String fileName, String changeType) {
+    public Change(String id, String fileName, String changeType, String serviceName, String oldId) {
         this.id = id;
         this.fileName = fileName;
         this.changeType = changeType;
+        this.serviceName = serviceName;
+        this.oldId = oldId;
     }
 
     public String getId() {
@@ -40,4 +44,19 @@ public class Change implements Serializable {
         this.changeType = changeType;
     }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(String oldId) {
+        this.oldId = oldId;
+    }
 }

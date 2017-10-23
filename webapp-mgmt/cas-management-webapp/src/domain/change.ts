@@ -6,4 +6,6 @@ export class Change {
   id: String;
   fileName: String;
   changeType: String;
+  serviceName: String;
+  oldId: String;
 }
