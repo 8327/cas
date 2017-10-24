@@ -47,10 +47,10 @@ public class ManagerFactory {
             } catch(final Exception e) {
                 return;
             }
-            final GitServicesManager manager = new GitServicesManager(casProperties.getMgmt().getServicesRepo(), defaultOnly, repositoryFactory);
-            manager.loadFrom(servicesManager);
             try {
-                final GitUtil git = repositoryFactory.masterRepository();
+                GitUtil git = repositoryFactory.masterRepository();
+                final GitServicesManager manager = new GitServicesManager(git, defaultOnly);
+                manager.loadFrom(servicesManager);
                 git.addWorkingChanges();
                 git.getGit().commit().setAll(true).setMessage("Initial commit").call();
                 git.setPublished();
@@ -99,7 +99,7 @@ public class ManagerFactory {
         if (manager != null) {
             manager.load();
         } else {
-            manager = new GitServicesManager(casProperties.getMgmt().getServicesRepo(), defaultOnly, repositoryFactory);
+            manager = new GitServicesManager(repositoryFactory.masterRepository(),defaultOnly);
             request.getSession().setAttribute("servicesManager", manager);
         }
 
