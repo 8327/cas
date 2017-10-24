@@ -5,7 +5,6 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms"
 import 'hammerjs';
-import {MyTooltipDirective} from "../my-tooltip.directive";
 import {
   MatButtonModule,
   MatCardModule,
@@ -65,7 +64,6 @@ import {ControlsService} from "../controls/controls.service";
     MatPaginatorModule,
   ],
   declarations: [
-    MyTooltipDirective,
     Editor,
     ControlsComponent,
     CommitComponent,
@@ -79,7 +77,6 @@ import {ControlsService} from "../controls/controls.service";
     ControlsService
   ],
   exports: [
-    MyTooltipDirective,
     MatTabsModule,
     MatCheckboxModule,
     MatInputModule,

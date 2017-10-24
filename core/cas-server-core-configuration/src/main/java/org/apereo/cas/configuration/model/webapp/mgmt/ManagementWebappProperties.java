@@ -75,7 +75,7 @@ public class ManagementWebappProperties implements Serializable {
     private Resource userPropertiesFile = new ClassPathResource("user-details.properties");
 
     /**
-     * A writtable location where the Git repository will be created to track changes
+     * A writtable location where the Git repository will be created to track changes.
      */
     private String servicesRepo = "/etc/cas/services-repo";
 
@@ -162,7 +162,7 @@ public class ManagementWebappProperties implements Serializable {
         return servicesRepo;
     }
 
-    public void setServicesRepo(String servicesRepo) {
+    public void setServicesRepo(final String servicesRepo) {
         this.servicesRepo = servicesRepo;
     }
 
@@ -170,7 +170,7 @@ public class ManagementWebappProperties implements Serializable {
         return syncScript;
     }
 
-    public void setSyncScript(String syncScript) {
+    public void setSyncScript(final String syncScript) {
         this.syncScript = syncScript;
     }
 }

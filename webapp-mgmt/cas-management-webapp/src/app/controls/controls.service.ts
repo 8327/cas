@@ -4,7 +4,6 @@
 
 import {Injectable} from "@angular/core";
 import {Change} from "../../domain/change";
-import {Note} from "../../domain/note";
 import {Commit} from "../../domain/commit";
 import {Service} from "../service";
 import {Http} from "@angular/http";
@@ -17,7 +16,7 @@ export class ControlsService extends Service {
   }
 
   changes: Change[];
-  commits: Note[];
+  commits: Commit[];
 
   commit(msg: String): Promise<String> {
     return this.get<String>('commit?msg='+msg);

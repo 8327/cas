@@ -49,25 +49,12 @@ public class RepositoryFactory {
      * @throws Exception -failed
      */
     public GitUtil from(final CasUserProfile user) throws Exception {
+        if (!user.isAdministrator()) {
+            throw new Exception("Permission denied");
+        }
         return masterRepository();
-        //return from(user,false);
     }
 
-    /*
-    public GitUtil from(CasUserProfile user, boolean returnMaster) throws Exception {
-        if (user.isAdministrator())  {
-            return masterRepository();
-        }
-        Path path = Paths.get(casProperties.getMgmt().getUserReposDir()+"/"+user.getId());
-        if (Files.exists(path)) {
-            return userRepository(user.getId());
-        }
-        if (returnMaster) {
-            return masterRepository();
-        }
-        return new GitUtil(null);
-    }
-    */
 
     /**
      * Method returns a GitUtil wrapping the master repository.
@@ -83,18 +70,6 @@ public class RepositoryFactory {
                 .findGitDir()
                 .build()));
     }
-
-    /*
-    public GitUtil userRepository(String user) throws Exception {
-        String path = casProperties.getMgmt().getUserReposDir()+"/"+user+"/.git";
-        return new GitUtil(new Git(new FileRepositoryBuilder()
-                .setGitDir(new File(path))
-                .setMustExist(true)
-                .readEnvironment()
-                .findGitDir()
-                .build()));
-    }
-    */
 
     /**
      * Clones the master repository into the passed in directory.

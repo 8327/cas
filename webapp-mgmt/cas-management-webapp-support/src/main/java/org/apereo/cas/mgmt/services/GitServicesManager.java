@@ -3,7 +3,6 @@ package org.apereo.cas.mgmt.services;
 import javafx.util.Pair;
 import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.services.web.beans.RegisteredServiceItem;
-import org.apereo.cas.mgmt.services.web.factory.RepositoryFactory;
 import org.apereo.cas.services.DomainServicesManager;
 import org.apereo.cas.services.JsonServiceRegistryDao;
 import org.apereo.cas.services.RegisteredService;

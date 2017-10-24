@@ -30,15 +30,12 @@ public class ManagerFactory {
     @Autowired
     private CasUserProfileFactory casUserProfileFactory;
 
-    private CasConfigurationProperties casProperties;
-
     private final boolean defaultOnly;
 
     public ManagerFactory(final ServicesManager servicesManager,
                           final CasConfigurationProperties casProperties,
                           final RepositoryFactory repositoryFactory) {
         this.repositoryFactory = repositoryFactory;
-        this.casProperties = casProperties;
         this.defaultOnly = casProperties.getServiceRegistry().getManagementType() == ServiceRegistryProperties.ServiceManagementTypes.DEFAULT;
         final Path servicesRepo = Paths.get(casProperties.getMgmt().getServicesRepo());
         if (!Files.exists(servicesRepo)) {
@@ -48,7 +45,7 @@ public class ManagerFactory {
                 return;
             }
             try {
-                GitUtil git = repositoryFactory.masterRepository();
+                final GitUtil git = repositoryFactory.masterRepository();
                 final GitServicesManager manager = new GitServicesManager(git, defaultOnly);
                 manager.loadFrom(servicesManager);
                 git.addWorkingChanges();
@@ -82,24 +79,15 @@ public class ManagerFactory {
      * @throws Exception - failed
      */
     public GitServicesManager from(final HttpServletRequest request, final CasUserProfile user) throws Exception {
-        /*
-        if(user.isAdministrator()) {
-            return new GitServicesManager(casProperties.getMgmt().getServicesRepo());
+        if (!user.isAdministrator()) {
+            throw new Exception("Permission denied, you must be an administrator.");
         }
-
-        Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.getId());
-        if (!Files.exists(path)) {
-            repositoryFactory.clone(path.toString());
-        } else {
-            repositoryFactory.userRepository(user.getId()).rebase();
-        }
-        */
 
         GitServicesManager manager = (GitServicesManager) request.getSession().getAttribute("servicesManager");
         if (manager != null) {
             manager.load();
         } else {
-            manager = new GitServicesManager(repositoryFactory.masterRepository(),defaultOnly);
+            manager = new GitServicesManager(repositoryFactory.masterRepository(), defaultOnly);
             request.getSession().setAttribute("servicesManager", manager);
         }
 
