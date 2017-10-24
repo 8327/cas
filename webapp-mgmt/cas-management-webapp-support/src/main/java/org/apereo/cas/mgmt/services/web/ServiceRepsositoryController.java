@@ -86,7 +86,7 @@ public class ServiceRepsositoryController {
     public ResponseEntity<String> commit(final HttpServletResponse response, final HttpServletRequest request,
                                          @RequestParam final String msg) throws Exception {
         final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(user);
         if (git.isNull()) {
             throw new Exception("No changes to commit");
         }
@@ -197,7 +197,7 @@ public class ServiceRepsositoryController {
                                              final HttpServletRequest request,
                                              final @RequestBody String msg) throws Exception {
         final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(user);
         if (git.isNull()) {
             throw new Exception("No changes to submit");
         }
@@ -243,8 +243,7 @@ public class ServiceRepsositoryController {
     @GetMapping(value = "/untracked")
     public ResponseEntity<List<Change>> untracked(final HttpServletResponse response,
                                                   final HttpServletRequest request) throws Exception {
-        final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(request, response);
         if (git.isNull()) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         }
@@ -374,8 +373,7 @@ public class ServiceRepsositoryController {
     public void viewDiff(final HttpServletRequest request,
                          final HttpServletResponse response,
                          final @RequestBody String[] ids) throws Exception {
-        final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(request, response);
         final ObjectId oldId = ObjectId.fromString(ids[0]);
         final ObjectId newId = ObjectId.fromString(ids[1]);
         response.getOutputStream().write(git.getFormatter(oldId, newId));
@@ -395,9 +393,7 @@ public class ServiceRepsositoryController {
     public ResponseEntity<RegisteredService> viewChange(final HttpServletResponse response,
                                                         final HttpServletRequest request,
                                                         final @RequestParam String id) throws Exception {
-        final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
-
+        final GitUtil git = repositoryFactory.from(request, response);
         return new ResponseEntity<>(new DefaultRegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
     }
 
@@ -517,8 +513,7 @@ public class ServiceRepsositoryController {
     public ResponseEntity<List<History>> history(final HttpServletRequest request,
                                                  final HttpServletResponse response,
                                                  final @RequestParam String path) throws Exception {
-        final CasUserProfile user = casUserProfileFactory.from(request, response);
-        GitUtil git = repositoryFactory.getGit(user);
+        GitUtil git = repositoryFactory.from(request, response);
         if (git.isNull()) {
             git = repositoryFactory.masterRepository();
         }
@@ -541,8 +536,7 @@ public class ServiceRepsositoryController {
     public ResponseEntity<String> revert(final HttpServletRequest request,
                                          final HttpServletResponse response,
                                          final @RequestParam String path) throws Exception {
-        final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(request, response);
         if (git.isNull()) {
             throw new Exception("No changes to revert");
         }
@@ -566,7 +560,7 @@ public class ServiceRepsositoryController {
                                                final HttpServletResponse response,
                                                final @RequestParam String path) throws Exception {
         final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(user);
         if (git.isNull()) {
             throw new Exception("No changes to revert");
         }
@@ -591,9 +585,7 @@ public class ServiceRepsositoryController {
                                            final HttpServletResponse response,
                                            final @RequestParam String id,
                                            final @RequestParam String path) throws Exception {
-        final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
-
+        final GitUtil git = repositoryFactory.from(request, response);
         git.checkout(path, id);
         git.getGit().reset().addPath(path).call();
         git.close();
@@ -629,7 +621,7 @@ public class ServiceRepsositoryController {
                                                final HttpServletResponse response,
                                                final @RequestParam String branchName) throws Exception {
         final CasUserProfile user = casUserProfileFactory.from(request, response);
-        final GitUtil git = repositoryFactory.getGit(user);
+        final GitUtil git = repositoryFactory.from(user);
         if (git.isNull()) {
             throw new Exception("No changes to revert");
         }
