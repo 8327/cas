@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Factory class to create repository objects.
@@ -49,25 +52,15 @@ public class RepositoryFactory {
      * @throws Exception -failed
      */
     public GitUtil from(final CasUserProfile user) throws Exception {
-        return masterRepository();
-        //return from(user,false);
-    }
-
-    /*
-    public GitUtil from(CasUserProfile user, boolean returnMaster) throws Exception {
         if (user.isAdministrator())  {
             return masterRepository();
         }
-        Path path = Paths.get(casProperties.getMgmt().getUserReposDir()+"/"+user.getId());
-        if (Files.exists(path)) {
-            return userRepository(user.getId());
+        final Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.getId());
+        if (!Files.exists(path)) {
+            clone(path.toString());
         }
-        if (returnMaster) {
-            return masterRepository();
-        }
-        return new GitUtil(null);
+        return userRepository(user.getId()).rebase();
     }
-    */
 
     /**
      * Method returns a GitUtil wrapping the master repository.
@@ -84,8 +77,8 @@ public class RepositoryFactory {
                 .build()));
     }
 
-    /*
-    public GitUtil userRepository(String user) throws Exception {
+
+    private GitUtil userRepository(String user) throws Exception {
         String path = casProperties.getMgmt().getUserReposDir()+"/"+user+"/.git";
         return new GitUtil(new Git(new FileRepositoryBuilder()
                 .setGitDir(new File(path))
@@ -94,7 +87,6 @@ public class RepositoryFactory {
                 .findGitDir()
                 .build()));
     }
-    */
 
     /**
      * Clones the master repository into the passed in directory.

@@ -794,11 +794,12 @@ public class GitUtil {
     /**
      * Rebases the wrapped repository to the remote it was created form.
      */
-    public void rebase() {
+    public GitUtil rebase() {
         try {
             git.pull().setRebase(true).call();
         } catch(final Exception e) {
         }
+        return this;
     }
 
     /**

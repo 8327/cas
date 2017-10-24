@@ -86,14 +86,10 @@ public class ManagerFactory {
         if (manager != null) {
             manager.load();
         } else if(user.isAdministrator()) {
+            final GitUtil git = repositoryFactory.from(user);
+            manager = new GitServicesManager(git, defaultOnly);
             manager = new GitServicesManager(casProperties.getMgmt().getServicesRepo(), defaultOnly, repositoryFactory);
         } else {
-            final Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.getId());
-            if (!Files.exists(path)) {
-                repositoryFactory.clone(path.toString());
-            } else {
-                repositoryFactory.userRepository(user.getId()).rebase();
-            }
             manager = new GitServicesManager(casProperties.getMgmt().getUserReposDir() + "/" + user.getId(),
                                              defaultOnly,
                                              repositoryFactory);

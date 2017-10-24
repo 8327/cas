@@ -37,10 +37,18 @@ public class GitServicesManager extends DomainServicesManager {
 
     private final boolean defaultOnly;
 
-    private RepositoryFactory repositoryFactory;
+    private GitUtil git;
 
     private Map<Integer, String> uncommitted;
 
+
+    public GitServicesManager(final GitUtil git, final boolean defaultOnly) {
+        this(new JsonServiceRegistryDao(git.getGit().getRepository().getDirectory().toPath(),
+                                        false,
+                                        null),
+                                        null, defaultOnly);
+        this.git = git;
+    }
 
     /**
      * Constructor to create instance.
@@ -48,7 +56,7 @@ public class GitServicesManager extends DomainServicesManager {
      * @param repository - String path to the repository
      * @param defaultOnly - boolean if the default domain is only used.
      * @param repositoryFactory - RepositoryFactory
-     */
+
     public GitServicesManager(final String repository,
                               final boolean defaultOnly,
                               final RepositoryFactory repositoryFactory) {
@@ -59,6 +67,7 @@ public class GitServicesManager extends DomainServicesManager {
                 defaultOnly);
         this.repositoryFactory = repositoryFactory;
     }
+    */
 
     /**
      * Protected constructor matching extended class for creating an instance.
@@ -108,12 +117,11 @@ public class GitServicesManager extends DomainServicesManager {
      * @throws Exception -failed
      */
     public List<RegisteredServiceItem> getServiceItemsForDomain(final String domain) throws Exception {
-        final GitUtil git = repositoryFactory.masterRepository();
         if (git.isNull()) {
-            return Collections.EMPTY_LIST;
+            return new ArrayList<>();
         }
         this.uncommitted = git.scanWorkingDiffs().stream()
-                .map(d -> createChange(d, git))
+                .map(d -> createChange(d))
                 .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
         final List<RegisteredServiceItem> serviceItems = new ArrayList<>();
         final List<RegisteredService> services = new ArrayList<>(getServicesForDomain(domain));
@@ -123,17 +131,17 @@ public class GitServicesManager extends DomainServicesManager {
 
     }
 
-    private List<RegisteredServiceItem> checkForDeleted(final GitUtil git) {
+    private List<RegisteredServiceItem> checkForDeleted() {
         try {
             return git.checkForDeletes()
-                    .map(d -> getService(git, d))
+                    .map(d -> getService(d))
                     .collect(Collectors.toList());
         }catch (final Exception e) {
         }
         return new ArrayList<>();
     }
 
-    private RegisteredServiceItem getService(final GitUtil git, final DiffEntry d) {
+    private RegisteredServiceItem getService(final DiffEntry d) {
         try {
             final String json = git.readObject(d.getOldId().toObjectId());
             final DefaultRegisteredServiceJsonSerializer serializer = new DefaultRegisteredServiceJsonSerializer();
@@ -162,7 +170,7 @@ public class GitServicesManager extends DomainServicesManager {
         return serviceItem;
     }
 
-    private Pair<Integer, String> createChange(final DiffEntry entry, final GitUtil git) {
+    private Pair<Integer, String> createChange(final DiffEntry entry) {
         try {
             final DefaultRegisteredServiceJsonSerializer ser = new DefaultRegisteredServiceJsonSerializer();
             final RegisteredService svc;
