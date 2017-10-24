@@ -3,10 +3,13 @@ package org.apereo.cas.mgmt.services.web.factory;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
+import org.apereo.cas.mgmt.authentication.CasUserProfileFactory;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 
 /**
@@ -18,9 +21,24 @@ import java.io.File;
 public class RepositoryFactory {
 
     @Autowired
+    private CasUserProfileFactory casUserProfileFactory;
+
+    @Autowired
     private CasConfigurationProperties casProperties;
 
     public RepositoryFactory() {
+    }
+
+    /**
+     * Method looks up user from servlet request to return correct repository.
+     *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
+     * @return - GitUtil wrappinng the user's repository
+     * @throws Exception - failed
+     */
+    public GitUtil from(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        return from(casUserProfileFactory.from(request, response));
     }
 
     /**
@@ -30,13 +48,13 @@ public class RepositoryFactory {
      * @return - GitUtil wrapping the user's repository
      * @throws Exception -failed
      */
-    public GitUtil getGit(final CasUserProfile user) throws Exception {
+    public GitUtil from(final CasUserProfile user) throws Exception {
         return masterRepository();
-        //return getGit(user,false);
+        //return from(user,false);
     }
 
     /*
-    public GitUtil getGit(CasUserProfile user, boolean returnMaster) throws Exception {
+    public GitUtil from(CasUserProfile user, boolean returnMaster) throws Exception {
         if (user.isAdministrator())  {
             return masterRepository();
         }
