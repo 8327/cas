@@ -3,17 +3,20 @@ package org.apereo.cas.mgmt.services.web.beans;
 import java.io.Serializable;
 
 /**
- * Created by tsschmi on 3/17/17.
+ * Bean to serialze data about a branch to the client.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
 public class BranchData implements Serializable {
-    public String name;
-    public boolean accepted;
-    public String msg;
-    public String committer;
-    public long time;
-    public String id;
-    public boolean rejected;
-    public boolean reverted;
+    private String name;
+    private boolean accepted;
+    private String msg;
+    private String committer;
+    private long time;
+    private String id;
+    private boolean rejected;
+    private boolean reverted;
 
     public BranchData() {
 

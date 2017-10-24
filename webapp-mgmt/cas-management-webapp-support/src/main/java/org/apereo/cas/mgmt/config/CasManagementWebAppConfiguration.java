@@ -193,7 +193,7 @@ public class CasManagementWebAppConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ServiceRepsositoryController serviceRepsositoryController() {
-        return new ServiceRepsositoryController(repositoryFactory(),managerFactory(),casUserProfileFactory);
+        return new ServiceRepsositoryController(repositoryFactory(), managerFactory(), casUserProfileFactory);
     }
 
     @RefreshScope

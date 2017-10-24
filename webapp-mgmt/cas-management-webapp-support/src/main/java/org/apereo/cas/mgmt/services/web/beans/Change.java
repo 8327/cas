@@ -3,17 +3,25 @@ package org.apereo.cas.mgmt.services.web.beans;
 import java.io.Serializable;
 
 /**
- * Created by tsschmi on 3/17/17.
+ * Bean to serialize Change data to the client.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
 public class Change implements Serializable {
-    String id;
-    String fileName;
-    String changeType;
-    String serviceName;
-    String oldId;
-    String newId;
+    private String id;
+    private String fileName;
+    private String changeType;
+    private String serviceName;
+    private String oldId;
+    private String newId;
 
-    public Change(String id, String fileName, String changeType, String serviceName, String oldId, String newId) {
+    public Change(final String id,
+                  final String fileName,
+                  final String changeType,
+                  final String serviceName,
+                  final String oldId,
+                  final String newId) {
         this.id = id;
         this.fileName = fileName;
         this.changeType = changeType;
@@ -50,7 +58,7 @@ public class Change implements Serializable {
         return serviceName;
     }
 
-    public void setServiceName(String serviceName) {
+    public void setServiceName(final String serviceName) {
         this.serviceName = serviceName;
     }
 
@@ -58,7 +66,7 @@ public class Change implements Serializable {
         return oldId;
     }
 
-    public void setOldId(String oldId) {
+    public void setOldId(final String oldId) {
         this.oldId = oldId;
     }
 
@@ -66,7 +74,7 @@ public class Change implements Serializable {
         return newId;
     }
 
-    public void setNewId(String newId) {
+    public void setNewId(final String newId) {
         this.newId = newId;
     }
 }

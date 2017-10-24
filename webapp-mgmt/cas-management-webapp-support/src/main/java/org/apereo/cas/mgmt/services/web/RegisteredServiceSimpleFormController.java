@@ -30,13 +30,13 @@ import javax.servlet.http.HttpServletResponse;
 @Controller("registeredServiceSimpleFormController")
 public class RegisteredServiceSimpleFormController extends AbstractManagementController {
 
-    @Autowired
-    ManagerFactory managerFactory;
-
-    @Autowired
-    CasUserProfileFactory casUserProfileFactory;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisteredServiceSimpleFormController.class);
+
+    @Autowired
+    private ManagerFactory managerFactory;
+
+    @Autowired
+    private CasUserProfileFactory casUserProfileFactory;
 
     /**
      * Instantiates a new registered service simple form controller.
@@ -50,14 +50,17 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     /**
      * Adds the service to the Service Registry.
      *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
      * @param service the edit bean
      * @return the response entity
+     * @throws Exception - failed
      */
     @PostMapping(value = "saveService", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveService(final HttpServletRequest request,
                                               final HttpServletResponse response,
                                               @RequestBody final RegisteredService service) throws Exception {
-        final GitServicesManager manager = managerFactory.from(request,casUserProfileFactory.from(request,response));
+        final GitServicesManager manager = managerFactory.from(request, response);
         if (service.getEvaluationOrder() < 0) {
             service.setEvaluationOrder(manager.getAllServices().size());
         }
@@ -69,6 +72,8 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     /**
      * Gets service by id.
      *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
      * @param id the id
      * @return the service by id
      * @throws Exception the exception
@@ -77,7 +82,7 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     public ResponseEntity<RegisteredService> getServiceById(final HttpServletRequest request,
                                                             final HttpServletResponse response,
                                                             @RequestParam(value = "id", required = false) final Long id) throws Exception {
-        final GitServicesManager manager = managerFactory.from(request,casUserProfileFactory.from(request,response));
+        final GitServicesManager manager = managerFactory.from(request, response);
         final RegisteredService service;
         if (id == -1) {
             service = new RegexRegisteredService();

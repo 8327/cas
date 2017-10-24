@@ -3,17 +3,20 @@ package org.apereo.cas.mgmt.services.web.beans;
 import java.io.Serializable;
 
 /**
- * Created by tsschmi on 5/2/17.
+ * Bean to serialize History info to the client.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
 public class History implements Serializable {
-    String id;
-    String message;
-    String committer;
-    String time;
-    String path;
-    String commit;
+    private String id;
+    private String message;
+    private String committer;
+    private String time;
+    private String path;
+    private String commit;
 
-    public History()  {
+    public History() {
 
     }
 
@@ -21,7 +24,7 @@ public class History implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -29,7 +32,7 @@ public class History implements Serializable {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -37,7 +40,7 @@ public class History implements Serializable {
         return committer;
     }
 
-    public void setCommitter(String committer) {
+    public void setCommitter(final String committer) {
         this.committer = committer;
     }
 
@@ -45,11 +48,11 @@ public class History implements Serializable {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(final String time) {
         this.time = time;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
@@ -61,7 +64,7 @@ public class History implements Serializable {
         return commit;
     }
 
-    public void setCommit(String commit) {
+    public void setCommit(final String commit) {
         this.commit = commit;
     }
 }

@@ -3,11 +3,14 @@ package org.apereo.cas.mgmt.services.web.beans;
 import java.io.Serializable;
 
 /**
- * Created by tsschmi on 5/2/17.
+ * Bean to serialze action info taken on a branch to a client.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
 public class BranchActionData implements Serializable {
-    BranchData branch;
-    String note;
+    private BranchData branch;
+    private String note;
 
     BranchActionData() {
 

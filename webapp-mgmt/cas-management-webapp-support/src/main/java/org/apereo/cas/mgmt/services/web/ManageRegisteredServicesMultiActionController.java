@@ -60,15 +60,13 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     private final CasUserProfileFactory casUserProfileFactory;
     private final Service defaultService;
 
+    @Autowired
+    private ManagerFactory managerFactory;
+
+    @Autowired
+    private RepositoryFactory repositoryFactory;
+
     private CasConfigurationProperties casProperties;
-
-
-
-    @Autowired
-    ManagerFactory managerFactory;
-
-    @Autowired
-    RepositoryFactory repositoryFactory;
 
     /**
      * Instantiates a new manage registered services multi action controller.
@@ -168,7 +166,7 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     public ResponseEntity<String> deleteRegisteredService(final HttpServletRequest request,
                                                           final HttpServletResponse response,
                                                           @RequestParam("id") final long idAsLong) throws Exception {
-        GitServicesManager manager = managerFactory.from(request,response);
+        final GitServicesManager manager = managerFactory.from(request, response);
         final RegisteredService svc = manager.findServiceBy(this.defaultService);
         if (svc == null || svc.getId() == idAsLong) {
             return new ResponseEntity<>("The default service " + this.defaultService.getId() + " cannot be deleted. "
@@ -198,11 +196,10 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     @GetMapping(value = "/domainList")
     public ResponseEntity<Collection<String>> getDomains(final HttpServletRequest request,
                                                          final HttpServletResponse response) throws Exception {
-        GitServicesManager manager = managerFactory.from(request,response);
+        final GitServicesManager manager = managerFactory.from(request, response);
         final Collection<String> data = manager.getDomains();
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
-
 
     /**
      * Gets user.
@@ -233,10 +230,9 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
                                                                    final HttpServletResponse response,
                                                                    @RequestParam final String domain) throws Exception {
         ensureDefaultServiceExists();
-        final GitServicesManager manager = managerFactory.from(request,response);
+        final GitServicesManager manager = managerFactory.from(request, response);
         return new ResponseEntity<>(manager.getServiceItemsForDomain(domain), HttpStatus.OK);
     }
-
 
     /**
      * Method will filter all services in the register using the passed string a regular expression against the
@@ -252,7 +248,7 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     public ResponseEntity<List<RegisteredServiceItem>> search(final HttpServletRequest request,
                                                               final HttpServletResponse response,
                                                               @RequestParam final String query) throws Exception {
-        final GitServicesManager manager = managerFactory.from(request,response);
+        final GitServicesManager manager = managerFactory.from(request, response);
         final Pattern pattern = RegexUtils.createPattern("^.*" + query + ".*$");
         final List<RegisteredServiceItem> serviceBeans = new ArrayList<>();
         final List<RegisteredService> services = manager.getAllServices()
@@ -296,7 +292,7 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
     @ResponseStatus(HttpStatus.OK)
     public void updateOrder(final HttpServletRequest request, final HttpServletResponse response,
                             @RequestBody final RegisteredServiceItem[] svcs) throws Exception {
-        GitServicesManager manager = managerFactory.from(request, response);
+        final GitServicesManager manager = managerFactory.from(request, response);
         final String id = svcs[0].getAssignedId();
         final RegisteredService svcA = manager.findServiceBy(Long.parseLong(id));
         if (svcA == null) {

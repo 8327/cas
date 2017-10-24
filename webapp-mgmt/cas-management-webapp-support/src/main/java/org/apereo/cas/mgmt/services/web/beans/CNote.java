@@ -1,11 +1,14 @@
 package org.apereo.cas.mgmt.services.web.beans;
 
 /**
- * Created by tsschmi on 3/17/17.
+ * Bean to serialize commit notes to the client.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
 public class CNote {
-    String id;
-    String text;
+    private String id;
+    private String text;
 
     public CNote() {
 

@@ -5,19 +5,25 @@ import org.eclipse.jgit.lib.ObjectId;
 import java.io.Serializable;
 
 /**
- * Created by tsschmi on 3/17/17.
+ * Bean to serialize a Diff to the client.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
 public class Diff implements Serializable {
-    String oldId;
-    String newId;
-    String path;
-    String changeType;
+    private String oldId;
+    private String newId;
+    private String path;
+    private String changeType;
 
     public Diff(){
 
     }
 
-    public Diff(String path, ObjectId oldId, ObjectId newId, String changeType) {
+    public Diff(final String path,
+                final ObjectId oldId,
+                final ObjectId newId,
+                final String changeType) {
         this.path = path;
         this.oldId = ObjectId.toString(oldId);
         this.newId = ObjectId.toString(newId);
@@ -28,7 +34,7 @@ public class Diff implements Serializable {
         return oldId;
     }
 
-    public void setOldId(String oldId) {
+    public void setOldId(final String oldId) {
         this.oldId = oldId;
     }
 
@@ -36,7 +42,7 @@ public class Diff implements Serializable {
         return newId;
     }
 
-    public void setNewId(String newId) {
+    public void setNewId(final String newId) {
         this.newId = newId;
     }
 
@@ -44,7 +50,7 @@ public class Diff implements Serializable {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
@@ -52,7 +58,7 @@ public class Diff implements Serializable {
         return changeType;
     }
 
-    public void setChangeType(String changeType) {
+    public void setChangeType(final String changeType) {
         this.changeType = changeType;
     }
 }

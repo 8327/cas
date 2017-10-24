@@ -2,7 +2,6 @@ package org.apereo.cas.mgmt;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharSet;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.services.web.beans.Commit;
 import org.apereo.cas.mgmt.services.web.beans.History;
@@ -18,8 +17,6 @@ import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.AbbreviatedObjectId;
-import org.eclipse.jgit.lib.BranchTrackingStatus;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -34,7 +31,6 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
-import org.yaml.snakeyaml.reader.StreamReader;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -52,6 +48,8 @@ import java.util.stream.StreamSupport;
  */
 public class GitUtil {
 
+    private static final int NAME_LENGTH = 40;
+
     private final Git git;
 
     public GitUtil(final Git git) {
@@ -59,21 +57,28 @@ public class GitUtil {
     }
 
     /**
-     * Returns Commit objects for the last n commits
+     * Returns Commit objects for the last n commits.
      *
      * @param n - number of commits to return
      * @return - List of Commit objects
      * @throws Exception - failed.
      */
     public List<Commit> getLastNCommits(final int n) throws Exception {
-        return StreamSupport.stream(git.log().setMaxCount(n).call().spliterator(),false)
-                .map(c -> new Commit(c.abbreviate(40).name(), c.getFullMessage()))
+        return StreamSupport.stream(git.log().setMaxCount(n).call().spliterator(), false)
+                .map(c -> new Commit(c.abbreviate(NAME_LENGTH).name(), c.getFullMessage()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns a list of Commits representing all changes since the last time the repo was
+     * published.
+     *
+     * @return - List of Commit objects
+     * @throws Exception - failed
+     */
     public List<Commit> getUnpublishedCommits() throws Exception {
-        return StreamSupport.stream(git.log().addRange(getPublished().getPeeledObjectId(),git.getRepository().resolve("HEAD"))
-                .call().spliterator(),false).map(c -> new Commit(c.abbreviate(40).name(),c.getFullMessage()))
+        return StreamSupport.stream(git.log().addRange(getPublished().getPeeledObjectId(), git.getRepository().resolve("HEAD"))
+                .call().spliterator(), false).map(c -> new Commit(c.abbreviate(NAME_LENGTH).name(), c.getFullMessage()))
                 .collect(Collectors.toList());
     }
 
@@ -169,7 +174,7 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public void addWorkingChanges() throws Exception {
-        Status status = git.status().call();
+        final Status status = git.status().call();
         status.getUntracked()
                 .forEach(f -> addFile(f));
     }
@@ -181,22 +186,37 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public List<DiffEntry> scanWorkingDiffs() throws Exception {
-        FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
-        CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-        ObjectReader reader = git.getRepository().newObjectReader();
+        final FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
+        final CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+        final ObjectReader reader = git.getRepository().newObjectReader();
         oldTreeIter.reset(reader, git.getRepository().resolve("HEAD^{tree}"));
-        DiffFormatter formatter = new DiffFormatter(System.out);
+        final DiffFormatter formatter = new DiffFormatter(new ByteArrayOutputStream());
         formatter.setRepository(git.getRepository());
         return formatter.scan(oldTreeIter, workTreeIterator);
     }
 
-    public String readFromWorkingTree(String id) throws Exception {
+    /**
+     * Returns the content of the file as a String that is represented by the passed object Id
+     * as a string.
+     *
+     * @param id - String representing Id of the object
+     * @return - Contents of the object as String.
+     * @throws Exception - failed.
+     */
+    public String readFromWorkingTree(final String id) throws Exception {
         return readFormWorkingTree(ObjectId.fromString(id));
     }
 
-    public String readFormWorkingTree(ObjectId id) throws Exception {
-        FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
-        while(!workTreeIterator.eof() && !workTreeIterator.getEntryObjectId().equals(id)) {
+    /**
+     * Returns the content of the file as a String that is represented by the passed object id.
+     *
+     * @param id - ObjectId of the file in the repository
+     * @return - Contents of the object as String.
+     * @throws Exception - failed.
+     */
+    public String readFormWorkingTree(final ObjectId id) throws Exception {
+        final FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
+        while (!workTreeIterator.eof() && !workTreeIterator.getEntryObjectId().equals(id)) {
             workTreeIterator.next(1);
         }
         return IOUtils.toString(workTreeIterator.openEntryStream(), Charset.defaultCharset());
@@ -211,26 +231,20 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public RawText raw(final Repository repo, final String path) throws Exception {
-        File file = new File(repo.getWorkTree().getAbsolutePath()+"/"+path);
+        final File file = new File(repo.getWorkTree().getAbsolutePath() + "/" + path);
         return new RawText(FileUtils.readFileToByteArray(file));
     }
 
     /**
      * Returns the file as a String form the repository indexed by the passed String
-     * representing its ObjectId
+     * representing its ObjectId.
      *
      * @param id - String id of a file in the repository.
      * @return - File returned as String.
      * @throws Exception - failed.
      */
     public String readObject(final String id) throws Exception {
-        return readFormWorkingTree(ObjectId.fromString(id));
-        /*
-        ObjectReader reader = git.getRepository().newObjectReader();
-        AbbreviatedObjectId aid = AbbreviatedObjectId.fromString(id);
-        ObjectId oid = reader.resolve(aid).iterator().next();
-        return new String(reader.open(oid).getBytes());
-        */
+        return readObject(ObjectId.fromString(id));
     }
 
     /**
@@ -241,14 +255,13 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public String readObject(final ObjectId id) throws Exception {
-        ObjectReader reader = git.getRepository().newObjectReader();
+        final ObjectReader reader = git.getRepository().newObjectReader();
         if (reader.has(id)) {
             return new String(reader.open(id).getBytes());
         } else {
             return readFormWorkingTree(id);
         }
     }
-
 
     /**
      * Merges the branch represented by the passed branchId in the current branch.
@@ -283,15 +296,15 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public void appendNote(final RevObject com, final String msg) throws Exception {
-        Note note = note(com);
-        StringBuffer buffer = new StringBuffer();
+        final Note note = note(com);
+        final StringBuffer buffer = new StringBuffer();
         if (note != null) {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             git.getRepository().open(note.getData()).copyTo(bytes);
-            buffer.append(bytes.toString()+"\n\n");
+            buffer.append(bytes.toString() + "\n\n");
         }
         buffer.append(msg);
-        addNote(com,buffer.toString());
+        addNote(com, buffer.toString());
         git.close();
     }
 
@@ -342,7 +355,7 @@ public class GitUtil {
      */
     public List<History> history(final String path) throws Exception {
         return logs(path)
-                .map(r -> createHistory(r,path))
+                .map(r -> createHistory(r, path))
                 .filter(h -> h != null)
                 .collect(Collectors.toList());
     }
@@ -354,12 +367,12 @@ public class GitUtil {
      * @return - Stream of RevCommits the file is in.
      * @throws Exception - failed.
      */
-    public Stream<RevCommit> logs(final String path)  throws Exception {
-        return StreamSupport.stream(git.log().addPath(path).call().spliterator(),false);
+    public Stream<RevCommit> logs(final String path) throws Exception {
+        return StreamSupport.stream(git.log().addPath(path).call().spliterator(), false);
     }
 
     /**
-     * Checksout a file into the working directory.
+     * Checks out a file into the working directory.
      *
      * @param path - The file path.
      * @throws Exception - failed.
@@ -389,7 +402,7 @@ public class GitUtil {
      */
     public void reset(final RevCommit reset) throws Exception {
         git.reset()
-                .setRef(reset.abbreviate(40).name())
+                .setRef(reset.abbreviate(NAME_LENGTH).name())
                 .setMode(ResetCommand.ResetType.HARD)
                 .call();
     }
@@ -403,19 +416,19 @@ public class GitUtil {
      */
     public History createHistory(final RevCommit r, final String path) {
         try {
-            TreeWalk treeWalk  = historyWalk(r,path);
+            final TreeWalk treeWalk = historyWalk(r, path);
             if (treeWalk.next()) {
-                History history = new History();
-                history.setId(treeWalk.getObjectId(0).abbreviate(40).name());
-                history.setCommit(r.abbreviate(40).name());
+                final History history = new History();
+                history.setId(treeWalk.getObjectId(0).abbreviate(NAME_LENGTH).name());
+                history.setCommit(r.abbreviate(NAME_LENGTH).name());
                 history.setPath(treeWalk.getPathString());
                 history.setMessage(r.getFullMessage());
-                history.setTime(new Date(r.getCommitTime() * 1000l).toString());
+                history.setTime(new Date(r.getCommitTime() * 1000L).toString());
                 history.setCommitter(r.getCommitterIdent().getName());
                 return history;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch(final Exception e) {
+
         }
         return null;
     }
@@ -429,7 +442,7 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public TreeWalk historyWalk(final RevCommit r, final String path) throws Exception {
-        TreeWalk treeWalk = new TreeWalk(git.getRepository());
+        final TreeWalk treeWalk = new TreeWalk(git.getRepository());
         treeWalk.addTree(r.getTree());
         treeWalk.setFilter(new HistoryTreeFilter(path));
         return treeWalk;
@@ -443,8 +456,7 @@ public class GitUtil {
     public void addFile(final String file) {
         try {
             git.add().addFilepattern(file).call();
-        }catch(Exception e) {
-            e.printStackTrace();
+        }catch(final Exception e) {
         }
     }
 
@@ -455,7 +467,7 @@ public class GitUtil {
      * @throws Exception -failed.
      */
     public void markAsSubmitted(final RevObject c) throws Exception {
-        appendNote(c,"SUBMITTED on "+new Date().toString()+"\n    ");
+        appendNote(c, "SUBMITTED on " + new Date().toString() + "\n    ");
     }
 
     /**
@@ -466,9 +478,9 @@ public class GitUtil {
      * @throws Exception -failed.
      */
     public String noteText(final RevObject com) throws Exception {
-        Note note = note(com);
-        if(note != null) {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final Note note = note(com);
+        if (note != null) {
+            final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             git.getRepository().open(note.getData()).copyTo(bytes);
             return bytes.toString();
         }
@@ -482,26 +494,32 @@ public class GitUtil {
      * @return - PersonIden object to be added to a commit.
      */
     public PersonIdent getCommitterId(final CasUserProfile user) {
-        String displayName = user.getDisplayName();
-        String email = user.getEmail() != null ? user.getEmail() : "mgmt@cas.com";
+        final String displayName = user.getDisplayName();
+        final String email = user.getEmail() != null ? user.getEmail() : "mgmt@cas.com";
         return new PersonIdent(user.getId() + " - " + displayName, email);
     }
 
+    /**
+     * Method will tag the current HEAD commit has being the latest published.
+     */
     public void setPublished() {
         try {
             git.tagDelete().setTags("published").call();
             git.tag().setName("published").call();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
         }
     }
 
+    /**
+     * Method returns the Ref to the commit witht the published tag.
+     *
+     * @return - Ref of the published commit
+     */
     public Ref getPublished() {
         try {
-            Ref ref = git.tagList().call().get(0);
+            final Ref ref = git.tagList().call().get(0);
             return git.getRepository().peel(ref);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
             return null;
         }
     }
@@ -510,7 +528,7 @@ public class GitUtil {
      * Class used to define a TreeFilter to only pull history for a single path.
      */
     public class HistoryTreeFilter extends TreeFilter {
-        String path;
+        private String path;
 
         public HistoryTreeFilter(final String path) {
             this.path = path;
@@ -530,6 +548,7 @@ public class GitUtil {
         public TreeFilter clone() {
             return null;
         }
+
     }
 
     /**
@@ -596,12 +615,6 @@ public class GitUtil {
         git.getRepository().open(note.getData()).copyTo(output);
     }
 
-    /*
-    public void setGit(Git git) {
-        this.git = git;
-    }
-    */
-
     /**
      * Pulls changes form the default remote repository into the wrapped repository.
      *
@@ -621,17 +634,6 @@ public class GitUtil {
     }
 
     /**
-     * Returns how many commits behind a branch is from its upstream origin.
-     *
-     * @param branch - The branch to check.
-     * @return - int count of number commits behind.
-     * @throws Exception - failed.
-     */
-    public int behindCount(final String branch) throws Exception {
-        return BranchTrackingStatus.of(git.getRepository(),branch).getBehindCount();
-    }
-
-    /**
      * Returns a BranchMap for the commit passed as a Ref.
      *
      * @param r - Ref commit to generate the BranchMap for.
@@ -639,10 +641,9 @@ public class GitUtil {
      */
     public BranchMap mapBranches(final Ref r) {
         try {
-            RevWalk revWalk = new RevWalk(git.getRepository());
-            return new BranchMap(this,r,revWalk.parseCommit(git.getRepository().resolve(r.getName())));
-        } catch (Exception e) {
-            e.printStackTrace();
+            final RevWalk revWalk = new RevWalk(git.getRepository());
+            return new BranchMap(this, r, revWalk.parseCommit(git.getRepository().resolve(r.getName())));
+        } catch (final Exception e) {
         }
         return null;
     }
@@ -655,11 +656,11 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public List<DiffEntry> getDiffs(final String branch) throws Exception {
-        CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-        ObjectReader reader = git.getRepository().newObjectReader();
-        oldTreeIter.reset(reader,git.getRepository().resolve(branch+"~1^{tree}"));
-        CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
-        newTreeIter.reset(reader,git.getRepository().resolve(branch+"^{tree}"));
+        final CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+        final ObjectReader reader = git.getRepository().newObjectReader();
+        oldTreeIter.reset(reader, git.getRepository().resolve(branch + "~1^{tree}"));
+        final CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
+        newTreeIter.reset(reader, git.getRepository().resolve(branch + "^{tree}"));
         return git.diff().setOldTree(oldTreeIter).setNewTree(newTreeIter).call();
     }
 
@@ -672,7 +673,7 @@ public class GitUtil {
      * @throws Exception -failed.
      */
     public byte[] getFormatter(final ObjectId oldId, final ObjectId newId) throws Exception {
-        return getFormatter(rawText(oldId),rawText(newId));
+        return getFormatter(rawText(oldId), rawText(newId));
     }
 
     /**
@@ -684,7 +685,7 @@ public class GitUtil {
      * @throws Exception -failed.
      */
     public byte[] getFormatter(final RawText oldText, final ObjectId newId) throws Exception {
-        return getFormatter(oldText,rawText(newId));
+        return getFormatter(oldText, rawText(newId));
     }
 
     /**
@@ -696,7 +697,7 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public byte[] getFormatter(final ObjectId oldId, final RawText newText) throws Exception {
-        return getFormatter(rawText(oldId),newText);
+        return getFormatter(rawText(oldId), newText);
     }
 
     /**
@@ -708,12 +709,16 @@ public class GitUtil {
      * @throws Exception -failed.
      */
     public byte[] getFormatter(final RawText oldText, final RawText newText) throws Exception {
-        DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm((DiffAlgorithm.SupportedAlgorithm)git.getRepository().getConfig().getEnum("diff", (String)null, "algorithm", DiffAlgorithm.SupportedAlgorithm.HISTOGRAM));
-        EditList editList = diffAlgorithm.diff(RawTextComparator.DEFAULT,oldText,newText);
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        DiffFormatter df = new DiffFormatter(bytes);
+        final DiffAlgorithm diffAlgorithm = DiffAlgorithm.getAlgorithm(
+                (DiffAlgorithm.SupportedAlgorithm) git.getRepository().getConfig().getEnum("diff",
+                        (String) null,
+                        "algorithm",
+                        DiffAlgorithm.SupportedAlgorithm.HISTOGRAM));
+        final EditList editList = diffAlgorithm.diff(RawTextComparator.DEFAULT, oldText, newText);
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final DiffFormatter df = new DiffFormatter(bytes);
         df.setRepository(git.getRepository());
-        df.format(editList,oldText,newText);
+        df.format(editList, oldText, newText);
         df.flush();
         return bytes.toByteArray();
     }
@@ -741,7 +746,7 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public RawText rawText(final String path) throws Exception {
-        File file = new File(git.getRepository().getWorkTree().getAbsolutePath()+"/"+path);
+        final File file = new File(git.getRepository().getWorkTree().getAbsolutePath() + "/" + path);
         return new RawText(FileUtils.readFileToByteArray(file));
     }
 
@@ -753,8 +758,8 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public RevCommit findCommitBeforeSubmit(final String branchName) throws Exception {
-        RevCommit com = findSubmitCommit(branchName);
-        RevCommit before = commitLogs(com).skip(1).findFirst().get();
+        final RevCommit com = findSubmitCommit(branchName);
+        final RevCommit before = commitLogs(com).skip(1).findFirst().get();
         return before;
     }
 
@@ -780,9 +785,9 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public void markAsReverted(final String branch, final CasUserProfile user) throws Exception {
-        RevWalk revWalk = new RevWalk(git.getRepository());
-        RevCommit com = revWalk.parseCommit(git.getRepository().resolve(branch));
-        String msg = "REVERTED by "+user.getId()+" on "+new Date().toString()+"\n    ";
+        final RevWalk revWalk = new RevWalk(git.getRepository());
+        final RevCommit com = revWalk.parseCommit(git.getRepository().resolve(branch));
+        final String msg = "REVERTED by " + user.getId() + " on " + new Date().toString() + "\n    ";
         appendNote(com, msg);
     }
 
@@ -792,8 +797,7 @@ public class GitUtil {
     public void rebase() {
         try {
             git.pull().setRebase(true).call();
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(final Exception e) {
         }
     }
 
@@ -806,8 +810,7 @@ public class GitUtil {
     public boolean isRejected(final RevObject com) {
         try {
             return noteText(com).contains("REJECTED");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
         }
         return false;
     }
@@ -821,8 +824,7 @@ public class GitUtil {
     public boolean isReverted(final RevObject com) {
         try {
             return noteText(com).contains("REVERTED");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
         }
         return false;
     }
@@ -836,8 +838,7 @@ public class GitUtil {
     public boolean isAccepted(final RevObject com) {
         try {
             return noteText(com).contains("ACCEPTED");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
         }
         return false;
     }
@@ -849,11 +850,11 @@ public class GitUtil {
      * @throws Exception - failed.
      */
     public Stream<DiffEntry> checkForDeletes() throws Exception {
-        FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
-        CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-        ObjectReader reader = git.getRepository().newObjectReader();
+        final FileTreeIterator workTreeIterator = new FileTreeIterator(git.getRepository());
+        final CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+        final ObjectReader reader = git.getRepository().newObjectReader();
         oldTreeIter.reset(reader, git.getRepository().resolve("HEAD^{tree}"));
-        DiffFormatter formatter = new DiffFormatter(System.out);
+        final DiffFormatter formatter = new DiffFormatter(new ByteArrayOutputStream());
         formatter.setRepository(git.getRepository());
         return formatter.scan(oldTreeIter, workTreeIterator).stream()
                 .filter(d -> d.getChangeType() == DiffEntry.ChangeType.DELETE);
@@ -868,7 +869,7 @@ public class GitUtil {
         private GitUtil git;
 
         public BranchMap(final GitUtil git) {
-           this.git = git;
+            this.git = git;
         }
 
         public BranchMap(final GitUtil git, final Ref ref, final RevCommit revCommit) {
@@ -910,7 +911,7 @@ public class GitUtil {
         }
 
         public String getId() {
-            return revCommit.abbreviate(40).name();
+            return revCommit.abbreviate(NAME_LENGTH).name();
         }
 
         public boolean isAccepted() {

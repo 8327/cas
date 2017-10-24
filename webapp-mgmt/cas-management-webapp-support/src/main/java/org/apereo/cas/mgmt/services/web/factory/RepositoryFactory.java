@@ -6,18 +6,19 @@ import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 
 /**
- * Created by tsschmi on 3/2/17.
+ * Factory class to create repository objects.
+ *
+ * @author Travis Schmidt
+ * @since 5.2.0
  */
-@Component("repositoryFactory")
 public class RepositoryFactory {
 
     @Autowired
-    CasConfigurationProperties casProperties;
+    private CasConfigurationProperties casProperties;
 
     public RepositoryFactory() {
     }
@@ -25,17 +26,13 @@ public class RepositoryFactory {
     /**
      * Method loads the git repository based on the user and their permissions.
      *
-     * @param user
-     * @return
-     * @throws Exception
+     * @param user - CasUserProfile of logged in user
+     * @return - GitUtil wrapping the user's repository
+     * @throws Exception -failed
      */
-    public GitUtil getGit(CasUserProfile user) throws Exception {
+    public GitUtil getGit(final CasUserProfile user) throws Exception {
         return masterRepository();
         //return getGit(user,false);
-    }
-
-    public GitUtil getGit(CasUserProfile user, boolean returnMaster) throws Exception {
-        return masterRepository();
     }
 
     /*
@@ -54,9 +51,15 @@ public class RepositoryFactory {
     }
     */
 
+    /**
+     * Method returns a GitUtil wrapping the master repository.
+     *
+     * @return - GitUtil
+     * @throws Exception - failed
+     */
     public GitUtil masterRepository() throws Exception {
         return new GitUtil(new Git(new FileRepositoryBuilder()
-                .setGitDir(new File(casProperties.getMgmt().getServicesRepo()+ "/.git"))
+                .setGitDir(new File(casProperties.getMgmt().getServicesRepo() + "/.git"))
                 .setMustExist(true)
                 .readEnvironment()
                 .findGitDir()
@@ -75,14 +78,18 @@ public class RepositoryFactory {
     }
     */
 
-    public void clone(String clone) {
+    /**
+     * Clones the master repository into the passed in directory.
+     *
+     * @param clone - String representing dir to create the clone
+     */
+    public void clone(final String clone) {
         try {
-            Git git = Git.cloneRepository()
-                    .setURI(casProperties.getMgmt().getServicesRepo()+"/.git")
+            Git.cloneRepository()
+                    .setURI(casProperties.getMgmt().getServicesRepo() + "/.git")
                     .setDirectory(new File(clone))
                     .call();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
         }
     }
 }
