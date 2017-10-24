@@ -82,27 +82,23 @@ public class ManagerFactory {
      * @throws Exception - failed
      */
     public GitServicesManager from(final HttpServletRequest request, final CasUserProfile user) throws Exception {
-        /*
-        if(user.isAdministrator()) {
-            return new GitServicesManager(casProperties.getMgmt().getServicesRepo());
-        }
-
-        Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.getId());
-        if (!Files.exists(path)) {
-            repositoryFactory.clone(path.toString());
-        } else {
-            repositoryFactory.userRepository(user.getId()).rebase();
-        }
-        */
-
         GitServicesManager manager = (GitServicesManager) request.getSession().getAttribute("servicesManager");
         if (manager != null) {
             manager.load();
-        } else {
+        } else if(user.isAdministrator()) {
             manager = new GitServicesManager(casProperties.getMgmt().getServicesRepo(), defaultOnly, repositoryFactory);
-            request.getSession().setAttribute("servicesManager", manager);
+        } else {
+            final Path path = Paths.get(casProperties.getMgmt().getUserReposDir() + "/" + user.getId());
+            if (!Files.exists(path)) {
+                repositoryFactory.clone(path.toString());
+            } else {
+                repositoryFactory.userRepository(user.getId()).rebase();
+            }
+            manager = new GitServicesManager(casProperties.getMgmt().getUserReposDir() + "/" + user.getId(),
+                                             defaultOnly,
+                                             repositoryFactory);
         }
-
+        request.getSession().setAttribute("servicesManager", manager);
         return manager;
     }
 }

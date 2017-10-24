@@ -79,6 +79,8 @@ public class ManagementWebappProperties implements Serializable {
      */
     private String servicesRepo = "/etc/cas/services-repo";
 
+    private String userReposDir = "/etc/cas/user-repos";
+
     /**
      * Path to executable bean shell script to sync server nodes.
      */
@@ -162,7 +164,7 @@ public class ManagementWebappProperties implements Serializable {
         return servicesRepo;
     }
 
-    public void setServicesRepo(String servicesRepo) {
+    public void setServicesRepo(final String servicesRepo) {
         this.servicesRepo = servicesRepo;
     }
 
@@ -170,8 +172,16 @@ public class ManagementWebappProperties implements Serializable {
         return syncScript;
     }
 
-    public void setSyncScript(String syncScript) {
+    public void setSyncScript(final String syncScript) {
         this.syncScript = syncScript;
+    }
+
+    public String getUserReposDir() {
+        return userReposDir;
+    }
+
+    public void setUserReposDir(final String userReposDir) {
+        this.userReposDir = userReposDir;
     }
 }
 
