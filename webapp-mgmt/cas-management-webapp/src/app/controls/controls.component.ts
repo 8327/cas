@@ -23,7 +23,7 @@ export class ControlsComponent implements OnInit {
   userAhead: boolean = false;
 
   @Input()
-  showEdit: boolean = false;
+  showEdit: boolean;
 
   @ViewChild('publishModal')
   submitComp: PublishComponent;

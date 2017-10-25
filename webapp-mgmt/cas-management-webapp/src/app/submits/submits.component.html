@@ -23,20 +23,18 @@
         </ng-container>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [ngClass]="'messageWidth'">
-        {{ row.message }}
+        {{ row.msg }}
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="branch">
-      <mat-header-cell *matHeaderCellDef [ngClass]="'branchWidth'">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'nameWidth'">
         <ng-container i18n>
           Branch Name
         </ng-container>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row" [ngClass]="'branchWidth'">
-        <a (click)="viewChanges(row.branchName)">
-          {{ row.branchName }}
-        </a>
+      <mat-cell *matCellDef="let row" [ngClass]="'nameWidth'">
+       {{ row.name }}
       </mat-cell>
     </ng-container>
 
@@ -47,7 +45,7 @@
         </ng-container>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [ngClass]="'statusWidth'">
-        {{ row.status }}
+        {{ status(row) }}
       </mat-cell>
     </ng-container>
 
@@ -78,7 +76,7 @@
 </div>
 
 <mat-menu #submitsMenu>
-  <button mat-menu-item *ngIf="status() === 'Rejected'" (click)="revert()">
+  <button mat-menu-item *ngIf="status(selectedItem) === 'Rejected'" (click)="openModalRevert()">
     <mat-icon>undo</mat-icon>
     <ng-container i18n>Revert</ng-container>
   </button>

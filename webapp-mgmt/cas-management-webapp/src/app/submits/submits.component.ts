@@ -4,6 +4,7 @@ import { Branch } from "../../domain/branch";
 import {Database, Datasource} from "../database";
 import {MatDialog, MatPaginator, MatSnackBar} from "@angular/material";
 import {RevertComponent} from "../revert/revert.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-submits',
@@ -13,18 +14,19 @@ import {RevertComponent} from "../revert/revert.component";
 
 export class SubmitsComponent implements OnInit {
 
-  displayedColumns = ['actions','branch','message','status'];
+  displayedColumns = ['actions', 'status', 'name', 'message'];
   database: Database<Branch> = new Database<Branch>();
   dataSource: Datasource<Branch> | null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  selectedBranch: Branch;
+  selectedItem: Branch;
   revertBranch: Branch;
 
   constructor(private service: SubmitService,
               public dialog: MatDialog,
-              public snackBar: MatSnackBar) { }
+              public snackBar: MatSnackBar,
+              public router: Router) { }
 
   ngOnInit() {
     this.dataSource = new Datasource(this.database, this.paginator);
@@ -33,10 +35,14 @@ export class SubmitsComponent implements OnInit {
 
 
   getNotes(branch: String) {
+    this.router.navigate(['notes', this.selectedItem.id]);
   }
 
 
   status(branch: Branch): String {
+    if (!branch) {
+      return;
+    }
     if (branch.accepted) {
       return "Accepted";
     } else if (branch.reverted) {
@@ -50,7 +56,7 @@ export class SubmitsComponent implements OnInit {
 
   openModalRevert(branch: Branch) {
     let dialogRef = this.dialog.open(RevertComponent,{
-      data: this.selectedBranch,
+      data: this.selectedItem,
       width: '500px',
       position: {top: '100px'}
     });
@@ -59,7 +65,7 @@ export class SubmitsComponent implements OnInit {
         this.revert();
       }
     });
-    this.revertBranch = this.selectedBranch;
+    this.revertBranch = this.selectedItem;
   }
 
   revert() {

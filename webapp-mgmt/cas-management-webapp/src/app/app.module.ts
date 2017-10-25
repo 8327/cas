@@ -30,6 +30,11 @@ import {JSONModule} from "./json/json.module";
 import {HeaderService} from "./header/header.service";
 import {InitComponent} from "app/init.component";
 import { LocalChangesComponent } from './local-changes/local-changes.component';
+import {PullModule} from "./pull/pull.module";
+import {SubmitModule} from "./submits/submits.module";
+import {NotesModule} from "./notes/notes.module";
+import {RejectComponent} from "./reject/reject.component";
+import {AcceptComponent} from "./accept/accept.component";
 
 
 @NgModule({
@@ -44,6 +49,9 @@ import { LocalChangesComponent } from './local-changes/local-changes.component';
     JSONModule,
     ChangesModule,
     DiffModule,
+    PullModule,
+    SubmitModule,
+    NotesModule,
     FormModule,
     SharedModule,
     AppRoutingModule
@@ -54,12 +62,16 @@ import { LocalChangesComponent } from './local-changes/local-changes.component';
     DeleteComponent,
     SearchComponent,
     RevertComponent,
+    AcceptComponent,
+    RejectComponent,
     InitComponent,
     LocalChangesComponent
   ],
   entryComponents: [
     DeleteComponent,
-    RevertComponent
+    RevertComponent,
+    AcceptComponent,
+    RejectComponent
   ],
   providers: [
     Messages,

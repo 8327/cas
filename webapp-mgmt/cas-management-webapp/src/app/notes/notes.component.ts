@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Editor } from "../editor.component";
 import { Messages } from "../messages";
+import {ActivatedRoute, Route, Router} from "@angular/router";
+import {NotesService} from "./notes.service";
 
 @Component({
   selector: 'app-notes',
@@ -9,8 +11,6 @@ import { Messages } from "../messages";
 })
 
 export class NotesComponent implements OnInit {
-  @Input()
-  note: String;
 
   @Output()
   commit: EventEmitter<String> = new EventEmitter<String>();
@@ -21,9 +21,15 @@ export class NotesComponent implements OnInit {
   @Input()
   viewOnly: boolean;
 
-  constructor(public messages: Messages) { }
+  file: String;
+
+  constructor(public messages: Messages,
+              public route: ActivatedRoute,
+              public service: NotesService) { }
 
   ngOnInit() {
+    let id = this.route.snapshot.params['id'];
+    this.service.getNotes(id).then(resp => this.file = resp);
   }
 
   saveNote() {

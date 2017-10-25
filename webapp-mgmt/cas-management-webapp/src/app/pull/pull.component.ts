@@ -21,7 +21,7 @@ import {RejectComponent} from "../reject/reject.component";
 
 export class PullComponent implements OnInit {
 
-  displayedColumns = ['actions','branch','message','status'];
+  displayedColumns = ['actions', 'branch', 'status', 'message'];
   database: Database<Branch> = new Database<Branch>();
   dataSource: Datasource<Branch> | null;
 
@@ -61,7 +61,7 @@ export class PullComponent implements OnInit {
 
   openAcceptModal() {
     let dialogRef = this.dialog.open(AcceptComponent,{
-      data: this.selectedBranch,
+      data: [],
       width: '500px',
       position: {top: '100px'}
     });
@@ -112,11 +112,7 @@ export class PullComponent implements OnInit {
   }
 
   getNotes() {
-    this.notesService.getNotes(this.selectedBranch.id)
-      .then(resp => this.handleNote(resp));
-  }
-
-  handleNote(note: String) {
+    this.router.navigate(['notes', this.selectedBranch.id]);
   }
 
   saveNote(note: String) {

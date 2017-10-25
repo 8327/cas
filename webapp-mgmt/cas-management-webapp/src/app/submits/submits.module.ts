@@ -19,7 +19,6 @@ import {RevertComponent} from "../revert/revert.component";
   ],
   declarations: [
     SubmitsComponent,
-    RevertComponent
   ],
   providers: [
     SubmitService

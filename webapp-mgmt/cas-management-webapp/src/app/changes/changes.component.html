@@ -9,7 +9,7 @@
   </div>
   <div style="flex: 1 1 auto"></div>
   <div>
-    <app-controls></app-controls>
+    <app-controls [showEdit]="false"></app-controls>
   </div>
 </div>
 
@@ -39,19 +39,14 @@
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef [ngClass]="'actionWidth'">
         <ng-container i18n>
-          Actions
+          &nbsp;
         </ng-container>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <button mat-button (click)="viewChange( row )">
-          <mat-icon>view</mat-icon>
-          <ng-container i18n>View</ng-container>
-        </button>
-        <button mat-button (click)="viewDiff( row )">
-          <mat-icon>details</mat-icon>
-          <ng-container i18n>Diff</ng-container>
+      <mat-cell *matCellDef="let row" [ngClass]="'actionWidth'">
+        <button mat-icon-button [matMenuTriggerFor]="changesMenu" (click)="selectedItem = row">
+          <mat-icon>menu</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
@@ -68,4 +63,15 @@
                  [pageSizeOptions]="[5, 10, 25, 100]">
   </mat-paginator>
 </div>
+
+<mat-menu #changesMenu>
+  <button mat-menu-item (click)="viewChange()">
+    <mat-icon>visibility</mat-icon>
+    <ng-container i18n>View</ng-container>
+  </button>
+  <button mat-menu-item (click)="viewDiff()">
+    <mat-icon>compare_arrows</mat-icon>
+    <ng-container i18n>Diff</ng-container>
+  </button>
+</mat-menu>
 

@@ -5,9 +5,7 @@ import {DiffEntry} from "../../domain/diff-entry";
 import {Location} from "@angular/common";
 import {Messages} from "../messages";
 import {MatPaginator, MatSnackBar} from "@angular/material";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {DataSource} from "@angular/cdk/collections";
-import {Observable} from "rxjs/Observable";
+import {Database, Datasource} from "../database";
 
 @Component({
   selector: 'app-changes',
@@ -16,11 +14,13 @@ import {Observable} from "rxjs/Observable";
 })
 
 export class ChangesComponent implements OnInit {
-    displayedColumns = ['file','change','actions'];
-    database = new ChangesDatabase();
-    dataSource: ChangesDataSource | null;
+    displayedColumns = ['actions', 'file', 'change'];
+    database: Database<DiffEntry> = new Database<DiffEntry>();
+    dataSource: Datasource<DiffEntry> | null;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
+
+    selectedItem: DiffEntry;
 
     constructor(public messages: Messages,
                 public router: Router,
@@ -30,62 +30,18 @@ export class ChangesComponent implements OnInit {
                 public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.dataSource = new ChangesDataSource(this.database, this.paginator);
+    this.dataSource = new Datasource(this.database, this.paginator);
     this.route.data
       .subscribe((data: { resp: DiffEntry[]}) => {
         this.database.load(data.resp);
       });
   }
 
-  viewDiff(diff: DiffEntry) {
-    this.service.currentDiff = diff;
-    this.router.navigate(['/diff']);
+  viewDiff() {
+    this.router.navigate(['/diff',{oldId: this.selectedItem.oldId, newId: this.selectedItem.newId}]);
   }
 
-  viewChange(diff: DiffEntry) {
-    this.router.navigate(['/view',diff.newId]);
+  viewChange() {
+    this.router.navigate(['/view',this.selectedItem.newId]);
   }
-}
-
-export class ChangesDatabase {
-  dataChange: BehaviorSubject<DiffEntry[]> = new BehaviorSubject<DiffEntry[]>([]);
-  get data(): DiffEntry[] { return this.dataChange.value; }
-
-  constructor() {
-  }
-
-  load(changes: DiffEntry[]) {
-    this.dataChange.next([]);
-    for(let change of changes) {
-      this.addService(change);
-    }
-  }
-
-  addService(change: DiffEntry) {
-    const copiedData = this.data.slice();
-    copiedData.push(change);
-    this.dataChange.next(copiedData);
-  }
-}
-
-export class ChangesDataSource extends DataSource<any> {
-
-  constructor(private _changesDatabase: ChangesDatabase, private _paginator: MatPaginator) {
-      super();
-  }
-
-  connect(): Observable<DiffEntry[]> {
-     const displayDataChanges = [
-       this._changesDatabase.dataChange,
-       this._paginator.page,
-      ];
-
-     return Observable.merge(...displayDataChanges).map(() => {
-        const data = this._changesDatabase.data.slice();
-        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-        return data.splice(startIndex, this._paginator.pageSize);
-    });
-  }
-
-  disconnect() {}
 }

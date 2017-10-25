@@ -40,7 +40,7 @@ export class LocalChangesComponent implements OnInit {
   }
 
   refresh() {
-    this.controlsService.untracked().then(resp => this.database.load(resp));
+    this.controlsService.untracked().then(resp => this.database.load(resp ? resp : []));
   }
 
   openModalRevert() {

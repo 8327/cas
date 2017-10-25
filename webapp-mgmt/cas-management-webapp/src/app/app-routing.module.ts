@@ -14,6 +14,11 @@ import {DiffComponent} from "./diff/diff.component";
 import {JSONComponent} from "./json/json.component";
 import {JSONResolver} from "./json/json.resolover";
 import {LocalChangesComponent} from "./local-changes/local-changes.component";
+import {PullComponent} from "./pull/pull.component";
+import {SubmitsComponent} from "./submits/submits.component";
+import {ChangesComponent} from "./changes/changes.component";
+import {ChangesResolve} from "./changes/changes.resolover";
+import {NotesComponent} from "./notes/notes.component";
 
 @NgModule({
   imports: [
@@ -59,6 +64,25 @@ import {LocalChangesComponent} from "./local-changes/local-changes.component";
         path: 'manage.html',
         component: InitComponent
       },
+      {
+        path: 'pulls',
+        component: PullComponent
+      },
+      {
+        path: 'submits',
+        component: SubmitsComponent
+      },
+      {
+        path: 'changes/:branch',
+        component: ChangesComponent,
+        resolve: {
+          resp: ChangesResolve
+        }
+      },
+      {
+        path: 'notes/:id',
+        component: NotesComponent
+      }
     ]),
   ],
   exports: [ RouterModule ]

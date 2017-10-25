@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {Observable} from "rxjs/Observable";
 import {Location} from "@angular/common";
 import {HeaderService} from "./header.service";
+import {UserService} from "../user.service";
 
 @Component({
   selector: 'app-header',
@@ -15,11 +16,13 @@ export class HeaderComponent implements OnInit {
   @ViewChild("search") search: ElementRef;
 
   type: String;
+  isAdmin: boolean;
 
   constructor(public messages: Messages,
               public router: Router,
               public location: Location,
-              private service: HeaderService) { }
+              private service: HeaderService,
+              private userService: UserService) { }
 
   ngOnInit() {
     this.service.getMangerType().then(resp => this.type = resp);
@@ -29,6 +32,7 @@ export class HeaderComponent implements OnInit {
       .subscribe(() => {
         this.router.navigate(['search', this.search.nativeElement.value]);
       });
+    this.userService.getUser().then(resp => this.isAdmin = resp.administrator);
   }
 
   logout() {
