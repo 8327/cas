@@ -21,7 +21,9 @@ export class ControlsComponent implements OnInit {
   showCommit: boolean = false;
   publishDirty: boolean = false;
   userAhead: boolean = false;
-  showEdit: boolean;
+
+  @Input()
+  showEdit: boolean = false;
 
   @ViewChild('publishModal')
   submitComp: PublishComponent;
@@ -38,7 +40,6 @@ export class ControlsComponent implements OnInit {
               public location: Location) { }
 
   ngOnInit() {
-    this.showEdit = this.router.url.includes("form");
     this.userService.getUser().then(resp => this.isAdmin = resp.administrator);
     this.service.untracked();
     this.unpublished();

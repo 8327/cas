@@ -26,7 +26,8 @@
     </button>
     <button mat-button *ngIf="!isAdmin && service.changes != null"
             (click)="callSubmit()">
-      <ng-container i18n>Submit Changes</ng-container>
+      <mat-icon>file_upload</mat-icon>
+      <ng-container i18n>Submit</ng-container>
     </button>
   </div>
   <div style="display:inline;" *ngIf="!showEdit">
