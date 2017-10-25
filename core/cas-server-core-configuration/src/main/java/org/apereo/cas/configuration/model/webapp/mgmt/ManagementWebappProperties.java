@@ -22,10 +22,13 @@ import java.util.List;
 public class ManagementWebappProperties implements Serializable {
     private static final long serialVersionUID = -7686426966125636166L;
     /**
-     * List of roles required to accept the web application.
+     * List of roles that allow admin access to the web application.
      */
     private List<String> adminRoles = CollectionUtils.wrap("ROLE_ADMIN");
 
+    /**
+     * List of roles that allow a non-admin access to the web application.
+     */
     private List<String> userRoles = CollectionUtils.wrap("ROLE_USER");
     /**
      * The server name/address of the management web application.
@@ -76,10 +79,13 @@ public class ManagementWebappProperties implements Serializable {
     private Resource userPropertiesFile = new ClassPathResource("user-details.properties");
 
     /**
-     * A writtable location where the Git repository will be created to track changes
+     * A writable location where the Git repository will be created to track changes.
      */
     private String servicesRepo = "/etc/cas/services-repo";
 
+    /**
+     * A writable location where the users Git repositories will be created.
+     */
     private String userReposDir = "/etc/cas/user-repos";
 
     /**

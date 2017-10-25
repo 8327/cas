@@ -793,6 +793,8 @@ public class GitUtil {
 
     /**
      * Rebases the wrapped repository to the remote it was created form.
+     *
+     * @return self
      */
     public GitUtil rebase() {
         try {

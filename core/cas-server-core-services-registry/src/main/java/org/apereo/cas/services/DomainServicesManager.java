@@ -24,11 +24,17 @@ import java.util.stream.Collectors;
  * @since 5.2.0
  */
 public class DomainServicesManager extends AbstractServicesManager {
+
+    /**
+     * Name used to identify the default domain for service urls that contain wildcards.
+     */
+    protected static final String DEFAULT_DOMAIN_NAME = "default";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DomainServicesManager.class);
 
     private static final long serialVersionUID = -8581398063126547772L;
 
-    protected static final String DEFAULT_DOMAIN_NAME = "default";
+
 
     private final Map<String, TreeSet<RegisteredService>> domains = new ConcurrentHashMap<>();
 
@@ -88,7 +94,12 @@ public class DomainServicesManager extends AbstractServicesManager {
         return this.domains.containsKey(domain) ? this.domains.get(domain) : new ArrayList<>();
     }
 
-
+    /**
+     * Method extracts the domain from a service url expression.
+     *
+     * @param service - The service url
+     * @return - the domain
+     */
     protected String extractDomain(final String service) {
         final Matcher extractor = this.domainExtractor.matcher(service.toLowerCase());
         return extractor.lookingAt() ? validateDomain(extractor.group(1)) : "default";

@@ -23,7 +23,7 @@ public class CasRoleBasedAuthorizer extends RequireAnyRoleAuthorizer<CommonProfi
     }
 
     @Override
-    protected boolean isProfileAuthorized(WebContext context, CommonProfile profile) throws HttpAction {
+    protected boolean isProfileAuthorized(final WebContext context, final CommonProfile profile) throws HttpAction {
         LOGGER.debug("Evaluating profile [{}]", profile);
         final boolean result = super.isProfileAuthorized(context, profile);
         if (!result) {
