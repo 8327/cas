@@ -26,6 +26,7 @@ public class ManagementWebappProperties implements Serializable {
      */
     private List<String> adminRoles = CollectionUtils.wrap("ROLE_ADMIN");
 
+    private List<String> userRoles = CollectionUtils.wrap("ROLE_USER");
     /**
      * The server name/address of the management web application.
      */
@@ -182,6 +183,14 @@ public class ManagementWebappProperties implements Serializable {
 
     public void setUserReposDir(final String userReposDir) {
         this.userReposDir = userReposDir;
+    }
+
+    public List<String> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(final List<String> userRoles) {
+        this.userRoles = userRoles;
     }
 }
 

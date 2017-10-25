@@ -100,6 +100,7 @@ public class RepositoryFactory {
                     .setDirectory(new File(clone))
                     .call();
         } catch (final Exception e) {
+            e.printStackTrace();
         }
     }
 }

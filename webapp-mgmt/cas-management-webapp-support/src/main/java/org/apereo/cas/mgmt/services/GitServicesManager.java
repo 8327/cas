@@ -43,31 +43,13 @@ public class GitServicesManager extends DomainServicesManager {
 
 
     public GitServicesManager(final GitUtil git, final boolean defaultOnly) {
-        this(new JsonServiceRegistryDao(git.getGit().getRepository().getDirectory().toPath(),
+
+        this(new JsonServiceRegistryDao(Paths.get(git.repoPath()),
                                         false,
                                         null),
                                         null, defaultOnly);
         this.git = git;
     }
-
-    /**
-     * Constructor to create instance.
-     *
-     * @param repository - String path to the repository
-     * @param defaultOnly - boolean if the default domain is only used.
-     * @param repositoryFactory - RepositoryFactory
-
-    public GitServicesManager(final String repository,
-                              final boolean defaultOnly,
-                              final RepositoryFactory repositoryFactory) {
-        this(new JsonServiceRegistryDao(Paths.get(repository),
-                false,
-                null),
-                null,
-                defaultOnly);
-        this.repositoryFactory = repositoryFactory;
-    }
-    */
 
     /**
      * Protected constructor matching extended class for creating an instance.
