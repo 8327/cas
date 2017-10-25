@@ -70,6 +70,7 @@ import org.slf4j.LoggerFactory;
 import javax.security.auth.login.AccountNotFoundException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,13 +120,20 @@ public class CloseableKryoFactory implements KryoFactory {
         kryo.setReferences(this.replaceObjectsByReferences);
         kryo.setRegistrationRequired(this.registrationRequired);
 
+        LOGGER.debug("Constructing a kryo instance with the following settings:");
+        LOGGER.debug("warnUnregisteredClasses: [{}]", this.warnUnregisteredClasses);
+        LOGGER.debug("autoReset: [{}]", this.autoReset);
+        LOGGER.debug("replaceObjectsByReferences: [{}]", this.replaceObjectsByReferences);
+        LOGGER.debug("registrationRequired: [{}]", this.registrationRequired);
+        
         registerCasAuthenticationWithKryo(kryo);
         registerExpirationPoliciesWithKryo(kryo);
         registerCasTicketsWithKryo(kryo);
         registerNativeJdkComponentsWithKryo(kryo);
         registerCasServicesWithKryo(kryo);
+        
         registerImmutableOrEmptyCollectionsWithKryo(kryo);
-
+        
         classesToRegister.stream().forEach(c -> {
             LOGGER.debug("Registering serializable class [{}] with Kryo", c.getName());
             kryo.register(c);
@@ -177,6 +185,8 @@ public class CloseableKryoFactory implements KryoFactory {
     }
 
     private void registerImmutableOrEmptyCollectionsWithKryo(final Kryo kryo) {
+        LOGGER.debug("Registering immutable/empty collections with Kryo");
+        
         UnmodifiableCollectionsSerializer.registerSerializers(kryo);
         ImmutableListSerializer.registerSerializers(kryo);
         ImmutableSetSerializer.registerSerializers(kryo);
@@ -248,7 +258,9 @@ public class CloseableKryoFactory implements KryoFactory {
         kryo.register(ArrayList.class);
         kryo.register(HashMap.class);
         kryo.register(LinkedHashMap.class);
+        kryo.register(byte[].class);
         kryo.register(LinkedHashSet.class);
+        kryo.register(ByteBuffer.class);
         kryo.register(HashSet.class);
         kryo.register(URL.class, new URLSerializer());
         kryo.register(URI.class, new URISerializer());
@@ -272,4 +284,5 @@ public class CloseableKryoFactory implements KryoFactory {
         kryo.register(BaseDelegatingExpirationPolicy.class);
     }
 
+    
 }
