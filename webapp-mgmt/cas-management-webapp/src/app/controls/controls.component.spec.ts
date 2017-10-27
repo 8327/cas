@@ -3,13 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { ControlsComponent } from './controls.component';
-import {CommitComponent} from "../commit/commit.component";
-import {Change} from "../../domain/change";
-import {ControlsService} from "./controls.service";
-import {UserService} from "../user.service";
-import {PublishComponent} from "../publish/publish.component";
+import {CommitComponent} from '../commit/commit.component';
+import {Change} from '../../domain/change';
+import {ControlsService} from './controls.service';
+import {UserService} from '../user.service';
+import {PublishComponent} from '../publish/publish.component';
+import {Messages} from '../messages';
 
-let userServiceStub = {
+const userServiceStub = {
   getRoles(): Promise<String[]> {
     return Promise.resolve([]);
   },
@@ -18,9 +19,9 @@ let userServiceStub = {
   }
 };
 
-let controlsServiceStub = {
+const controlsServiceStub = {
   commit(msg: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   publish(): Promise<void> {

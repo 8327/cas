@@ -22,11 +22,11 @@ export class ServiceViewService extends Service {
   }
 
   revert(fileName: string): Promise<String> {
-    return this.get<String>("revert?path="+fileName);
+    return this.get<String>('revert?path=' + fileName);
   }
 
   revertDelete(fileName: string): Promise<String> {
-    return this.get<String>("revertDelete?path="+fileName);
+    return this.get<String>('revertDelete?path=' + fileName);
   }
 
   updateOrder(a: ServiceItem, b: ServiceItem): Promise<String> {

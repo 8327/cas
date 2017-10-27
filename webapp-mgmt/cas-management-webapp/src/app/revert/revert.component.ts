@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Messages} from "../messages";
-import {MatDialogRef} from "@angular/material";
+import {Messages} from '../messages';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-revert',

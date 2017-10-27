@@ -31,9 +31,9 @@ import {
 import {CdkTableModule} from '@angular/cdk/table';
 import {ControlsComponent} from '../controls/controls.component';
 import {ControlsService} from '../controls/controls.service';
-import {Editor} from "../editor.component";
-import {CommitComponent} from "../commit/commit.component";
-import {PublishComponent} from "../publish/publish.component";
+import {EditorComponent} from '../editor.component';
+import {CommitComponent} from '../commit/commit.component';
+import {PublishComponent} from '../publish/publish.component';
 
 @NgModule({
   imports: [
@@ -64,7 +64,7 @@ import {PublishComponent} from "../publish/publish.component";
     MatPaginatorModule,
   ],
   declarations: [
-    Editor,
+    EditorComponent,
     ControlsComponent,
     CommitComponent,
     PublishComponent
@@ -100,7 +100,7 @@ import {PublishComponent} from "../publish/publish.component";
     MatAutocompleteModule,
     MatSnackBarModule,
     MatPaginatorModule,
-    Editor,
+    EditorComponent,
     ControlsComponent,
     CommitComponent
   ]

@@ -17,16 +17,15 @@ import { SearchComponent } from './search/search.component';
 import {SearchService} from './search/SearchService';
 
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
-import {UserService} from "./user.service";
-import {CommitComponent} from "./commit/commit.component";
-import {HistoryModule} from "./history/history.module";
-import {RevertComponent} from "./revert/revert.component";
-import {ChangesModule} from "./changes/changes.module";
-import {DiffComponent} from "./diff/diff.component";
-import {DiffModule} from "./diff/diff.module";
-import {JSONModule} from "./json/json.module";
-import {InitComponent} from "app/init.component";
+import {UserService} from './user.service';
+import {HistoryModule} from './history/history.module';
+import {RevertComponent} from './revert/revert.component';
+import {ChangesModule} from './changes/changes.module';
+import {DiffModule} from './diff/diff.module';
+import {JSONModule} from './json/json.module';
+import {InitComponent} from 'app/init.component';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
+import {HeaderService} from './header/header.service';
 
 
 @NgModule({

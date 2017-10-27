@@ -1,14 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Messages} from "../messages";
-import {ControlsService} from "../controls/controls.service";
-import {Database, Datasource} from "../database";
-import {MatDialog, MatPaginator, MatSnackBar} from "@angular/material";
-import {Change} from "../../domain/change";
-import {RevertComponent} from "../revert/revert.component";
-import {ServiceViewService} from "../services/service.service";
-import {Router} from "@angular/router";
-import {DiffEntry} from "../../domain/diff-entry";
-import {ChangesService} from "../changes/changes.service";
+import {Messages} from '../messages';
+import {ControlsService} from '../controls/controls.service';
+import {Database, Datasource} from '../database';
+import {MatDialog, MatPaginator, MatSnackBar} from '@angular/material';
+import {Change} from '../../domain/change';
+import {RevertComponent} from '../revert/revert.component';
+import {ServiceViewService} from '../services/service.service';
+import {Router} from '@angular/router';
+import {DiffEntry} from '../../domain/diff-entry';
+import {ChangesService} from '../changes/changes.service';
 
 @Component({
   selector: 'app-local-changes',
@@ -19,11 +19,11 @@ export class LocalChangesComponent implements OnInit {
 
   selectedItem: Change;
   revertItem: Change;
-  displayedColumns = ["actions","serviceName","changeType"];
+  displayedColumns = ['actions', 'serviceName', 'changeType'];
   database: Database<Change> = new Database<Change>();
   datasource: Datasource<Change> | null;
 
-  @ViewChild("paginator")
+  @ViewChild('paginator')
   paginator: MatPaginator;
 
   constructor(public messages: Messages,
@@ -44,7 +44,7 @@ export class LocalChangesComponent implements OnInit {
   }
 
   openModalRevert() {
-    let dialogRef = this.dialog.open(RevertComponent,{
+    const dialogRef = this.dialog.open(RevertComponent, {
       data: this.selectedItem,
       width: '500px',
       position: {top: '100px'}
@@ -58,8 +58,8 @@ export class LocalChangesComponent implements OnInit {
   };
 
   revert() {
-    let fileName: string = (this.revertItem.fileName).replace(/ /g,"");
-    if (this.revertItem.changeType === "DELETED") {
+    const fileName: string = (this.revertItem.fileName).replace(/ /g, '');
+    if (this.revertItem.changeType === 'DELETED') {
       this.service.revertDelete(fileName)
         .then(resp => this.refresh());
     } else {
@@ -69,12 +69,12 @@ export class LocalChangesComponent implements OnInit {
   }
 
   viewDiff() {
-    this.router.navigate(['/diff', {oldId: this.selectedItem.oldId,newId: this.selectedItem.newId}]);
+    this.router.navigate(['/diff', {oldId: this.selectedItem.oldId, newId: this.selectedItem.newId}]);
   }
 
   viewJSON() {
-    let id = this.selectedItem.changeType === 'DELETE' ? this.selectedItem.oldId : this.selectedItem.newId;
-    this.router.navigate(['/json',id]);
+    const id = this.selectedItem.changeType === 'DELETE' ? this.selectedItem.oldId : this.selectedItem.newId;
+    this.router.navigate(['/json', id]);
   }
 
 }

@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Service} from "./service";
-import {Http} from "@angular/http";
-import {UserProfile} from "../domain/user-profile";
+import {Injectable} from '@angular/core';
+import {Service} from './service';
+import {Http} from '@angular/http';
+import {UserProfile} from '../domain/user-profile';
 
 @Injectable()
 export class UserService extends Service {
@@ -11,6 +11,6 @@ export class UserService extends Service {
     }
 
     getUser(): Promise<UserProfile> {
-        return this.get<UserProfile>("user");
+        return this.get<UserProfile>('user');
     }
 }

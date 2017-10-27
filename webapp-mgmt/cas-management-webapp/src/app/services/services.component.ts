@@ -8,7 +8,7 @@ import {MatDialog, MatPaginator, MatSnackBar} from '@angular/material';
 import {DeleteComponent} from '../delete/delete.component';
 import {ControlsService} from '../controls/controls.service';
 import {Database, Datasource} from '../database';
-import {RevertComponent} from "../revert/revert.component";
+import {RevertComponent} from '../revert/revert.component';
 
 @Component({
   selector: 'app-services',
@@ -80,7 +80,7 @@ export class ServicesComponent implements OnInit, AfterViewInit {
   };
 
   openModalRevert() {
-    let dialogRef = this.dialog.open(RevertComponent,{
+    const dialogRef = this.dialog.open(RevertComponent, {
       data: this.selectedItem,
       width: '500px',
       position: {top: '100px'}
@@ -111,13 +111,13 @@ export class ServicesComponent implements OnInit, AfterViewInit {
   }
 
   history() {
-    let fileName: string = (this.selectedItem.name + '-' + this.selectedItem.assignedId + ".json").replace(/ /g,"");
-    this.router.navigate(['/history',fileName]);
+    const fileName: string = (this.selectedItem.name + '-' + this.selectedItem.assignedId + '.json').replace(/ /g, '');
+    this.router.navigate(['/history', fileName]);
   }
 
   revert() {
-    let fileName: string = (this.revertItem.name + '-' + this.revertItem.assignedId + ".json").replace(/ /g,"");
-    if(this.controlsService.changeStyle(this.revertItem.assignedId) === 'deleted') {
+    const fileName: string = (this.revertItem.name + '-' + this.revertItem.assignedId + '.json').replace(/ /g, '');
+    if (this.controlsService.changeStyle(this.revertItem.assignedId) === 'deleted') {
       this.service.revertDelete(fileName)
           .then(resp => this.refresh());
     } else {
@@ -164,7 +164,7 @@ export class ServicesComponent implements OnInit, AfterViewInit {
     if (!this.selectedItem) {
       return false;
     }
-    let index = this.serviceDatabase.data.indexOf(this.selectedItem);
+    const index = this.serviceDatabase.data.indexOf(this.selectedItem);
     return index < this.serviceDatabase.data.length - 1
            && this.serviceDatabase.data[index + 1].status !== 'DELETE'
            && this.selectedItem && this.selectedItem.status !== 'DELETE';
@@ -173,7 +173,7 @@ export class ServicesComponent implements OnInit, AfterViewInit {
     if (!this.selectedItem) {
       return false;
     }
-    let index = this.serviceDatabase.data.indexOf(this.selectedItem);
+    const index = this.serviceDatabase.data.indexOf(this.selectedItem);
     return index > 0;
   }
 }

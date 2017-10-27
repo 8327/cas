@@ -1,13 +1,13 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import {Messages} from '../messages';
 import {ControlsService} from './controls.service';
 import {Location} from '@angular/common';
-import {UserService} from "../user.service";
-import {PublishComponent} from "../publish/publish.component";
-import {Commit} from "../../domain/commit";
-import {MatDialog, MatSnackBar} from "@angular/material";
-import {CommitComponent} from "../commit/commit.component";
+import {UserService} from '../user.service';
+import {PublishComponent} from '../publish/publish.component';
+import {Commit} from '../../domain/commit';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {CommitComponent} from '../commit/commit.component';
 
 @Component({
   selector: 'app-controls',
@@ -17,10 +17,10 @@ import {CommitComponent} from "../commit/commit.component";
 
 export class ControlsComponent implements OnInit {
 
-  isAdmin: boolean = false;
-  showCommit: boolean = false;
-  publishDirty: boolean = false;
-  userAhead: boolean = false;
+  isAdmin = false;
+  showCommit = false;
+  publishDirty = false;
+  userAhead = false;
   showEdit: boolean;
 
   @ViewChild('publishModal')
@@ -38,7 +38,7 @@ export class ControlsComponent implements OnInit {
               public location: Location) { }
 
   ngOnInit() {
-    this.showEdit = this.router.url.includes("form");
+    this.showEdit = this.router.url.includes('form');
     this.userService.getUser().then(resp => this.isAdmin = resp.administrator);
     this.service.untracked();
     this.unpublished();
@@ -49,7 +49,7 @@ export class ControlsComponent implements OnInit {
   }
 
   openModalCommit() {
-      let dialogRef = this.dialog.open(CommitComponent,{
+      const dialogRef = this.dialog.open(CommitComponent, {
           data: [this.service.changes, this.isAdmin],
           width: '500px',
           position: {top: '100px'}
@@ -62,12 +62,12 @@ export class ControlsComponent implements OnInit {
   }
 
   commit(msg: String) {
-    if(msg === 'CANCEL') {
+    if (msg === 'CANCEL') {
       return;
     } else if (!this.isAdmin) {
       this.submit(msg);
     } else {
-      if (msg != null && msg != "") {
+      if (msg !== null && msg !== '') {
         this.service.commit(msg)
           .then(resp => this.handleCommit(resp))
           .catch(e => this.handleNotCommitted(e));
@@ -79,19 +79,19 @@ export class ControlsComponent implements OnInit {
     this.publishDirty = true;
     this.userAhead = true;
     this.service.untracked().then();
-    this.snackBar.open(this.messages.management_services_status_committed,'dismiss',{
+    this.snackBar.open(this.messages.management_services_status_committed, 'dismiss', {
         duration: 5000
     });
   }
 
   handleNotCommitted(e: any) {
-    this.snackBar.open(this.messages.management_services_status_notcommitted,'dismiss',{
+    this.snackBar.open(this.messages.management_services_status_notcommitted, 'dismiss', {
         duration: 5000
     });
   }
 
   openModalPublish() {
-      let dialogRef = this.dialog.open(PublishComponent,{
+      const dialogRef = this.dialog.open(PublishComponent, {
           width: '500px',
           position: {top: '100px'}
       });
@@ -112,13 +112,13 @@ export class ControlsComponent implements OnInit {
 
   handlePublish() {
     this.publishDirty = false;
-    this.snackBar.open(this.messages.management_services_status_published,'dismiss',{
+    this.snackBar.open(this.messages.management_services_status_published, 'dismiss', {
         duration: 5000
     });
   }
 
   handleNotPublished(e: any) {
-    this.snackBar.open(this.messages.management_services_status_notpublished,'dismiss',{
+    this.snackBar.open(this.messages.management_services_status_notpublished, 'dismiss', {
         duration: 5000
     });
   }
@@ -137,13 +137,13 @@ export class ControlsComponent implements OnInit {
     this.publishDirty = true;
     this.userAhead = true;
     this.service.untracked().then();
-    this.snackBar.open('Your commit has been submitted for review', 'dismiss',{
+    this.snackBar.open('Your commit has been submitted for review', 'dismiss', {
         duration: 5000
     });
   }
 
   handleNotSubmitted(e: any) {
-    this.snackBar.open('Something went wrong and your commit was not able to be submitted', 'dismiss',{
+    this.snackBar.open('Something went wrong and your commit was not able to be submitted', 'dismiss', {
         duration: 5000
     });
   }

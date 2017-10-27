@@ -1,11 +1,11 @@
 /**
  * Created by tschmidt on 2/15/17.
  */
-import {Injectable} from "@angular/core";
-import {DiffEntry} from "../../domain/diff-entry";
-import {Service} from "../service";
-import {Http} from "@angular/http";
-import {AbstractRegisteredService} from "../../domain/registered-service";
+import {Injectable} from '@angular/core';
+import {DiffEntry} from '../../domain/diff-entry';
+import {Service} from '../service';
+import {Http} from '@angular/http';
+import {AbstractRegisteredService} from '../../domain/registered-service';
 
 @Injectable()
 export class ChangesService extends Service {
@@ -14,19 +14,17 @@ export class ChangesService extends Service {
     super(http);
   }
 
-  currentDiff: DiffEntry;
-
   getChanges(branch: String): Promise<DiffEntry[]> {
-    return this.get<DiffEntry[]>("changes?branch=" + branch);
+    return this.get<DiffEntry[]>('changes?branch=' + branch);
   }
 
   viewDiff(oldId: String, newId: String): Promise<String> {
-    let data = [oldId,newId];
-    return this.post<String>("viewDiff",data);
+    const data = [oldId, newId];
+    return this.post<String>('viewDiff', data);
   }
 
   getChange(change: String): Promise<AbstractRegisteredService> {
-    return this.get<AbstractRegisteredService>("viewChange?id=" + change);
+    return this.get<AbstractRegisteredService>('viewChange?id=' + change);
   }
 
 }

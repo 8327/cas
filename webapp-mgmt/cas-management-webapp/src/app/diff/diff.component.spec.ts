@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Location, LocationStrategy } from "@angular/common";
+import { Location, LocationStrategy } from '@angular/common';
 import { DiffComponent } from './diff.component';
-import {Editor} from "../editor.component";
-import {Messages} from "../messages";
-import {DiffEntry} from "../../domain/diff-entry";
-import {ChangesService} from "../changes/changes.service";
-import {AbstractRegisteredService, RegexRegisteredService} from "../../domain/registered-service";
+import {EditorComponent} from '../editor.component';
+import {Messages} from '../messages';
+import {DiffEntry} from '../../domain/diff-entry';
+import {ChangesService} from '../changes/changes.service';
+import {AbstractRegisteredService, RegexRegisteredService} from '../../domain/registered-service';
 
-let changesServiceStub = {
+const changesServiceStub = {
   getChanges(branch: String): Promise<DiffEntry[]> {
     return Promise.resolve([]);
   },
 
   getDiff(diff: DiffEntry): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   getChange(change: String): Promise<AbstractRegisteredService> {
@@ -21,7 +21,7 @@ let changesServiceStub = {
   }
 };
 
-let locationStub = {
+const locationStub = {
 
 };
 
@@ -31,7 +31,7 @@ describe('DiffComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiffComponent, Editor],
+      declarations: [ DiffComponent, EditorComponent],
       providers: [
         Messages,
         {provide: ChangesService, useValue: changesServiceStub},

@@ -5,51 +5,51 @@
 import {Injectable} from '@angular/core';
 import {Service} from '../service';
 import {Http} from '@angular/http';
-import {Change} from "../../domain/change";
-import {Commit} from "../../domain/commit";
+import {Change} from '../../domain/change';
+import {Commit} from '../../domain/commit';
 
 @Injectable()
 export class ControlsService extends Service {
+
+  changes: Change[];
+  commits: Commit[];
 
   constructor (protected http: Http) {
     super(http);
   }
 
-  changes: Change[];
-  commits: Commit[];
-
   commit(msg: String): Promise<String> {
-    return this.get<String>('commit?msg='+msg);
+    return this.get<String>('commit?msg=' + msg);
   }
 
   publish(): Promise<String> {
-    return this.get<String>("publish");
+    return this.get<String>('publish');
   }
 
   submit(msg): Promise<String> {
-    return this.post<String>("submit", msg);
+    return this.post<String>('submit', msg);
   }
 
   untracked(): Promise<Change[]> {
-    return this.get<Change[]>("untracked")
+    return this.get<Change[]>('untracked')
       .then(resp => this.handleUntracked(resp));
   }
 
   handleUntracked(changes: Change[]): Change[] {
     this.changes = changes;
-    if (this.changes.length == 0) {
+    if (this.changes.length === 0) {
       this.changes = null;
     }
     return this.changes;
   }
 
   unpublished(): Promise<number> {
-    return this.get<number>("unpublished")
+    return this.get<number>('unpublished')
   }
 
   isChanged(id: String): Change {
     let change: Change;
-    if(this.changes) {
+    if (this.changes) {
       this.changes.forEach((c) => {
         if (c.id === id) {
           change = c;
@@ -60,9 +60,9 @@ export class ControlsService extends Service {
   }
 
   changeStyle(id: String): String {
-    let change : Change = this.isChanged(id);
+    const change: Change = this.isChanged(id);
     if (change) {
-      switch(change.changeType) {
+      switch (change.changeType) {
         case 'MODIFY' :
           return 'modified';
         case 'DELETE' :
@@ -75,9 +75,9 @@ export class ControlsService extends Service {
   }
 
   revertable(id: String): boolean {
-    let change : Change = this.isChanged(id);
+    const change: Change = this.isChanged(id);
     if (change) {
-      switch(change.changeType) {
+      switch (change.changeType) {
         case 'MODIFY' :
         case 'DELETE' :
           return true;
@@ -87,7 +87,7 @@ export class ControlsService extends Service {
   }
 
   getCommits(): Promise<Commit[]> {
-    return this.get<Commit[]>("commitList")
+    return this.get<Commit[]>('commitList')
       .then(resp => this.handleCommits(resp));
   }
 

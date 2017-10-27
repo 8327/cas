@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {ChangesService} from "./changes.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {DiffEntry} from "../../domain/diff-entry";
-import {Location} from "@angular/common";
-import {Messages} from "../messages";
-import {MatPaginator, MatSnackBar} from "@angular/material";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {DataSource} from "@angular/cdk/collections";
-import {Observable} from "rxjs/Observable";
+import {ChangesService} from './changes.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DiffEntry} from '../../domain/diff-entry';
+import {Location} from '@angular/common';
+import {Messages} from '../messages';
+import {MatPaginator, MatSnackBar} from '@angular/material';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {DataSource} from '@angular/cdk/collections';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-changes',
@@ -16,7 +16,7 @@ import {Observable} from "rxjs/Observable";
 })
 
 export class ChangesComponent implements OnInit {
-    displayedColumns = ['file','change','actions'];
+    displayedColumns = ['file', 'change', 'actions'];
     database = new ChangesDatabase();
     dataSource: ChangesDataSource | null;
 
@@ -38,12 +38,11 @@ export class ChangesComponent implements OnInit {
   }
 
   viewDiff(diff: DiffEntry) {
-    this.service.currentDiff = diff;
     this.router.navigate(['/diff']);
   }
 
   viewChange(diff: DiffEntry) {
-    this.router.navigate(['/view',diff.newId]);
+    this.router.navigate(['/view', diff.newId]);
   }
 }
 
@@ -56,7 +55,7 @@ export class ChangesDatabase {
 
   load(changes: DiffEntry[]) {
     this.dataChange.next([]);
-    for(let change of changes) {
+    for (const change of changes) {
       this.addService(change);
     }
   }
