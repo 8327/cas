@@ -25,8 +25,9 @@ dependencies {
     implementation project(":support:cas-server-support-oidc-core")
     implementation project(":support:cas-server-support-grouper")
     implementation project(":support:cas-server-support-surrogate-api")
+    implementation project(":support:cas-server-support-ws-idp-api")
     compile project(":support:cas-server-support-json-service-registry")
-    
+
     testImplementation project(":core:cas-server-core-services-authentication")
     testImplementation project(path: ":core:cas-server-core-services", configuration: "tests")
     compile ('org.eclipse.jgit:org.eclipse.jgit:4.6.1.201703071140-r') {

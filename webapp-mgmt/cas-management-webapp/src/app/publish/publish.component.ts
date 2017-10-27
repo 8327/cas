@@ -1,8 +1,8 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {Messages} from "../messages";
-import {Commit} from "../../domain/commit";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {ControlsService} from "../controls/controls.service";
+import {Messages} from '../messages';
+import {Commit} from '../../domain/commit';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {ControlsService} from '../controls/controls.service';
 
 @Component({
   selector: 'app-publish',

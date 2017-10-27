@@ -2269,7 +2269,9 @@ To learn more about this topic, [please review this guide](JWT-Authentication.ht
 # cas.authn.token.principalTransformation.prefix=
 ```
 
-### JWT Service Tickets
+### JWT Tickets
+
+Allow CAS tickets through various protocol channels to be created as JWTs. See [this guide](Configure-ServiceTicket-JWT.html) or [this guide](../protocol/REST-Protocol.html) for more info.
 
 ```properties
 # cas.authn.token.crypto.enabled=true
@@ -3866,6 +3868,7 @@ To learn more about this topic, [please review this guide](OAuth-OpenId-Authenti
 # cas.authn.oauth.grants.resourceOwner.requireServiceHeader=true
 
 # cas.authn.oauth.userProfileViewType=NESTED|FLAT
+# cas.authn.oauth.throttler=neverThrottle|authenticationThrottle
 ```
 
 ## Localization
@@ -5494,7 +5497,7 @@ To learn more about this topic, [please review this guide](../protocol/REST-Prot
 ```properties
 # cas.rest.attributeName=
 # cas.rest.attributeValue=
-# cas.rest.throttler=neverThrottle
+# cas.rest.throttler=neverThrottle|authenticationThrottle
 ```
 
 ## Metrics
@@ -5814,6 +5817,9 @@ To learn more about this topic, [please review this guide](Password-Policy-Enfor
 # cas.authn.pm.reset.expirationMinutes=1
 # cas.authn.pm.reset.emailAttribute=mail
 # cas.authn.pm.reset.securityQuestionsEnabled=true
+
+# Automatically log in after successful password change
+# cas.authn.pm.autoLogin=false
 
 # Used to sign/encrypt the password-reset link
 # cas.authn.pm.reset.crypto.encryption.key=

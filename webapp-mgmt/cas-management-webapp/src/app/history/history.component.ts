@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Messages} from "../messages";
-import {ActivatedRoute, Router} from "@angular/router";
-import {HistoryService} from "./history.service";
-import {History} from "../../domain/history";
-import {Location} from "@angular/common";
-import {DiffEntry} from "../../domain/diff-entry";
-import {ChangesService} from "../changes/changes.service";
-import {MatPaginator, MatSnackBar} from "@angular/material";
-import {Database, Datasource} from "../database";
+import {Messages} from '../messages';
+import {ActivatedRoute, Router} from '@angular/router';
+import {HistoryService} from './history.service';
+import {History} from '../../domain/history';
+import {Location} from '@angular/common';
+import {DiffEntry} from '../../domain/diff-entry';
+import {ChangesService} from '../changes/changes.service';
+import {MatPaginator, MatSnackBar} from '@angular/material';
+import {Database, Datasource} from '../database';
 
 @Component({
   selector: 'app-history',
@@ -16,7 +16,7 @@ import {Database, Datasource} from "../database";
 })
 export class HistoryComponent implements OnInit {
 
-  displayedColumns = ['actions','message','committer','time'];
+  displayedColumns = ['actions', 'message', 'committer', 'time'];
   database: Database<History> = new Database<History>();
   dataSource: Datasource<History> | null;
 
@@ -41,7 +41,7 @@ export class HistoryComponent implements OnInit {
       .subscribe((data: { resp: History[]}) => {
         this.database.load(data.resp);
         if (!data.resp) {
-          this.snackBar.open(this.messages.management_services_status_listfail,'dismiss', {
+          this.snackBar.open(this.messages.management_services_status_listfail, 'dismiss', {
               duration: 5000
           });
         }
@@ -50,22 +50,22 @@ export class HistoryComponent implements OnInit {
   }
 
   viewChange() {
-    this.router.navigate(['/view',this.selectedItem.id]);
+    this.router.navigate(['/view', this.selectedItem.id]);
   }
 
   checkout() {
-    this.service.checkout(this.selectedItem.commit as string,this.selectedItem.path)
+    this.service.checkout(this.selectedItem.commit as string, this.selectedItem.path)
       .then(resp => this.snackBar.open('Service successfully restored from history.', 'dismiss', {
         duration: 5000
       }));
   }
 
   viewDiff() {
-    this.router.navigate(['/diff',{oldId: this.database.data[0].id, newId: this.selectedItem.id}]);
+    this.router.navigate(['/diff', {oldId: this.database.data[0].id, newId: this.selectedItem.id}]);
   }
 
   viewJSON() {
-    this.router.navigate(['/json',this.selectedItem.id]);
+    this.router.navigate(['/json', this.selectedItem.id]);
   }
 }
 

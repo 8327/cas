@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Inject} from '@angular/core';
-import {Messages} from "../messages";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {DiffEntry} from "../../domain/diff-entry";
+import {Messages} from '../messages';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {DiffEntry} from '../../domain/diff-entry';
 
 @Component({
   selector: 'app-commit',

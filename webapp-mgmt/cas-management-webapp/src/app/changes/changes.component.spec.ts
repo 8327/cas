@@ -2,25 +2,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 
-import { RouterTestingModule } from "@angular/router/testing";
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ChangesComponent } from './changes.component';
-import {DiffEntry} from "../../domain/diff-entry";
-import {ChangesService} from "./changes.service";
-import {Messages} from "../messages";
-import {ActivatedRouteStub} from "../../testing/router-stub";
-import {AbstractRegisteredService, RegexRegisteredService} from "../../domain/registered-service";
+import {DiffEntry} from '../../domain/diff-entry';
+import {ChangesService} from './changes.service';
+import {Messages} from '../messages';
+import {ActivatedRouteStub} from '../../testing/router-stub';
+import {AbstractRegisteredService, RegexRegisteredService} from '../../domain/registered-service';
 
 
-let changesServiceStub = {
+const changesServiceStub = {
   getChanges(branch: String): Promise<DiffEntry[]> {
     return Promise.resolve([]);
   },
 
   getDiff(diff: DiffEntry): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   getChange(change: String): Promise<AbstractRegisteredService> {
@@ -28,9 +28,9 @@ let changesServiceStub = {
   }
 };
 
-let activatedRoute: ActivatedRouteStub = new ActivatedRouteStub();
+const activatedRoute: ActivatedRouteStub = new ActivatedRouteStub();
 
-let expectedDiff: DiffEntry[] = [];
+const expectedDiff: DiffEntry[] = [];
 
 describe('ChangesComponent', () => {
   let component: ChangesComponent;

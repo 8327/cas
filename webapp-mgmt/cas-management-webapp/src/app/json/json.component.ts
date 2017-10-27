@@ -1,10 +1,9 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import {ChangesService} from "../changes/changes.service";
-import { Location } from "@angular/common";
-import {Messages} from "../messages";
-import { Editor } from "../editor.component";
-import {ActivatedRoute, ActivatedRouteSnapshot} from "@angular/router";
-import {AbstractRegisteredService} from "../../domain/registered-service";
+import { Component, OnInit, AfterViewInit} from '@angular/core';
+import {ChangesService} from '../changes/changes.service';
+import { Location } from '@angular/common';
+import {Messages} from '../messages';
+import {ActivatedRoute} from '@angular/router';
+import {AbstractRegisteredService} from '../../domain/registered-service';
 
 @Component({
   selector: 'app-json',
@@ -26,10 +25,10 @@ export class JSONComponent implements AfterViewInit, OnInit {
         .subscribe((data: { resp: AbstractRegisteredService }) => {
           this.file = JSON.stringify(data.resp, null, 4);
         });
-    },100);
+    }, 100);
   }
 
-  ngOnInit(){
+  ngOnInit() {
 
   }
 

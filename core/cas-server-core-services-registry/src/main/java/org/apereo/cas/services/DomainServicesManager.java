@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class DomainServicesManager extends AbstractServicesManager {
 
     /**
-     * Name used to identify the default domain for service urls that contain wildcards.
+     * Default domain name for wildcarded domains in service urls.
      */
     protected static final String DEFAULT_DOMAIN_NAME = "default";
 
@@ -95,10 +95,10 @@ public class DomainServicesManager extends AbstractServicesManager {
     }
 
     /**
-     * Method extracts the domain from a service url expression.
+     * Method will extract the domain from the passed service url.
      *
-     * @param service - The service url
-     * @return - the domain
+     * @param service - The service url expressions as a String
+     * @return - String representing the domain the service is under
      */
     protected String extractDomain(final String service) {
         final Matcher extractor = this.domainExtractor.matcher(service.toLowerCase());

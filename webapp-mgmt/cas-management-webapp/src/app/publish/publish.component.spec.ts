@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from "@angular/forms";
+import { FormsModule } from '@angular/forms';
 import { PublishComponent } from './publish.component';
-import {Messages} from "../messages";
-import {Change} from "../../domain/change";
-import {ControlsService} from "../controls/controls.service";
+import {Messages} from '../messages';
+import {Change} from '../../domain/change';
+import {ControlsService} from '../controls/controls.service';
 
-let controlsServiceStub = {
+const controlsServiceStub = {
   commit(msg: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   publish(): Promise<void> {
