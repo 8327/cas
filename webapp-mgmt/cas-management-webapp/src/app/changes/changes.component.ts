@@ -8,7 +8,7 @@ import {MatPaginator, MatSnackBar} from '@angular/material';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
-import {Database, Datasource} from "../database";
+import {Database, Datasource} from '../database';
 
 @Component({
   selector: 'app-changes',
@@ -41,10 +41,10 @@ export class ChangesComponent implements OnInit {
   }
 
   viewDiff() {
-    this.router.navigate(['/diff',{oldId: this.selectedItem.oldId, newId: this.selectedItem.newId}]);
+    this.router.navigate(['/diff', {oldId: this.selectedItem.oldId, newId: this.selectedItem.newId}]);
   }
 
   viewChange() {
-    this.router.navigate(['/view',this.selectedItem.newId]);
+    this.router.navigate(['/view', this.selectedItem.newId]);
   }
 }

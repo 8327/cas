@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, ViewChild, Input} from '@angular/core';
 import { Router } from '@angular/router';
 import {Messages} from '../messages';
 import {ControlsService} from './controls.service';

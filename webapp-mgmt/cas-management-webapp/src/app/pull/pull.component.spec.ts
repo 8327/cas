@@ -4,24 +4,24 @@ import 'ace-builds/src-min-noconflict/keybinding-vim';
 import 'ace-builds/src-min-noconflict/mode-diff';
 import 'ace-builds/src-min-noconflict/mode-text';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { PullComponent } from './pull.component';
-import {NotesComponent} from "../notes/notes.component";
-import {Editor} from "../editor.component";
-import {Change} from "../../domain/change";
-import {Messages} from "../messages";
-import {ControlsService} from "../controls/controls.service";
-import { Branch } from "../../domain/branch";
-import {PullService} from "./pull.service";
-import {NotesService} from "../notes/notes.service";
+import {NotesComponent} from '../notes/notes.component';
+import {Editor} from '../editor.component';
+import {Change} from '../../domain/change';
+import {Messages} from '../messages';
+import {ControlsService} from '../controls/controls.service';
+import { Branch } from '../../domain/branch';
+import {PullService} from './pull.service';
+import {NotesService} from '../notes/notes.service';
 
-let controlsServiceStub = {
+const controlsServiceStub = {
   commit(msg: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   publish(): Promise<void> {
@@ -41,27 +41,27 @@ let controlsServiceStub = {
   }
 };
 
-let pullServiceStub = {
+const pullServiceStub = {
   getBranches(): Promise<Branch[]> {
     return Promise.resolve([]);
   },
 
   accept(id: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   reject(id: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   }
 };
 
-let noteServiceStub = {
+const noteServiceStub = {
   getNotes(id: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   addNote(id: String, text: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   }
 };
 

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Editor } from "../editor.component";
-import { Messages } from "../messages";
-import {ActivatedRoute, Route, Router} from "@angular/router";
-import {NotesService} from "./notes.service";
+import { EditorComponent } from '../editor.component';
+import { Messages } from '../messages';
+import {ActivatedRoute, Route, Router} from '@angular/router';
+import {NotesService} from './notes.service';
 
 @Component({
   selector: 'app-notes',
@@ -16,7 +16,7 @@ export class NotesComponent implements OnInit {
   commit: EventEmitter<String> = new EventEmitter<String>();
 
   @ViewChild('editor')
-  editor: Editor;
+  editor: EditorComponent;
 
   @Input()
   viewOnly: boolean;
@@ -28,7 +28,7 @@ export class NotesComponent implements OnInit {
               public service: NotesService) { }
 
   ngOnInit() {
-    let id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.params['id'];
     this.service.getNotes(id).then(resp => this.file = resp);
   }
 

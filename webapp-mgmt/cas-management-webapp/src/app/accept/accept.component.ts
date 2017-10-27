@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {Messages} from "../messages";
-import {DiffEntry} from "../../domain/diff-entry";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {Messages} from '../messages';
+import {DiffEntry} from '../../domain/diff-entry';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-accept',

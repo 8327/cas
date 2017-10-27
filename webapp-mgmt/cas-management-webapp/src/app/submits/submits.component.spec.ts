@@ -1,27 +1,27 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from "@angular/router/testing";
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { SubmitsComponent } from './submits.component';
-import {NotesComponent} from "../notes/notes.component";
-import {Editor} from "../editor.component";
-import {Messages} from "../messages";
-import { Branch } from "../../domain/branch";
-import {SubmitService} from "./submits.service";
-import {NotesService} from "../notes/notes.service";
+import {NotesComponent} from '../notes/notes.component';
+import {Editor} from '../editor.component';
+import {Messages} from '../messages';
+import { Branch } from '../../domain/branch';
+import {SubmitService} from './submits.service';
+import {NotesService} from '../notes/notes.service';
 
-let submitServiceStub = {
+const submitServiceStub = {
   getSubmits(): Promise<Branch[]> {
     return Promise.resolve([]);
   }
 };
 
-let notesServiceStub = {
+const notesServiceStub = {
   getNotes(id: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   },
 
   addNote(id: String, text: String): Promise<String> {
-    return Promise.resolve("");
+    return Promise.resolve('');
   }
 };
 

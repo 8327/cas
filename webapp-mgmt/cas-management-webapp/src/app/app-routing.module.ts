@@ -14,11 +14,11 @@ import {DiffComponent} from './diff/diff.component';
 import {JSONComponent} from './json/json.component';
 import {JSONResolver} from './json/json.resolover';
 import {LocalChangesComponent} from './local-changes/local-changes.component';
-import {PullComponent} from "./pull/pull.component";
-import {SubmitsComponent} from "./submits/submits.component";
-import {ChangesComponent} from "./changes/changes.component";
-import {ChangesResolve} from "./changes/changes.resolover";
-import {NotesComponent} from "./notes/notes.component";
+import {PullComponent} from './pull/pull.component';
+import {SubmitsComponent} from './submits/submits.component';
+import {ChangesComponent} from './changes/changes.component';
+import {ChangesResolve} from './changes/changes.resolover';
+import {NotesComponent} from './notes/notes.component';
 
 @NgModule({
   imports: [

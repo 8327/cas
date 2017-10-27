@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {SubmitService} from "./submits.service";
-import { Branch } from "../../domain/branch";
-import {Database, Datasource} from "../database";
-import {MatDialog, MatPaginator, MatSnackBar} from "@angular/material";
-import {RevertComponent} from "../revert/revert.component";
-import {Router} from "@angular/router";
+import {SubmitService} from './submits.service';
+import { Branch } from '../../domain/branch';
+import {Database, Datasource} from '../database';
+import {MatDialog, MatPaginator, MatSnackBar} from '@angular/material';
+import {RevertComponent} from '../revert/revert.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-submits',
@@ -34,7 +34,7 @@ export class SubmitsComponent implements OnInit {
   }
 
 
-  getNotes(branch: String) {
+  getNotes() {
     this.router.navigate(['notes', this.selectedItem.id]);
   }
 
@@ -44,18 +44,18 @@ export class SubmitsComponent implements OnInit {
       return;
     }
     if (branch.accepted) {
-      return "Accepted";
+      return 'Accepted';
     } else if (branch.reverted) {
-      return "Reverted";
+      return 'Reverted';
     } else if (branch.rejected) {
-      return "Rejected";
+      return 'Rejected';
     } else {
-      return "Pending";
+      return 'Pending';
     }
   }
 
   openModalRevert(branch: Branch) {
-    let dialogRef = this.dialog.open(RevertComponent,{
+    const dialogRef = this.dialog.open(RevertComponent, {
       data: this.selectedItem,
       width: '500px',
       position: {top: '100px'}
@@ -71,7 +71,7 @@ export class SubmitsComponent implements OnInit {
   revert() {
     this.service.revert(this.revertBranch.name as string)
       .then(resp => {
-        this.snackBar.open("Branch has been reverted", "dismiss", {
+        this.snackBar.open('Branch has been reverted', 'dismiss', {
           duration: 5000
         });
         this.refresh()

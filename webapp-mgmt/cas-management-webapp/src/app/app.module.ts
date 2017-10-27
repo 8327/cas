@@ -26,11 +26,11 @@ import {JSONModule} from './json/json.module';
 import {InitComponent} from 'app/init.component';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
 import {HeaderService} from './header/header.service';
-import {PullModule} from "./pull/pull.module";
-import {SubmitModule} from "./submits/submits.module";
-import {NotesModule} from "./notes/notes.module";
-import {RejectComponent} from "./reject/reject.component";
-import {AcceptComponent} from "./accept/accept.component";
+import {PullModule} from './pull/pull.module';
+import {SubmitModule} from './submits/submits.module';
+import {NotesModule} from './notes/notes.module';
+import {RejectComponent} from './reject/reject.component';
+import {AcceptComponent} from './accept/accept.component';
 
 
 @NgModule({

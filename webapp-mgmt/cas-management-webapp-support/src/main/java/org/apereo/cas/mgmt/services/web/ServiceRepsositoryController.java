@@ -4,6 +4,9 @@ import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.mgmt.GitUtil;
 import org.apereo.cas.mgmt.authentication.CasUserProfile;
 import org.apereo.cas.mgmt.authentication.CasUserProfileFactory;
+import org.apereo.cas.mgmt.services.web.beans.BranchActionData;
+import org.apereo.cas.mgmt.services.web.beans.BranchData;
+import org.apereo.cas.mgmt.services.web.beans.CNote;
 import org.apereo.cas.mgmt.services.web.beans.Change;
 import org.apereo.cas.mgmt.services.web.beans.Commit;
 import org.apereo.cas.mgmt.services.web.beans.Diff;
@@ -15,6 +18,8 @@ import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.services.util.DefaultRegisteredServiceJsonSerializer;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.notes.Note;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -178,6 +184,55 @@ public class ServiceRepsositoryController {
     }
 
     /**
+     * Method commits the working dir of the user and creates a submit branch that is made into a pull request.
+     *
+     * @param response - HttpServletResponse
+     * @param request  - HttpServletRequest
+     * @param msg      - message from user
+     * @return ResponseEntity
+     * @throws Exception - failed.
+     */
+    @PostMapping(value = "/submit", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> submitPull(final HttpServletResponse response,
+                                             final HttpServletRequest request,
+                                             final @RequestBody String msg) throws Exception {
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        final GitUtil git = repositoryFactory.from(user);
+        if (git.isNull()) {
+            throw new Exception("No changes to submit");
+        }
+        final long timestamp = new Date().getTime();
+        final String branchName = "submit-" + timestamp;
+        final String submitName = user.getId() + "_" + timestamp;
+
+        git.addWorkingChanges();
+        final RevCommit commit = git.commit(user, msg);
+        git.createBranch(branchName, "origin/master");
+        git.cherryPickCommit(commit);
+        git.commit(user, msg);
+        git.createPullRequest(commit, submitName);
+        git.checkout("master");
+        //mailUtil.sendSubmitMessage(submitName,createDiffs(submitName),user);
+        git.close();
+
+        return new ResponseEntity<>("Request Submitted", HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of Diffs of what is committed in services-repo to what is committed
+     * in the passed ref.
+     *
+     * @param ref - Commit Ref
+     * @return - List of Diff
+     * @throws Exception - failed.
+     */
+    private List<Diff> createDiffs(final String ref) throws Exception {
+        return repositoryFactory.masterRepository().getDiffs("refs/heads/" + ref).stream()
+                .map(this::createDiff)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Method returns a list of changes to the client of work that has not been committed to the repo.
      *
      * @param response - HttpServletResponse
@@ -207,6 +262,75 @@ public class ServiceRepsositoryController {
     @GetMapping(value = "/unpublished")
     public ResponseEntity<Integer> unpublished() throws Exception {
         return new ResponseEntity<>(getPublishBehindCount(), HttpStatus.OK);
+    }
+
+    /**
+     * Method will create a list of branches that have been submitted by users to be merged into the services-repo.
+     *
+     * @param response - HttpServletResponse
+     * @param request  - HttpsServletRequest
+     * @param options  - List of Branch statuses filter the returned branches by
+     * @return ResponseEntity
+     * @throws Exception - failed
+     */
+    @PostMapping(value = "/pullRequests", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BranchData>> branches(final HttpServletResponse response,
+                                                     final HttpServletRequest request,
+                                                     final @RequestBody boolean[] options) throws Exception {
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        if (!user.isAdministrator()) {
+            throw new Exception("Permission Denied");
+        }
+        final GitUtil git = repositoryFactory.masterRepository();
+        final List<BranchData> names = git.branches()
+                .map(git::mapBranches)
+                .filter(r -> filterPulls(r, options))
+                .map(r -> createBranch(r))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(names, HttpStatus.OK);
+    }
+
+    /**
+     * Method will filter refs to only the statuses on Options.
+     *
+     * @param r       - BranchMap
+     * @param options - 0:Submitted, 1:Accepted, 2:Rejected
+     * @return - true of the pull should be included
+     */
+    private boolean filterPulls(final GitUtil.BranchMap r, final boolean[] options) {
+        if (r.getName().equals("refs/heads/master")) {
+            return false;
+        }
+        if (r.isAccepted()) {
+            return options[1];
+        }
+        if (r.isRejected()) {
+            return options[2];
+        }
+        return options[0];
+    }
+
+    /**
+     * Method will create and return a list of branches that have been submitted as pull request by users.
+     *
+     * @param request  - HttpServletRequest
+     * @param response - HttpServletResponse
+     * @return ResponseEntity
+     * @throws Exception - failed
+     */
+    @GetMapping(value = "/submitRequests")
+    public ResponseEntity<List<BranchData>> submits(final HttpServletRequest request,
+                                                    final HttpServletResponse response) throws Exception {
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        final GitUtil git = repositoryFactory.masterRepository();
+
+        final List<BranchData> names = git.branches()
+                .filter(r -> r.getName().contains("/" + user.getId() + "_"))
+                .map(git::mapBranches)
+                .map(r -> createBranch(r))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(names, HttpStatus.OK);
     }
 
     /**
@@ -271,6 +395,109 @@ public class ServiceRepsositoryController {
                                                         final @RequestParam String id) throws Exception {
         final GitUtil git = repositoryFactory.from(request, response);
         return new ResponseEntity<>(new DefaultRegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
+    }
+
+
+    /**
+     * Method will merge the submitted pull request into the services-repo.
+     *
+     * @param request   - HttpServletRequest
+     * @param response  - HttpServletResponse
+     * @param acception - BranchActionData
+     * @return ResponseEntity
+     * @throws Exception - failed
+     */
+    @PostMapping(value = "/acceptBranch", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> acceptChange(final HttpServletRequest request,
+                                               final HttpServletResponse response,
+                                               final @RequestBody BranchActionData acception) throws Exception {
+        final BranchData branch = acception.getBranch();
+        final String text = acception.getNote();
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        if (!user.isAdministrator()) {
+            throw new Exception("Permission Denied");
+        }
+
+        final GitUtil git = repositoryFactory.masterRepository();
+        git.merge(branch.getId());
+        final RevCommit com = git.getCommit(branch.getId());
+        final String msg = "ACCEPTED by " + user.getId() + " on " + new Date().toString() + "\n    "
+                + text.replaceAll("\\n", "\n    ");
+        git.appendNote(com, msg);
+        //mailUtil.sendAcceptMessage(branch.getName().split("/")[2], com.getCommitterIdent().getEmailAddress());
+        return new ResponseEntity<>("Branch Merged", HttpStatus.OK);
+    }
+
+    /**
+     * Method will mark the submitted pull request as being rejected by an admin.
+     *
+     * @param request   - HttpServletRequest
+     * @param response  - HttpServletResponse
+     * @param rejection - BranchActionData
+     * @return ResponseEntity
+     * @throws Exception - failed
+     */
+    @PostMapping(value = "/rejectBranch", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> rejectChange(final HttpServletRequest request,
+                                               final HttpServletResponse response,
+                                               final @RequestBody BranchActionData rejection) throws Exception {
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        if (!user.isAdministrator()) {
+            throw new Exception("Permission Denied");
+        }
+
+        final BranchData branch = rejection.getBranch();
+        final String text = rejection.getNote();
+        final GitUtil git = repositoryFactory.masterRepository();
+        final RevCommit com = git.getCommit(branch.getId());
+        final String msg = "REJECTED by " + user.getId() + " on " + new Date().toString() + "\n    "
+                + text.replaceAll("\\n", "\n    ");
+        git.appendNote(com, msg);
+        //mailUtil.sendRejectMessage(branch.getName().split("/")[2], text, com.getCommitterIdent().getEmailAddress());
+        return new ResponseEntity<String>("Branch Rejected", HttpStatus.OK);
+    }
+
+    /**
+     * Method will return all notes that have been added to a submit request.
+     *
+     * @param response - HttpServletResponse
+     * @param id       - id of note
+     * @throws Exception - failed
+     */
+    @GetMapping(value = "/notes")
+    public void getNotes(final HttpServletResponse response, final @RequestParam String id) throws Exception {
+        final GitUtil git = repositoryFactory.masterRepository();
+
+        final Note note = git.note(id);
+        if (note != null) {
+            git.writeNote(note, response.getOutputStream());
+        }
+        git.close();
+    }
+
+    /**
+     * Method will add the supplied note from the client to the submit request in the repo.
+     *
+     * @param request  - HttpServletRequest
+     * @param response - HttpServletResponse
+     * @param cnote    - CNote
+     * @return ResponseEntity
+     * @throws Exception - failed
+     */
+    @PostMapping(value = "/addNote", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addNote(final HttpServletRequest request,
+                                          final HttpServletResponse response,
+                                          final @RequestBody CNote cnote) throws Exception {
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        if (!user.isAdministrator()) {
+            throw new Exception("Permission denied");
+        }
+        final GitUtil git = repositoryFactory.masterRepository();
+        final RevCommit com = git.getCommit(cnote.getId());
+        final String msg = user.getId() + " - " + new Date().toString() + " : \n    "
+                + cnote.getText().replaceAll("\\n", "\n    ");
+        git.appendNote(com, msg);
+        return new ResponseEntity<>("Note Added", HttpStatus.OK);
     }
 
     /**
@@ -378,6 +605,50 @@ public class ServiceRepsositoryController {
         final RegisteredService svc = ser.from(git.readObject(git.history(path).get(0).getId()));
         final String domain = getDomain(svc.getServiceId());
         //from.insertService(domain,svc.getEvaluationOrder());
+    }
+
+    /**
+     * Method will revert a submitted pull request from a user's repository if it has been rejected by an admin.
+     *
+     * @param request    - HttpServletRequest
+     * @param response   - HttpServletResponse
+     * @param branchName - Name of the pull requet
+     * @return - status message
+     * @throws Exception - failed
+     */
+    @GetMapping(value = "/revertSubmit")
+    public ResponseEntity<String> revertSubmit(final HttpServletRequest request,
+                                               final HttpServletResponse response,
+                                               final @RequestParam String branchName) throws Exception {
+        final CasUserProfile user = casUserProfileFactory.from(request, response);
+        final GitUtil git = repositoryFactory.from(user);
+        if (git.isNull()) {
+            throw new Exception("No changes to revert");
+        }
+
+        git.reset(git.findCommitBeforeSubmit(branchName));
+        git.close();
+        repositoryFactory.masterRepository().markAsReverted(branchName, user);
+        return new ResponseEntity<>("Submit reverted", HttpStatus.OK);
+    }
+
+    /**
+     * Method creates a branch object to be returned to the client.
+     *
+     * @param r - BranchMap
+     * @return - BranchData
+     */
+    private BranchData createBranch(final GitUtil.BranchMap r) {
+        final BranchData branch = new BranchData();
+        branch.setName(r.getName());
+        branch.setMsg(r.getFullMessage());
+        branch.setCommitter(r.getCommitter());
+        branch.setTime(r.getCommitTime());
+        branch.setAccepted(r.isAccepted());
+        branch.setId(r.getId());
+        branch.setRejected(r.isRejected());
+        branch.setReverted(r.isReverted());
+        return branch;
     }
 
     /**
