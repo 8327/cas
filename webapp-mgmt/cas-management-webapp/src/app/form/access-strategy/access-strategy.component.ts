@@ -1,18 +1,18 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Messages} from "../../messages";
+import {Messages} from '../../messages';
 import {
   DefaultRegisteredServiceAccessStrategy, GrouperRegisteredServiceAccessStrategy,
   RemoteEndpointServiceAccessStrategy, SurrogateRegisteredServiceAccessStrategy,
   TimeBasedRegisteredServiceAccessStrategy
-} from "../../../domain/access-strategy";
-import {FormData} from "../../../domain/service-view-bean";
-import {AbstractRegisteredService} from "../../../domain/registered-service";
-import {Util} from "../../util/util";
-import {Data} from "../data";
+} from '../../../domain/access-strategy';
+import {FormData} from '../../../domain/form-data';
+import {AbstractRegisteredService} from '../../../domain/registered-service';
+import {Util} from '../../util/util';
+import {Data} from '../data';
 
 
-enum Type{
-  DEFAULT,TIME,GROUPER,REMOTE,SURROGATE
+enum Type {
+  DEFAULT, TIME, GROUPER, REMOTE, SURROGATE
 }
 
 @Component({
@@ -24,20 +24,18 @@ export class AccessStrategyComponent implements OnInit {
 
 
   formData: FormData;
-  selectOptions;
   type: Type;
   TYPE = Type;
-  types = [Type.DEFAULT,Type.TIME,Type.GROUPER,Type.REMOTE,Type.SURROGATE];
+  types = [Type.DEFAULT, Type.TIME, Type.GROUPER, Type.REMOTE, Type.SURROGATE];
 
   constructor(public messages: Messages,
               public data: Data) {
     this.formData = data.formData;
-    this.selectOptions = data.selectOptions;
   }
 
   ngOnInit() {
 
-    let service = this.data.service;
+    const service = this.data.service;
 
     if (Util.isEmpty(service.accessStrategy.rejectedAttributes)) {
       service.accessStrategy.rejectedAttributes = new Map();
@@ -48,7 +46,7 @@ export class AccessStrategyComponent implements OnInit {
     }
 
     this.formData.availableAttributes.forEach((item: any) => {
-      service.accessStrategy.requiredAttributes[item] = service.accessStrategy.requiredAttributes[item] || [item];//this.textareaArrParse(dir, data.accessStrategy.requiredAttributes[item]);
+      service.accessStrategy.requiredAttributes[item] = service.accessStrategy.requiredAttributes[item] || [item];
     });
 
     if (RemoteEndpointServiceAccessStrategy.instanceOf(service.accessStrategy)) {
@@ -65,7 +63,7 @@ export class AccessStrategyComponent implements OnInit {
   }
 
   changeType() {
-    switch(+this.type) {
+    switch (+this.type) {
       case Type.DEFAULT :
         this.data.service.accessStrategy = new DefaultRegisteredServiceAccessStrategy(this.data.service.accessStrategy);
         break;

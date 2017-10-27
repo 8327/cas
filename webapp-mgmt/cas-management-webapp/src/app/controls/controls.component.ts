@@ -1,13 +1,13 @@
-import {Component, OnInit, Input, ViewChild, Output, EventEmitter} from '@angular/core';
-import { Router } from "@angular/router";
-import {Messages} from "../messages";
-import {ControlsService} from "./controls.service";
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { Router } from '@angular/router';
+import {Messages} from '../messages';
+import {ControlsService} from './controls.service';
+import {Location} from '@angular/common';
 import {UserService} from "../user.service";
 import {PublishComponent} from "../publish/publish.component";
 import {Commit} from "../../domain/commit";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {CommitComponent} from "../commit/commit.component";
-import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-controls',

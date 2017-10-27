@@ -1,9 +1,9 @@
 /**
  * Created by tsschmi on 2/28/17.
  */
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms"
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms'
 import 'hammerjs';
 import {
   MatButtonModule,
@@ -27,13 +27,13 @@ import {
   MatAutocompleteModule,
   MatSnackBarModule,
   MatPaginatorModule
-} from "@angular/material";
-import {CdkTableModule} from "@angular/cdk/table";
+} from '@angular/material';
+import {CdkTableModule} from '@angular/cdk/table';
+import {ControlsComponent} from '../controls/controls.component';
+import {ControlsService} from '../controls/controls.service';
 import {Editor} from "../editor.component";
 import {CommitComponent} from "../commit/commit.component";
-import {ControlsComponent} from "../controls/controls.component";
 import {PublishComponent} from "../publish/publish.component";
-import {ControlsService} from "../controls/controls.service";
 
 @NgModule({
   imports: [
@@ -105,8 +105,4 @@ import {ControlsService} from "../controls/controls.service";
     CommitComponent
   ]
 })
-export class SharedModule {
-  static empty(obj: any): boolean {
-    return !obj || Object.keys(obj).length == 0;
-  }
-}
+export class SharedModule {}

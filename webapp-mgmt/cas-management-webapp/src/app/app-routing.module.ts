@@ -3,17 +3,16 @@
  */
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router';
+import {ServicesComponent} from './services/services.component';
+import {ServicesResolve} from './services/services.resolover';
+import {DomainsComponent} from './domains/domains.component';
+import {SearchComponent} from './search/search.component';
+import {InitComponent} from './init.component';
 import {ServicesComponent} from "./services/services.component";
 import {ServicesResolve} from "./services/services.resolover";
 import {DomainsComponent} from "./domains/domains.component";
 import {SearchComponent} from "./search/search.component";
 import {InitComponent} from "./init.component";
-import {HistoryComponent} from "./history/history.component";
-import {HistoryResolve} from "./history/history.resolover";
-import {DiffComponent} from "./diff/diff.component";
-import {JSONComponent} from "./json/json.component";
-import {JSONResolver} from "./json/json.resolover";
-import {LocalChangesComponent} from "./local-changes/local-changes.component";
 
 @NgModule({
   imports: [

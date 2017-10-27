@@ -42,7 +42,7 @@ JWT support is enabled by including the following dependency in the WAR overlay:
 </dependency>
 ```
 
-To see the relevant list of CAS properties, please [review this guide](Configuration-Properties.html#jwt-service-tickets).
+To see the relevant list of CAS properties, please [review this guide](Configuration-Properties.html#jwt-tickets).
 
 ### Register Clients
 
@@ -56,7 +56,7 @@ Signal the relevant application in CAS service registry to produce JWTs for serv
   "id" : 10,
   "properties" : {
     "@class" : "java.util.HashMap",
-    "jwtAsResponse" : {
+    "jwtAsServiceTicket" : {
       "@class" : "org.apereo.cas.services.DefaultRegisteredServiceProperty",
       "values" : [ "java.util.HashSet", [ "true" ] ]
     }

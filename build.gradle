@@ -286,7 +286,6 @@ subprojects {
         api libraries.hibernate
         api libraries.springcloud
         api libraries.springboot
-        api libraries.javers
 
         provided libraries.javax
 
@@ -339,6 +338,8 @@ task jacocoAggregateReport(type: JacocoReport, description: "Aggregate all test 
         fileTree(dir: it,
                 exclude: [
                         '**/**Configuration.class',
+                        '**/**WebflowConfigurer.class',
+                        '**/**Exception.class',
                         '**/**Properties.class'
                 ])
     })
