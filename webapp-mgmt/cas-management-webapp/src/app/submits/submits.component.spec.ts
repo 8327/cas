@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { SubmitsComponent } from './submits.component';
 import {NotesComponent} from '../notes/notes.component';
-import {Editor} from '../editor.component';
+import {EditorComponent} from '../editor.component';
 import {Messages} from '../messages';
 import { Branch } from '../../domain/branch';
 import {SubmitService} from './submits.service';
@@ -32,7 +32,7 @@ describe('SubmitsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ RouterTestingModule ],
-      declarations: [ SubmitsComponent, NotesComponent, Editor ],
+      declarations: [ SubmitsComponent, NotesComponent, EditorComponent ],
       providers: [
         Messages,
         {provide: SubmitService, useValue: submitServiceStub},

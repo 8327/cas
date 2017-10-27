@@ -11,13 +11,13 @@ import { DebugElement } from '@angular/core';
 
 import { PullComponent } from './pull.component';
 import {NotesComponent} from '../notes/notes.component';
-import {Editor} from '../editor.component';
 import {Change} from '../../domain/change';
 import {Messages} from '../messages';
 import {ControlsService} from '../controls/controls.service';
 import { Branch } from '../../domain/branch';
 import {PullService} from './pull.service';
 import {NotesService} from '../notes/notes.service';
+import {EditorComponent} from '../editor.component';
 
 const controlsServiceStub = {
   commit(msg: String): Promise<String> {
@@ -80,7 +80,7 @@ describe('PullComponent', () => {
       declarations: [
         PullComponent,
         NotesComponent,
-        Editor
+        EditorComponent
       ],
       providers: [
         Messages,
