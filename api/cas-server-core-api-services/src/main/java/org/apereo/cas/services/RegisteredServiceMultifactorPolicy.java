@@ -15,7 +15,6 @@ import java.util.Set;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY)
 public interface RegisteredServiceMultifactorPolicy extends Serializable {
-
     /**
      * A list of options to present to the client for available MFA Providers.
      */

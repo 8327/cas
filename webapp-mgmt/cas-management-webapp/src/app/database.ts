@@ -18,8 +18,10 @@ export class Database<T> {
 
   load(items: T[]) {
     this.dataChange.next([]);
-    for (const item of items) {
-      this.addItem(item);
+    if (items) {
+      for (const item of items) {
+        this.addItem(item);
+      }
     }
   }
 
