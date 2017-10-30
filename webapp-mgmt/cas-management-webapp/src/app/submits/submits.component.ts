@@ -71,7 +71,7 @@ export class SubmitsComponent implements OnInit {
   revert() {
     this.service.revert(this.revertBranch.name as string)
       .then(resp => {
-        this.snackBar.open('Branch has been reverted', 'dismiss', {
+        this.snackBar.open('Branch has been reverted', 'Dismiss', {
           duration: 5000
         });
         this.refresh()

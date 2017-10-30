@@ -88,12 +88,12 @@
     <mat-icon>visibility</mat-icon>
     <ng-container i18n>View Changes</ng-container>
   </button>
-  <button mat-menu-item (click)="openAcceptModal()">
-    <mat-icon>check</mat-icon>
+  <button mat-menu-item (click)="openAcceptModal()" *ngIf="status(selectedBranch) === 'Pending'">
+    <mat-icon>thumb_up</mat-icon>
     <ng-container i18n>Accept</ng-container>
   </button>
-  <button mat-menu-item (click)="openRejectModal()">
-    <mat-icon>reject</mat-icon>
+  <button mat-menu-item (click)="openRejectModal()" *ngIf="status(selectedBranch) === 'Pending'">
+    <mat-icon>thumb_down</mat-icon>
     <ng-container i18n>Reject</ng-container>
   </button>
   <button mat-menu-item (click)="getNotes()">

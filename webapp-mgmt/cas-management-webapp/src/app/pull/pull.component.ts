@@ -47,6 +47,9 @@ export class PullComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new Datasource(this.database, this.paginator);
+  }
+
+  refresh() {
     this.service.getBranches([this.showPending, this.showAccepted, this.showRejected])
       .then(resp => this.database.load(resp));
   }
@@ -75,9 +78,13 @@ export class PullComponent implements OnInit {
 
   accept(note: String) {
     this.service.accept(this.acceptBranch, note)
-        .then(resp => this.snackBar.open('Branch has been merged', 'dismiss', {
-          duration: 5000
-        }));
+        .then(resp => {
+          this.snackBar.open('Branch has been merged', 'Dismiss', {
+            duration: 5000
+          });
+          this.refresh();
+        });
+
   }
 
   openRejectModal() {
@@ -96,13 +103,12 @@ export class PullComponent implements OnInit {
 
   reject(note: String) {
     this.service.reject(this.rejectBranch, note)
-        .then(resp => this.snackBar.open('Branch has beem marked as rejected', 'dismiss', {
-          duration: 5000
-        }));
-  }
-
-  refresh() {
-    this.ngOnInit();
+        .then(resp => {
+          this.snackBar.open('Branch has beem marked as rejected', 'Dismiss', {
+            duration: 5000
+          });
+          this.refresh();
+        });
   }
 
   addNote() {
@@ -122,12 +128,14 @@ export class PullComponent implements OnInit {
   }
 
   status(branch: Branch): String {
-    if (branch.accepted) {
-      return 'Accepted';
-    } else if (branch.rejected) {
-      return 'Rejected';
-    } else {
-      return 'Pending';
+    if (branch) {
+      if (branch.accepted) {
+        return 'Accepted';
+      } else if (branch.rejected) {
+        return 'Rejected';
+      } else {
+        return 'Pending';
+      }
     }
   }
 

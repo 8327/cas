@@ -80,13 +80,13 @@ export class ControlsComponent implements OnInit {
     this.publishDirty = true;
     this.userAhead = true;
     this.service.untracked().then();
-    this.snackBar.open(this.messages.management_services_status_committed, 'dismiss', {
+    this.snackBar.open(this.messages.management_services_status_committed, 'Dismiss', {
         duration: 5000
     });
   }
 
   handleNotCommitted(e: any) {
-    this.snackBar.open(this.messages.management_services_status_notcommitted, 'dismiss', {
+    this.snackBar.open(this.messages.management_services_status_notcommitted, 'Dismiss', {
         duration: 5000
     });
   }
@@ -113,13 +113,13 @@ export class ControlsComponent implements OnInit {
 
   handlePublish() {
     this.publishDirty = false;
-    this.snackBar.open(this.messages.management_services_status_published, 'dismiss', {
+    this.snackBar.open(this.messages.management_services_status_published, 'Dismiss', {
         duration: 5000
     });
   }
 
   handleNotPublished(e: any) {
-    this.snackBar.open(this.messages.management_services_status_notpublished, 'dismiss', {
+    this.snackBar.open(this.messages.management_services_status_notpublished, 'Dismiss', {
         duration: 5000
     });
   }
@@ -138,13 +138,13 @@ export class ControlsComponent implements OnInit {
     this.publishDirty = true;
     this.userAhead = true;
     this.service.untracked().then();
-    this.snackBar.open('Your commit has been submitted for review', 'dismiss', {
+    this.snackBar.open('Your commit has been submitted for review', 'Dismiss', {
         duration: 5000
     });
   }
 
   handleNotSubmitted(e: any) {
-    this.snackBar.open('Something went wrong and your commit was not able to be submitted', 'dismiss', {
+    this.snackBar.open('Something went wrong and your commit was not able to be submitted', 'Dismiss', {
         duration: 5000
     });
   }
