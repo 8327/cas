@@ -1,6 +1,6 @@
 package org.apereo.cas.services;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apereo.cas.authentication.principal.Service;
 
@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY)
 public interface RegisteredService extends Cloneable, Serializable, Comparable<RegisteredService> {
-    
+
     /**
      * The logout type.
      */
@@ -40,62 +40,6 @@ public interface RegisteredService extends Cloneable, Serializable, Comparable<R
     }
 
     /**
-     * A list of protocol client types for services.
-     */
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    enum ServiceType {
-        /**
-         * For Services protected by CAS.
-         */
-        CAS_CLIENT("CAS Client", "cas"),
-        /**
-         * For Services protected by OAuth.
-         */
-        OAUTH2_CLIENT("OAuth2 Client", "oauth"),
-        /**
-         * For Services protected by SAML.
-         */
-        SAML2_SERVICE_PROVIDER("SAML2 Service Provider", "saml"),
-        /**
-         * For Services protected by OIDC.
-         */
-        OIDC_CLIENT("OpenID Connect Client", "oidc"),
-        /**
-         * For Services that are part of WS Federation.
-         */
-        WS_FEDERATION("WS Federation", "wsfed");
-
-        private final String display;
-
-        private final String value;
-
-        ServiceType(final String display, final String value) {
-            this.display = display;
-            this.value = value;
-        }
-
-        /**
-         * Returns the display string for this property.
-         *
-         * @return - String to display
-         */
-        public String getDisplay() {
-            return this.display;
-        }
-
-        /**
-         * Returns the value to be stored for this property.
-         *
-         * @return - String value of the property
-         */
-        public String getValue() {
-            return this.value;
-        }
-    }
-
-
-    
-    /**
      * Initial ID value of newly created (but not persisted) registered service.
      */
     long INITIAL_IDENTIFIER_VALUE = -1;
@@ -106,7 +50,7 @@ public interface RegisteredService extends Cloneable, Serializable, Comparable<R
      * @return the proxy policy
      */
     RegisteredServiceExpirationPolicy getExpirationPolicy();
-    
+
     /**
      * Get the proxy policy rules for this service.
      *
@@ -155,8 +99,7 @@ public interface RegisteredService extends Cloneable, Serializable, Comparable<R
      * Gets the relative evaluation order of this service when determining
      * matches.
      *
-     * @return Evaluation order relative to other registered services. Services with lower values will
-     * be evaluated for a match before others.
+     * @return Evaluation order relative to other registered services. Services with lower values will be evaluated for a match before others.
      */
     int getEvaluationOrder();
 
@@ -219,9 +162,8 @@ public interface RegisteredService extends Cloneable, Serializable, Comparable<R
      * Clone this service.
      *
      * @return the registered service
-     * @throws CloneNotSupportedException the clone not supported exception
      */
-    RegisteredService clone() throws CloneNotSupportedException;
+    RegisteredService clone();
 
     /**
      * Returns the logout type of the service.
@@ -264,7 +206,7 @@ public interface RegisteredService extends Cloneable, Serializable, Comparable<R
      * @return the link to privacy policy
      */
     String getPrivacyUrl();
-    
+
     /**
      * Identifies the logout url that that will be invoked
      * upon sending single-logout callback notifications.
@@ -298,14 +240,26 @@ public interface RegisteredService extends Cloneable, Serializable, Comparable<R
      * @since 4.2
      */
     default Map<String, RegisteredServiceProperty> getProperties() {
-        return new LinkedHashMap<>();
+        return new LinkedHashMap<>(0);
     }
 
     /**
      * A list of contacts that are responsible for the clients that use
      * this service.
+     *
      * @return list of Contacts
      * @since 5.2
      */
     List<RegisteredServiceContact> getContacts();
+
+    /**
+     * Gets friendly name of this service.
+     * Typically describes the purpose of this service
+     * and the return value is usually used for display purposes.
+     * @return the friendly name
+     */
+    @JsonIgnore
+    default String getFriendlyName() {
+        return this.getClass().getSimpleName();
+    }
 }
