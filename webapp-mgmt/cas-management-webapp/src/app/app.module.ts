@@ -24,6 +24,9 @@ import {ChangesModule} from './changes/changes.module';
 import {DiffModule} from './diff/diff.module';
 import {JSONModule} from './json/json.module';
 import {InitComponent} from 'app/init.component';
+import {ControlsComponent} from './controls/controls.component';
+import {ControlsService} from './controls/controls.service';
+import { FooterComponent } from './footer/footer.component';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
 import {HeaderService} from './header/header.service';
 
@@ -52,6 +55,7 @@ import {HeaderService} from './header/header.service';
     RevertComponent,
     InitComponent,
     LocalChangesComponent
+    FooterComponent,
   ],
   entryComponents: [
     DeleteComponent,
