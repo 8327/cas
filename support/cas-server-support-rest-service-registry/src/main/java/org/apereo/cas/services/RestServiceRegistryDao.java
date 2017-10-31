@@ -54,7 +54,7 @@ public class RestServiceRegistryDao extends AbstractServiceRegistryDao {
             final RegisteredService[] results = responseEntity.getBody();
             return Stream.of(results).collect(Collectors.toList());
         }
-        return new ArrayList<>(0);
+        return new ArrayList<>();
     }
 
     @Override

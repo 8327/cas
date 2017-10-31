@@ -13,12 +13,12 @@ import static org.junit.Assert.*;
 public class MemoryMonitorTests {
 
     @Test
-    public void verifyObserveOk() {
+    public void verifyObserveOk() throws Exception {
         assertEquals(StatusCode.OK, new MemoryMonitor(0).observe().getCode());
     }
 
     @Test
-    public void verifyObserveWarn() {
+    public void verifyObserveWarn() throws Exception {
         final MemoryMonitor monitor = new MemoryMonitor(100);
         assertEquals(StatusCode.WARN, monitor.observe().getCode());
     }

@@ -39,7 +39,7 @@ public class ServiceAuthorizationCheck extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext context) {
+    protected Event doExecute(final RequestContext context) throws Exception {
         final WebApplicationService serviceInContext = WebUtils.getService(context);
         final Service service = authenticationRequestServiceSelectionStrategies.resolveService(serviceInContext);
         if (service == null) {

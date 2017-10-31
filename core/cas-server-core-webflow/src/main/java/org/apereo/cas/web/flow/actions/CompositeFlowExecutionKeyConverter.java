@@ -23,7 +23,7 @@ public class CompositeFlowExecutionKeyConverter implements Converter {
     }
 
     @Override
-    public Object convertSourceToTargetClass(final Object source, final Class targetClass) {
+    public Object convertSourceToTargetClass(final Object source, final Class targetClass) throws Exception {
         return source.toString();
     }
 }

@@ -61,7 +61,7 @@ public class OidcServiceJsonWebKeystoreCacheLoader implements CacheLoader<OidcRe
         return key;
     }
 
-    private Optional<JsonWebKeySet> buildJsonWebKeySet(final OidcRegisteredService service) {
+    private Optional<JsonWebKeySet> buildJsonWebKeySet(final OidcRegisteredService service) throws Exception {
         try {
             LOGGER.debug("Loading JSON web key from [{}]", service.getJwks());
             final Resource resource = this.resourceLoader.getResource(service.getJwks());

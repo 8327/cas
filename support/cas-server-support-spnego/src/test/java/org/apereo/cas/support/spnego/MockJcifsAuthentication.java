@@ -3,6 +3,7 @@ package org.apereo.cas.support.spnego;
 import java.security.Principal;
 
 import jcifs.spnego.Authentication;
+import jcifs.spnego.AuthenticationException;
 
 /**
  *
@@ -30,7 +31,7 @@ public class MockJcifsAuthentication extends Authentication {
     }
 
     @Override
-    public void process(final byte[] arg0) {
+    public void process(final byte[] arg0) throws AuthenticationException {
         // empty
     }
 }

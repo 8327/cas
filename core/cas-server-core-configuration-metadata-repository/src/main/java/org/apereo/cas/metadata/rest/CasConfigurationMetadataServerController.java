@@ -48,9 +48,10 @@ public class CasConfigurationMetadataServerController extends BaseCasMvcEndpoint
      *
      * @param propertyName the property name
      * @return the response entity
+     * @throws Exception the exception
      */
     @GetMapping(path = "/property")
-    public ResponseEntity<ConfigurationMetadataProperty> findByPropertyName(@RequestParam("name") final String propertyName) {
+    public ResponseEntity<ConfigurationMetadataProperty> findByPropertyName(@RequestParam("name") final String propertyName) throws Exception {
         final ConfigurationMetadataProperty configMetadataProp = repository.getRepository().getAllProperties().get(propertyName);
         return ResponseEntity.ok(configMetadataProp);
     }
@@ -60,9 +61,10 @@ public class CasConfigurationMetadataServerController extends BaseCasMvcEndpoint
      *
      * @param name the property name
      * @return the response entity
+     * @throws Exception the exception
      */
     @GetMapping(path = "/group")
-    public ResponseEntity<ConfigurationMetadataGroup> findByGroupName(@RequestParam("name") final String name) {
+    public ResponseEntity<ConfigurationMetadataGroup> findByGroupName(@RequestParam("name") final String name) throws Exception {
         final ConfigurationMetadataGroup grp = repository.getRepository().getAllGroups().get(name);
         return ResponseEntity.ok(grp);
     }
@@ -71,9 +73,10 @@ public class CasConfigurationMetadataServerController extends BaseCasMvcEndpoint
      * Find all groups.
      *
      * @return the response entity
+     * @throws Exception the exception
      */
     @GetMapping(path = "/groups")
-    public ResponseEntity<Map<String, ConfigurationMetadataGroup>> findAllGroups() {
+    public ResponseEntity<Map<String, ConfigurationMetadataGroup>> findAllGroups() throws Exception {
         return ResponseEntity.ok(repository.getRepository().getAllGroups());
     }
 
@@ -81,9 +84,10 @@ public class CasConfigurationMetadataServerController extends BaseCasMvcEndpoint
      * Find all properties.
      *
      * @return the response entity
+     * @throws Exception the exception
      */
     @GetMapping(path = "/properties")
-    public ResponseEntity<Map<String, ConfigurationMetadataProperty>> findAllProperties() {
+    public ResponseEntity<Map<String, ConfigurationMetadataProperty>> findAllProperties() throws Exception {
         final Map<String, ConfigurationMetadataProperty> allProps = repository.getRepository().getAllProperties();
         return ResponseEntity.ok(allProps);
     }
@@ -120,9 +124,10 @@ public class CasConfigurationMetadataServerController extends BaseCasMvcEndpoint
      * @param request  the request
      * @param response the response
      * @return the model and view
+     * @throws Exception the exception
      */
     @GetMapping
-    public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) {
+    public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         ensureEndpointAccessIsAuthorized(request, response);
         return new ModelAndView("monitoring/viewConfigMetadata");
     }

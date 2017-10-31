@@ -1,8 +1,7 @@
 package org.apereo.cas.services;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -22,71 +21,67 @@ public interface RegisteredServiceProperty extends Serializable {
     /**
      * Collection of supported properties that control various functionality in CAS.
      */
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     enum RegisteredServiceProperties {
 
         /**
          * using when delegating authentication to ADFS to indicate the relying party identifier.
          */
-        WSFED_RELYING_PARTY_ID("wsfed.relyingPartyIdentifier", StringUtils.EMPTY),
+        WSFED_RELYING_PARTY_ID("wsfed.relyingPartyIdentifier"),
         /**
          * Produce a JWT as a response when generating service tickets.
-         *
          * @deprecated Use {@link #TOKEN_AS_SERVICE_TICKET} instead.
          **/
         @Deprecated
-        TOKEN_AS_RESPONSE("jwtAsResponse", "true"),
+        TOKEN_AS_RESOPONSE("jwtAsResponse"),
 
         /**
          * Produce a JWT as a response when generating service tickets.
          **/
-        TOKEN_AS_SERVICE_TICKET("jwtAsServiceTicket", "false"),
+        TOKEN_AS_SERVICE_TICKET("jwtAsServiceTicket"),
 
+        /**
+         * Produce a JWT as a response when generating ticket-granting tickets.
+         **/
+        TOKEN_AS_TICKET_GRANTING_TICKET("jwtAsTicketGrantingTicket"),
+        
         /**
          * Jwt signing secret defined for a given service.
          **/
-        TOKEN_SECRET_SIGNING("jwtSigningSecret", StringUtils.EMPTY),
+        TOKEN_SECRET_SIGNING("jwtSigningSecret"),
 
         /**
          * Jwt signing secret alg defined for a given service.
          **/
-        TOKEN_SECRET_SIGNING_ALG("jwtSigningSecretAlg", "HS256"),
+        TOKEN_SECRET_SIGNING_ALG("jwtSigningSecretAlg"),
 
         /**
          * Jwt encryption secret defined for a given service.
          **/
-        TOKEN_SECRET_ENCRYPTION("jwtEncryptionSecret", StringUtils.EMPTY),
+        TOKEN_SECRET_ENCRYPTION("jwtEncryptionSecret"),
 
         /**
          * Jwt encryption secret alg defined for a given service.
          **/
-        TOKEN_SECRET_ENCRYPTION_ALG("jwtEncryptionSecretAlg", StringUtils.EMPTY),
+        TOKEN_SECRET_ENCRYPTION_ALG("jwtEncryptionSecretAlg"),
 
         /**
          * Jwt encryption secret method defined for a given service.
          **/
-        TOKEN_SECRET_ENCRYPTION_METHOD("jwtEncryptionSecretMethod", "A192CBC-HS384"),
+        TOKEN_SECRET_ENCRYPTION_METHOD("jwtEncryptionSecretMethod"),
 
         /**
          * Secrets are Base64 encoded.
          **/
-        TOKEN_SECRETS_ARE_BASE64_ENCODED("jwtSecretsAreBase64Encoded", "false");
+        TOKEN_SECRETS_ARE_BASE64_ENCODED("jwtSecretsAreBase64Encoded");
 
         private final String propertyName;
 
-        private final String defaultValue;
-
-        RegisteredServiceProperties(final String name, final String defaultValue) {
+        RegisteredServiceProperties(final String name) {
             this.propertyName = name;
-            this.defaultValue = defaultValue;
         }
 
         public String getPropertyName() {
             return propertyName;
-        }
-
-        public String getDefaultValue() {
-            return defaultValue;
         }
 
         public RegisteredServiceProperty getPropertyValue(final RegisteredService service) {
@@ -94,29 +89,11 @@ public interface RegisteredServiceProperty extends Serializable {
                 final Optional<Map.Entry<String, RegisteredServiceProperty>> property = service.getProperties()
                         .entrySet()
                         .stream()
-                        .filter(entry -> entry.getKey().equalsIgnoreCase(getPropertyName()) && StringUtils.isNotBlank(entry.getValue().getValue()))
+                        .filter(entry -> entry.getKey().equalsIgnoreCase(getPropertyName()) && BooleanUtils.toBoolean(entry.getValue().getValue()))
                         .distinct()
                         .findFirst();
                 if (property.isPresent()) {
                     return property.get().getValue();
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Gets property value.
-         *
-         * @param <T>     the type parameter
-         * @param service the service
-         * @param clazz   the clazz
-         * @return the property value
-         */
-        public <T> T getPropertyValue(final RegisteredService service, final Class<T> clazz) {
-            if (isAssignedTo(service)) {
-                final RegisteredServiceProperty prop = getPropertyValue(service);
-                if (prop != null) {
-                    return clazz.cast(prop.getValue());
                 }
             }
             return null;
@@ -132,7 +109,7 @@ public interface RegisteredServiceProperty extends Serializable {
             return service.getProperties()
                     .entrySet()
                     .stream()
-                    .anyMatch(entry -> entry.getKey().equalsIgnoreCase(getPropertyName()) && StringUtils.isNotBlank(entry.getValue().getValue()));
+                    .anyMatch(entry -> entry.getKey().equalsIgnoreCase(getPropertyName()) && BooleanUtils.toBoolean(entry.getValue().getValue()));
         }
     }
 

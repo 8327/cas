@@ -114,7 +114,7 @@ public class RegisteredServiceResourceTests {
                 .andExpect(status().isBadRequest());
     }
 
-    private void configureCasMockToCreateValidTGT() {
+    private void configureCasMockToCreateValidTGT() throws Exception {
         final TicketGrantingTicket tgt = mock(TicketGrantingTicket.class);
         when(tgt.getId()).thenReturn("TGT-1");
         when(tgt.getAuthentication()).thenReturn(CoreAuthenticationTestUtils.getAuthentication(

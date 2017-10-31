@@ -27,7 +27,7 @@ public class YubiKeyMultifactorWebflowConfigurer extends AbstractCasMultifactorW
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_YUBIKEY_EVENT_ID, this.yubikeyFlowRegistry);
     }
 }

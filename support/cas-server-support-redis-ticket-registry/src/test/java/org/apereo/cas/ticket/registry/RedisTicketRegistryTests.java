@@ -42,7 +42,7 @@ public class RedisTicketRegistryTests extends AbstractTicketRegistryTests {
     }
 
     @Parameterized.Parameters
-    public static Collection<Object> getTestParameters() {
+    public static Collection<Object> getTestParameters() throws Exception {
         return Arrays.asList(false, true);
     }
 
@@ -59,7 +59,7 @@ public class RedisTicketRegistryTests extends AbstractTicketRegistryTests {
     }
 
     @Override
-    public TicketRegistry getNewTicketRegistry() {
+    public TicketRegistry getNewTicketRegistry() throws Exception {
         return this.ticketRegistry;
     }
 }

@@ -51,9 +51,10 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
      *
      * @param id the id
      * @return the service by id
+     * @throws Exception the exception
      */
     @GetMapping(value = "getService")
-    public ResponseEntity<RegisteredService> getServiceById(@RequestParam(value = "id", required = false) final Long id) {
+    public ResponseEntity<RegisteredService> getServiceById(@RequestParam(value = "id", required = false) final Long id) throws Exception {
         final RegisteredService service;
         if (id == -1) {
             service = new RegexRegisteredService();

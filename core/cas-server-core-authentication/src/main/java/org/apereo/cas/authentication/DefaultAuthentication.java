@@ -196,9 +196,4 @@ public class DefaultAuthentication implements Authentication {
         this.attributes.clear();
         update(authn);
     }
-
-    @Override
-    public void addAttribute(final String name, final Object value) {
-        this.attributes.put(name, value);
-    }
 }

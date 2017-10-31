@@ -269,6 +269,6 @@ public class CasValidationConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "serviceValidationAuthorizers")
     public Set<ValidationAuthorizer> serviceValidationAuthorizers() {
-        return new LinkedHashSet<>(0);
+        return new LinkedHashSet<>();
     }
 }

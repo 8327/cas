@@ -83,12 +83,12 @@ public class LdapAuthenticationHandlerTests extends AbstractLdapTests {
     }
 
     @AfterClass
-    public static void shutdown() {
+    public static void shutdown() throws Exception {
         DIRECTORY.close();
     }
 
     @Test
-    public void verifyAuthenticateSuccess() {
+    public void verifyAuthenticateSuccess() throws Exception {
         assertNotEquals(handler.size(), 0);
         getEntries().forEach(entry -> {
             final String username = entry.getAttribute("sAMAccountName").getStringValue();

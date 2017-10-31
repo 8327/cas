@@ -1,11 +1,12 @@
-import {Component, OnInit } from '@angular/core';
-import {FormData} from '../../../domain/form-data';
-import {Messages} from '../../messages';
+import {Component, OnInit, Input} from '@angular/core';
+import {FormData} from "../../../domain/service-view-bean";
+import {Messages} from "../../messages";
+import {AbstractRegisteredService} from "../../../domain/registered-service";
 import {
   CachingPrincipalAttributesRepository,
   DefaultPrincipalAttributesRepository
-} from '../../../domain/attribute-repo';
-import {Data} from '../data';
+} from "../../../domain/attribute-repo";
+import {Data} from "../data";
 
 enum Type {
   DEFAULT,
@@ -21,6 +22,8 @@ export class AttributeReleasePrincipalRepoComponent implements OnInit {
   formData: FormData;
   type: Type;
   TYPE = Type;
+  timeUnits = ["MILLISECONDS","SECONDS","MINUTES","HOURS","DAYS"];
+  mergeStrategies = ["NONE","ADD","MULTIVALUED","REPLACE"];
 
   constructor(public messages: Messages,
               public data: Data) {
@@ -36,7 +39,7 @@ export class AttributeReleasePrincipalRepoComponent implements OnInit {
   }
 
   changeType() {
-    switch (+this.type) {
+    switch(+this.type) {
       case Type.DEFAULT :
         this.data.service.attributeReleasePolicy.principalAttributesRepository = new DefaultPrincipalAttributesRepository();
         break;

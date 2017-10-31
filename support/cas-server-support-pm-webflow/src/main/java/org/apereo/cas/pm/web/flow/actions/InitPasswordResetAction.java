@@ -27,7 +27,7 @@ public class InitPasswordResetAction extends AbstractAction {
 
     
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final String token = requestContext.getFlowScope().getString("token");
 
         if (StringUtils.isBlank(token)) {

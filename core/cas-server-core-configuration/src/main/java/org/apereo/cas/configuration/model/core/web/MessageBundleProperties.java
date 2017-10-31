@@ -44,11 +44,11 @@ public class MessageBundleProperties implements Serializable {
 
     /**
      * A list of strings representing common names for this message bundle.
-     * <p>
+     *
      * Entries in last common names override first values (as opposed to baseNames used in message bundles).
      */
-    private List<String> commonNames = CollectionUtils.wrapList("classpath:common_messages.properties", "file:/etc/cas/config/common_messages.properties");
-
+    private String[] commonNames = new String[] {"classpath:common_messages.properties", "file:/etc/cas/config/common_messages.properties"};
+    
     public String getEncoding() {
         return encoding;
     }
@@ -89,11 +89,11 @@ public class MessageBundleProperties implements Serializable {
         this.baseNames = baseNames;
     }
 
-    public List<String> getCommonNames() {
+    public String[] getCommonNames() {
         return commonNames;
     }
 
-    public void setCommonNames(final List<String> commonNames) {
+    public void setCommonNames(final String[] commonNames) {
         this.commonNames = commonNames;
     }
 }

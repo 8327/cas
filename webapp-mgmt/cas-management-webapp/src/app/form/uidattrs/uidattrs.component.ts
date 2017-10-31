@@ -1,12 +1,13 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Messages} from '../../messages';
-import {FormData} from '../../../domain/form-data';
+import {Messages} from "../../messages";
+import {FormData} from "../../../domain/service-view-bean";
+import {AbstractRegisteredService} from "../../../domain/registered-service";
 import {
   AnonymousRegisteredServiceUsernameProvider,
   DefaultRegisteredServiceUsernameProvider,
   PrincipalAttributeRegisteredServiceUsernameProvider
-} from '../../../domain/attribute-provider';
-import {Data} from '../data';
+} from "../../../domain/attribute-provider";
+import {Data} from "../data";
 
 enum Type {
   DEFAULT,
@@ -21,12 +22,15 @@ enum Type {
 export class UidattrsComponent implements OnInit {
 
   formData: FormData;
+  selectOptions;
   type: Type;
   TYPE = Type;
+  canonicalizations = ["NONE","UPPER","LOWER"];
 
   constructor(public messages: Messages,
               public data: Data) {
     this.formData = data.formData;
+    this.selectOptions = data.selectOptions;
   }
 
   ngOnInit() {
@@ -40,7 +44,7 @@ export class UidattrsComponent implements OnInit {
   }
 
   changeType() {
-      switch (+this.type) {
+      switch(+this.type) {
         case Type.DEFAULT :
           this.data.service.usernameAttributeProvider = new DefaultRegisteredServiceUsernameProvider();
           break;

@@ -42,7 +42,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     private StubPersonAttributeDao repository;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         final Map<String, List<Object>> attributes = new HashMap<>();
         attributes.put(TEST_ID, Arrays.asList(new Object[]{TEST_ID}));
 
@@ -54,7 +54,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyAddRegisteredServiceNoValues() {
+    public void verifyAddRegisteredServiceNoValues() throws Exception {
         final BindingResult result = mock(BindingResult.class);
         when(result.getModel()).thenReturn(new HashMap<>());
         when(result.hasErrors()).thenReturn(true);
@@ -62,7 +62,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyAddRegisteredServiceWithValues() {
+    public void verifyAddRegisteredServiceWithValues() throws Exception {
         final RegexRegisteredService svc = new RegexRegisteredService();
         svc.setDescription(DESCRIPTION);
         svc.setServiceId(SERVICE_ID);
@@ -78,7 +78,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyEditRegisteredServiceWithValues() {
+    public void verifyEditRegisteredServiceWithValues() throws Exception {
         final RegexRegisteredService r = new RegexRegisteredService();
         r.setId(1000);
         r.setName("Test Service");
@@ -103,7 +103,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyAddRegexRegisteredService() {
+    public void verifyAddRegexRegisteredService() throws Exception {
         final RegexRegisteredService svc = new RegexRegisteredService();
         svc.setDescription(DESCRIPTION);
         svc.setServiceId("^serviceId");
@@ -119,7 +119,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyAddMultipleRegisteredServiceTypes() {
+    public void verifyAddMultipleRegisteredServiceTypes() throws Exception {
         AbstractRegisteredService svc = new RegexRegisteredService();
         svc.setDescription(DESCRIPTION);
         svc.setServiceId("^serviceId");
@@ -143,7 +143,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyAddMockRegisteredService() {
+    public void verifyAddMockRegisteredService() throws Exception {
         this.controller = new RegisteredServiceSimpleFormController(this.manager);
 
         final RegexRegisteredService svc = new RegexRegisteredService();
@@ -161,7 +161,7 @@ public class RegisteredServiceSimpleFormControllerTests {
     }
 
     @Test
-    public void verifyEditMockRegisteredService() {
+    public void verifyEditMockRegisteredService() throws Exception {
         this.controller = new RegisteredServiceSimpleFormController(this.manager);
 
         final RegexRegisteredService r = new RegexRegisteredService();

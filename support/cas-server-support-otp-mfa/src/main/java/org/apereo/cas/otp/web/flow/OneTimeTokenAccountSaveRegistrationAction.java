@@ -21,7 +21,7 @@ public class OneTimeTokenAccountSaveRegistrationAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final OneTimeTokenAccount account = requestContext.getFlowScope().get("key", OneTimeTokenAccount.class);
 
         final String uid = WebUtils.getAuthentication(requestContext).getPrincipal().getId();

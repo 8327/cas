@@ -1,6 +1,7 @@
 package org.apereo.cas.integration.pac4j.authentication.handler.support;
 
 import org.apereo.cas.authentication.Credential;
+import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.UsernamePasswordCredential;
 import org.apereo.cas.authentication.handler.PrincipalNameTransformer;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
@@ -51,7 +52,7 @@ public class UsernamePasswordWrapperAuthenticationHandler
 
     @Override
     protected UsernamePasswordCredentials convertToPac4jCredentials(final UsernamePasswordCredential casCredential)
-            throws GeneralSecurityException {
+            throws GeneralSecurityException, PreventedException {
         LOGGER.debug("CAS credentials: [{}]", casCredential);
 
         final String username = this.principalNameTransformer.transform(casCredential.getUsername());

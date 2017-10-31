@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
+import javax.security.auth.login.LoginException;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class GroovyLdapPasswordPolicyHandlingStrategy implements LdapPasswordPol
 
     @Override
     public List<MessageDescriptor> handle(final AuthenticationResponse response,
-                                          final LdapPasswordPolicyConfiguration configuration) {
+                                          final LdapPasswordPolicyConfiguration configuration) throws LoginException {
   
         return ScriptingUtils.executeGroovyScript(groovyResource,
                 new Object[]{response, configuration, LOGGER}, List.class);

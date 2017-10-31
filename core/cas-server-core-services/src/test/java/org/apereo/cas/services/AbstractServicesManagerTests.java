@@ -36,7 +36,7 @@ public abstract class AbstractServicesManagerTests {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.serviceRegistryDao = getServiceRegistryInstance();
         this.servicesManager = getServicesManagerInstance();
         this.servicesManager.load();

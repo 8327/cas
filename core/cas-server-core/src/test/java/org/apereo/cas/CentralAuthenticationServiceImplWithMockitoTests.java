@@ -100,7 +100,7 @@ public class CentralAuthenticationServiceImplWithMockitoTests {
     }
 
     @Before
-    public void prepareNewCAS() {
+    public void prepareNewCAS() throws Exception {
         this.authentication = mock(Authentication.class);
         when(this.authentication.getAuthenticationDate()).thenReturn(ZonedDateTime.now(ZoneOffset.UTC));
         final CredentialMetaData metadata = new BasicCredentialMetaData(
@@ -181,7 +181,7 @@ public class CentralAuthenticationServiceImplWithMockitoTests {
     }
 
     @Test
-    public void verifyNonExistentServiceWhenDelegatingTicketGrantingTicket() {
+    public void verifyNonExistentServiceWhenDelegatingTicketGrantingTicket() throws Exception {
         this.thrown.expect(InvalidTicketException.class);
         this.thrown.expectMessage("bad-st");
 
@@ -189,13 +189,13 @@ public class CentralAuthenticationServiceImplWithMockitoTests {
     }
 
     @Test
-    public void verifyInvalidServiceWhenDelegatingTicketGrantingTicket() {
+    public void verifyInvalidServiceWhenDelegatingTicketGrantingTicket() throws Exception {
         this.thrown.expect(UnauthorizedServiceException.class);
         this.cas.createProxyGrantingTicket(ST_ID, getAuthenticationContext());
     }
 
     @Test
-    public void disallowVendingServiceTicketsWhenServiceIsNotAllowedToProxyCAS1019() {
+    public void disallowVendingServiceTicketsWhenServiceIsNotAllowedToProxyCAS1019() throws Exception {
         this.thrown.expect(UnauthorizedProxyingException.class);
         this.cas.grantServiceTicket(TGT_ID, RegisteredServiceTestUtils.getService(SVC1_ID), getAuthenticationContext());
     }
@@ -219,7 +219,7 @@ public class CentralAuthenticationServiceImplWithMockitoTests {
     }
 
     @Test
-    public void verifyChainedAuthenticationsOnValidation() {
+    public void verifyChainedAuthenticationsOnValidation() throws Exception {
         final Service svc = RegisteredServiceTestUtils.getService(SVC2_ID);
         final ServiceTicket st = this.cas.grantServiceTicket(TGT2_ID, svc, getAuthenticationContext());
         assertNotNull(st);

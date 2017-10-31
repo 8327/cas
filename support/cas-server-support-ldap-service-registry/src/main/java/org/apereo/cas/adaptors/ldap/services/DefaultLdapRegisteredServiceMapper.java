@@ -44,6 +44,7 @@ public class DefaultLdapRegisteredServiceMapper implements LdapRegisteredService
             }
             final String newDn = getDnForRegisteredService(dn, svc);
             LOGGER.debug("Creating entry [{}]", newDn);
+
             
             final Collection<LdapAttribute> attrs = new ArrayList<>();
             attrs.add(new LdapAttribute(ldap.getIdAttribute(), String.valueOf(svc.getId())));

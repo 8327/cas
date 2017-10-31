@@ -31,7 +31,7 @@ class JasigRegisteredServiceDeserializationProblemHandler extends Deserializatio
     public JavaType handleUnknownTypeId(final DeserializationContext ctxt,
                                         final JavaType baseType,
                                         final String subTypeId, final TypeIdResolver idResolver,
-                                        final String failureMsg) {
+                                        final String failureMsg) throws IOException {
 
         try {
             if (subTypeId.contains("org.jasig.")) {

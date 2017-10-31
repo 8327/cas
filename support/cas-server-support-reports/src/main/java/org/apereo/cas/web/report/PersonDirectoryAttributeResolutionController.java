@@ -38,6 +38,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -91,10 +92,11 @@ public class PersonDirectoryAttributeResolutionController extends BaseCasMvcEndp
      * @param request  the request
      * @param response the response
      * @return the model and view
+     * @throws Exception the exception
      */
     @GetMapping
     protected ModelAndView handleRequestInternal(final HttpServletRequest request,
-                                                 final HttpServletResponse response) {
+                                                 final HttpServletResponse response) throws Exception {
         ensureEndpointAccessIsAuthorized(request, response);
         final Map model = new LinkedHashMap();
        
@@ -108,12 +110,13 @@ public class PersonDirectoryAttributeResolutionController extends BaseCasMvcEndp
      * @param request  the request
      * @param response the response
      * @return the map
+     * @throws Exception the exception
      */
     @PostMapping(value = "/resolveattrs")
     @ResponseBody
     public Map<String, Object> resolvePrincipalAttributes(@RequestParam final String uid,
                                                           final HttpServletRequest request,
-                                                          final HttpServletResponse response) {
+                                                          final HttpServletResponse response) throws Exception {
         ensureEndpointAccessIsAuthorized(request, response);
         final Principal p = personDirectoryPrincipalResolver.resolve(new BasicIdentifiableCredential(uid));
         final Map<String, Object> map = new LinkedHashMap<>();
@@ -199,7 +202,7 @@ public class PersonDirectoryAttributeResolutionController extends BaseCasMvcEndp
             }
 
             @Override
-            public ServletOutputStream getOutputStream() {
+            public ServletOutputStream getOutputStream() throws IOException {
                 return stream;
             }
         };

@@ -31,7 +31,7 @@ public class SwivelMultifactorWebflowConfigurer extends AbstractCasMultifactorWe
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_SWIVEL_EVENT_ID, this.flowDefinitionRegistry);
     }
 }

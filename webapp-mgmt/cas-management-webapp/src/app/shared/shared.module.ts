@@ -1,10 +1,11 @@
 /**
  * Created by tsschmi on 2/28/17.
  */
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms'
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms"
 import 'hammerjs';
+import {MyTooltipDirective} from "../my-tooltip.directive";
 import {
   MatButtonModule,
   MatCardModule,
@@ -27,10 +28,10 @@ import {
   MatAutocompleteModule,
   MatSnackBarModule,
   MatPaginatorModule
-} from '@angular/material';
-import {CdkTableModule} from '@angular/cdk/table';
-import {ControlsComponent} from '../controls/controls.component';
-import {ControlsService} from '../controls/controls.service';
+} from "@angular/material";
+import {CdkTableModule} from "@angular/cdk/table";
+import {ControlsComponent} from "../controls/controls.component";
+import {ControlsService} from "../controls/controls.service";
 
 @NgModule({
   imports: [
@@ -61,12 +62,14 @@ import {ControlsService} from '../controls/controls.service';
     MatPaginatorModule
   ],
   declarations: [
+    MyTooltipDirective,
     ControlsComponent
   ],
   providers: [
     ControlsService
   ],
   exports: [
+    MyTooltipDirective,
     MatTabsModule,
     MatCheckboxModule,
     MatInputModule,
@@ -93,4 +96,8 @@ import {ControlsService} from '../controls/controls.service';
     ControlsComponent
   ]
 })
-export class SharedModule {}
+export class SharedModule {
+  static empty(obj: any): boolean {
+    return !obj || Object.keys(obj).length == 0;
+  }
+}

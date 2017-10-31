@@ -57,7 +57,7 @@ public class DefaultWebflowConfigurer extends AbstractCasWebflowConfigurer {
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         final Flow flow = getLoginFlow();
 
         if (flow != null) {

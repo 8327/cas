@@ -48,29 +48,6 @@ If incorrect credentials are sent, CAS will respond with a 400 Bad Request error
 (will also respond for missing parameters, etc.). If you send a media type
 it does not understand, it will send the 415 Unsupported Media Type.
 
-### JWT Ticket Granting Tickets
-
-Ticket-granting tickets created by the REST protocol may be issued as JWTs instead. Support is enabled by including the following in your overlay:
-
-```xml
-<dependency>
-    <groupId>org.apereo.cas</groupId>
-    <artifactId>cas-server-support-rest-tokens</artifactId>
-    <version>${cas.version}</version>
-</dependency>
-```
-
-To request a ticket-granting ticket as JWT next, ensure the `POST` request matches the following:
-
-```bash
-POST /cas/v1/tickets HTTP/1.0
-
-username=battags&password=password&token=true&additionalParam1=paramvalue
-```
-
-The `token` parameter may either be passed as a request parameter or a request header. The body of the response will include the ticket-granting ticket as a JWT. Note that JWTs created are typically signed and encrypted by default with pre-generated keys. To control settings or to see the relevant list of CAS properties, please [review this guide](../installation/Configuration-Properties.html#jwt-tickets).
-
-
 ## Request a Service Ticket
 
 ```bash
@@ -101,7 +78,6 @@ Support is enabled by including the following in your overlay:
 </dependency>
 ```
 
-Note that JWTs created are typically signed and encrypted by default with pre-generated keys. To control settings or to see the relevant list of CAS properties, please [review this guide](../installation/Configuration-Properties.html#jwt-tickets).
 
 ## Validate Service Ticket
 

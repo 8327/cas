@@ -64,7 +64,7 @@ public abstract class AbstractServicesManager implements ServicesManager {
     @Override
     public Collection<RegisteredService> findServiceBy(final Predicate<RegisteredService> predicate) {
         if (predicate == null) {
-            return new ArrayList<>(0);
+            return new ArrayList<>();
         }
         
         return getAllServices()
@@ -114,7 +114,12 @@ public abstract class AbstractServicesManager implements ServicesManager {
     @Override
     public RegisteredService findServiceBy(final long id) {
         final RegisteredService r = this.services.get(id);
-        return r == null ? null : r.clone();
+
+        try {
+            return r == null ? null : r.clone();
+        } catch (final CloneNotSupportedException e) {
+            return r;
+        }
     }
 
     @Override

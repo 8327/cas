@@ -4,9 +4,9 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { HeaderComponent } from './header.component';
-import {Messages} from '../messages';
+import {Messages} from "../messages";
 
-const userServiceStub = {
+let userServiceStub = {
   getRoles(): Promise<String[]> {
     return Promise.resolve([]);
   },

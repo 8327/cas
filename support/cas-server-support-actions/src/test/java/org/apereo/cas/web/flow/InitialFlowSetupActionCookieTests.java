@@ -66,7 +66,7 @@ public class InitialFlowSetupActionCookieTests extends AbstractCentralAuthentica
     }
 
     @Test
-    public void verifySettingContextPath() {
+    public void verifySettingContextPath() throws Exception {
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setContextPath(CONST_CONTEXT_PATH);
         final MockRequestContext context = new MockRequestContext();
@@ -79,7 +79,7 @@ public class InitialFlowSetupActionCookieTests extends AbstractCentralAuthentica
     }
 
     @Test
-    public void verifyResettingContextPath() {
+    public void verifyResettingContextPath() throws Exception {
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setContextPath(CONST_CONTEXT_PATH);
         final MockRequestContext context = new MockRequestContext();

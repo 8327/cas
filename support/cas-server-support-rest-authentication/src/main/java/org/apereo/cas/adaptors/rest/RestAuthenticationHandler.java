@@ -3,6 +3,7 @@ package org.apereo.cas.adaptors.rest;
 import org.apache.commons.lang3.StringUtils;
 import org.apereo.cas.authentication.exceptions.AccountDisabledException;
 import org.apereo.cas.authentication.HandlerResult;
+import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.UsernamePasswordCredential;
 import org.apereo.cas.authentication.exceptions.AccountPasswordMustChangeException;
 import org.apereo.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
@@ -40,7 +41,7 @@ public class RestAuthenticationHandler extends AbstractUsernamePasswordAuthentic
 
     @Override
     protected HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential c, final String originalPassword)
-            throws GeneralSecurityException {
+            throws GeneralSecurityException, PreventedException {
 
         try {
             final UsernamePasswordCredential creds = new UsernamePasswordCredential(c.getUsername(), c.getPassword());

@@ -288,8 +288,9 @@ public class SamlObjectSignatureValidator {
      * Gets signature validation configuration.
      *
      * @return the signature validation configuration
+     * @throws Exception the exception
      */
-    protected SignatureValidationConfiguration getSignatureValidationConfiguration() {
+    protected SignatureValidationConfiguration getSignatureValidationConfiguration() throws Exception {
         final BasicSignatureValidationConfiguration config =
                 DefaultSecurityConfigurationBootstrap.buildDefaultSignatureValidationConfiguration();
         final SamlIdPProperties samlIdp = casProperties.getAuthn().getSamlIdp();

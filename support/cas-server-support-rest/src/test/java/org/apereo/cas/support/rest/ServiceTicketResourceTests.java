@@ -10,7 +10,6 @@ import org.apereo.cas.authentication.DefaultAuthenticationTransactionManager;
 import org.apereo.cas.authentication.DefaultPrincipalElectionStrategy;
 import org.apereo.cas.authentication.principal.Service;
 import org.apereo.cas.authentication.principal.WebApplicationServiceFactory;
-import org.apereo.cas.support.rest.factory.DefaultServiceTicketResourceEntityResponseFactory;
 import org.apereo.cas.support.rest.resources.ServiceTicketResource;
 import org.apereo.cas.support.rest.resources.TicketGrantingTicketResource;
 import org.apereo.cas.ticket.InvalidTicketException;
@@ -57,7 +56,7 @@ public class ServiceTicketResourceTests {
     private MockMvc mockMvc;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         final AuthenticationManager mgmr = mock(AuthenticationManager.class);
         when(mgmr.authenticate(any(AuthenticationTransaction.class))).thenReturn(CoreAuthenticationTestUtils.getAuthentication());
         when(ticketSupport.getAuthenticationFrom(anyString())).thenReturn(CoreAuthenticationTestUtils.getAuthentication());
@@ -105,11 +104,11 @@ public class ServiceTicketResourceTests {
                 .andExpect(content().string(OTHER_EXCEPTION));
     }
 
-    private void configureCasMockSTCreationToThrow(final Throwable e) {
+    private void configureCasMockSTCreationToThrow(final Throwable e) throws Exception {
         when(this.casMock.grantServiceTicket(anyString(), any(Service.class), any(AuthenticationResult.class))).thenThrow(e);
     }
 
-    private void configureCasMockToCreateValidST() {
+    private void configureCasMockToCreateValidST() throws Exception {
         final ServiceTicket st = mock(ServiceTicket.class);
         when(st.getId()).thenReturn("ST-1");
         when(this.casMock.grantServiceTicket(anyString(), any(Service.class), any(AuthenticationResult.class))).thenReturn(st);

@@ -1,8 +1,0 @@
-description = 'Apereo CAS Authy Core Support'
-dependencies {
-    api project(":api:cas-server-core-api")
-    
-    implementation libraries.authyjava
-    implementation project(":core:cas-server-core-configuration")
-    implementation project(":core:cas-server-core-authentication-mfa")
-}

@@ -38,7 +38,7 @@ public class PooledConnectionFactoryMonitorTests extends AbstractLdapTests {
     }
 
     @Test
-    public void verifyObserve() {
+    public void verifyObserve() throws Exception {
         assertEquals(StatusCode.OK, monitor.observe().getCode());
     }
 }

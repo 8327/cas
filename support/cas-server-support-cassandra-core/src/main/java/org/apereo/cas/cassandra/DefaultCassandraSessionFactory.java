@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
 import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -112,7 +113,7 @@ public class DefaultCassandraSessionFactory implements CassandraSessionFactory, 
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
         destroy();
     }
 }

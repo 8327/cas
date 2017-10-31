@@ -77,12 +77,12 @@ public class EhCacheTicketRegistryTests extends AbstractTicketRegistryTests {
     }
 
     @Parameterized.Parameters
-    public static Collection<Object> getTestParameters() {
+    public static Collection<Object> getTestParameters() throws Exception {
         return Arrays.asList(false, true);
     }
 
     @Override
-    public TicketRegistry getNewTicketRegistry() {
+    public TicketRegistry getNewTicketRegistry() throws Exception {
         return ticketRegistry;
     }
 
@@ -139,7 +139,7 @@ public class EhCacheTicketRegistryTests extends AbstractTicketRegistryTests {
             }
 
             @Override
-            public Object clone() {
+            public Object clone() throws CloneNotSupportedException {
                 return null;
             }
         }

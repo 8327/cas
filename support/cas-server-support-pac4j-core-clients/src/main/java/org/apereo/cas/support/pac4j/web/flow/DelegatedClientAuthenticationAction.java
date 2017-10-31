@@ -174,8 +174,9 @@ public class DelegatedClientAuthenticationAction extends AbstractAction {
      * Prepare the data for the login page.
      *
      * @param context The current webflow context
+     * @throws HttpAction the http action
      */
-    protected void prepareForLoginPage(final RequestContext context) {
+    protected void prepareForLoginPage(final RequestContext context) throws HttpAction {
         final HttpServletRequest request = WebUtils.getHttpServletRequestFromExternalWebflowContext(context);
         final HttpServletResponse response = WebUtils.getHttpServletResponseFromExternalWebflowContext(context);
         final HttpSession session = request.getSession();

@@ -399,10 +399,6 @@ public class MonitorProperties implements Serializable {
         private Statistics statistics = new Statistics();
 
         /**
-         * Discovery related settings.
-         */
-        private Discovery discovery = new Discovery();
-        /**
          * Trusted devices related settings.
          */
         private TrustedDevices trustedDevices = new TrustedDevices();
@@ -446,14 +442,6 @@ public class MonitorProperties implements Serializable {
 
         public RegisteredServicesReport getRegisteredServicesReport() {
             return registeredServicesReport;
-        }
-
-        public Discovery getDiscovery() {
-            return discovery;
-        }
-
-        public void setDiscovery(final Discovery discovery) {
-            this.discovery = discovery;
         }
 
         public void setRegisteredServicesReport(final RegisteredServicesReport registeredServicesReport) {
@@ -618,10 +606,6 @@ public class MonitorProperties implements Serializable {
 
         @RequiresModule(name = "cas-server-core-web", automated = true)
         public static class Status extends BaseEndpoint {
-        }
-
-        @RequiresModule(name = "cas-server-support-discovery", automated = true)
-        public static class Discovery extends BaseEndpoint {
         }
 
         @RequiresModule(name = "cas-server-core", automated = true)

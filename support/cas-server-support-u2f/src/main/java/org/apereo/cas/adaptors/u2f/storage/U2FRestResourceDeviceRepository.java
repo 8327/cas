@@ -53,11 +53,11 @@ public class U2FRestResourceDeviceRepository extends BaseResourceU2FDeviceReposi
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return new HashMap<>(0);
+        return new HashMap<>();
     }
 
     @Override
-    protected void writeDevicesBackToResource(final List<U2FDeviceRegistration> list) {
+    protected void writeDevicesBackToResource(final List<U2FDeviceRegistration> list) throws Exception {
         try (StringWriter writer = new StringWriter()) {
             final Map<String, List<U2FDeviceRegistration>> newDevices = new HashMap<>();
             newDevices.put(MAP_KEY_SERVICES, list);

@@ -6,43 +6,44 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 
-import {FormRoutingModule} from './form-routing.module';
-import {FormComponent} from './form.component';
-import {FormResolve} from './form.resolover';
-import {TabBasicsComponent} from './tab-basics/tab-basics.component';
-import {TabLogoutComponent} from './tab-logout/tab-logout.component';
-import {TabAccessstrategyComponent} from './tab-accessstrategy/tab-accessstrategy.component';
-import {TabMulitauthComponent} from './tab-mulitauth/tab-mulitauth.component';
-import {TabProxyComponent} from './tab-proxy/tab-proxy.component';
-import {TabUsernameattrComponent} from './tab-usernameattr/tab-usernameattr.component';
-import {TabAttrreleaseComponent} from './tab-attrrelease/tab-attrrelease.component';
-import {TabPropertiesComponent} from './tab-properties/tab-properties.component';
-import {FormService} from './form.service';
-import {AccessStrategyComponent} from './access-strategy/access-strategy.component';
-import {AttributeReleaseComponent} from './attribute-release/attribute-release.component';
-import {EnabledComponent} from './enabled/enabled.component';
-import {EvalorderComponent} from './evalorder/evalorder.component';
-import {LinkrefsComponent} from './linkrefs/linkrefs.component';
-import {LogoComponent} from './logo/logo.component';
-import {LogoutComponent} from './logout/logout.component';
-import {LogouttypeevalComponent} from './logouttypeeval/logouttypeeval.component';
-import {MultiauthpaneComponent} from './multiauthpane/multiauthpane.component';
-import {OauthclientComponent} from './oauthclient/oauthclient.component';
-import {PropertiespaneComponent} from './propertiespane/propertiespane.component';
-import {ProxyComponent} from './proxy/proxy.component';
-import {PubkeyComponent} from './pubkey/pubkey.component';
-import {RejectedattributesComponent} from './rejectedattributes/rejectedattributes.component';
-import {ReqhandlersComponent} from './reqhandlers/reqhandlers.component';
-import {SamlclientComponent} from './samlclient/samlclient.component';
-import {ServicedescComponent} from './servicedesc/servicedesc.component';
-import {ServiceidComponent} from './serviceid/serviceid.component';
-import {ServicenameComponent} from './servicename/servicename.component';
-import {ServicetypeComponent} from './servicetype/servicetype.component';
-import {ThemeidComponent} from './themeid/themeid.component';
-import {UidattrsComponent} from './uidattrs/uidattrs.component';
-import {Data} from './data';
-import {SharedModule} from '../shared/shared.module';
-import {TabAdvancedComponent} from './tab-advanced/tab-advanced.component';
+import {FormRoutingModule} from "./form-routing.module";
+import {FormComponent} from "./form.component";
+import {FormResolve} from "./form.resolover";
+import {TabBasicsComponent} from "./tab-basics/tab-basics.component";
+import {TabLogoutComponent} from "./tab-logout/tab-logout.component";
+import {TabAccessstrategyComponent} from "./tab-accessstrategy/tab-accessstrategy.component";
+import {TabMulitauthComponent} from "./tab-mulitauth/tab-mulitauth.component";
+import {TabProxyComponent} from "./tab-proxy/tab-proxy.component";
+import {TabUsernameattrComponent} from "./tab-usernameattr/tab-usernameattr.component";
+import {TabAttrreleaseComponent} from "./tab-attrrelease/tab-attrrelease.component";
+import {TabPropertiesComponent} from "./tab-properties/tab-properties.component";
+import {FormService} from "./form.service";
+import {AccessStrategyComponent} from "./access-strategy/access-strategy.component";
+import {AttributeReleaseComponent} from "./attribute-release/attribute-release.component";
+import {EnabledComponent} from "./enabled/enabled.component";
+import {EvalorderComponent} from "./evalorder/evalorder.component";
+import {LinkrefsComponent} from "./linkrefs/linkrefs.component";
+import {LogoComponent} from "./logo/logo.component";
+import {LogoutComponent} from "./logout/logout.component";
+import {LogouttypeevalComponent} from "./logouttypeeval/logouttypeeval.component";
+import {MultiauthpaneComponent} from "./multiauthpane/multiauthpane.component";
+import {OauthclientComponent} from "./oauthclient/oauthclient.component";
+import {PropertiespaneComponent} from "./propertiespane/propertiespane.component";
+import {ProxyComponent} from "./proxy/proxy.component";
+import {PubkeyComponent} from "./pubkey/pubkey.component";
+import {RejectedattributesComponent} from "./rejectedattributes/rejectedattributes.component";
+import {ReqhandlersComponent} from "./reqhandlers/reqhandlers.component";
+import {SamlclientComponent} from "./samlclient/samlclient.component";
+import {SaveformtopComponent} from "./saveformtop/saveformtop.component";
+import {ServicedescComponent} from "./servicedesc/servicedesc.component";
+import {ServiceidComponent} from "./serviceid/serviceid.component";
+import {ServicenameComponent} from "./servicename/servicename.component";
+import {ServicetypeComponent} from "./servicetype/servicetype.component";
+import {ThemeidComponent} from "./themeid/themeid.component";
+import {UidattrsComponent} from "./uidattrs/uidattrs.component";
+import {Data} from "./data";
+import {SharedModule} from "../shared/shared.module";
+import {TabAdvancedComponent} from "./tab-advanced/tab-advanced.component";
 import { AttributeReleaseChecksComponent } from './attribute-release-checks/attribute-release-checks.component';
 import { AttributeReleaseFiltersComponent } from './attribute-release-filters/attribute-release-filters.component';
 import { AttributeReleasePoliciesComponent } from './attribute-release-policies/attribute-release-policies.component';
@@ -58,7 +59,7 @@ import { MappedattributesComponent } from './mappedattributes/mappedattributes.c
 import { TabOauthComponent } from './tab-oauth/tab-oauth.component';
 import { TabSamlComponent } from './tab-saml/tab-saml.component';
 import { TabWsfedComponent } from './tab-wsfed/tab-wsfed.component';
-import {TabBaseComponent} from './tab-base';
+import {TabBase} from "./tab-base";
 import { AttributeReleaseConsentComponent } from './attribute-release-consent/attribute-release-consent.component';
 import { SurrogateComponent } from './access-strategy/surrogate/surrogate.component';
 import { ContactsComponent } from './contacts/contacts.component';
@@ -70,9 +71,7 @@ import { SecurityComponent } from './samlclient/security/security.component';
 import { OptionalComponent } from './samlclient/optional/optional.component';
 import { NameidComponent } from './samlclient/nameid/nameid.component';
 import { MappedComponent } from './attribute-release-filters/mapped/mapped.component';
-import {TabOIDCComponent} from './tab-oidc/tab-oidc.component';
 
-import { ServiceWizardComponent } from './service-wizard/service-wizard.component';
 
 @NgModule({
   imports: [
@@ -95,9 +94,8 @@ import { ServiceWizardComponent } from './service-wizard/service-wizard.componen
     TabAdvancedComponent,
     TabSamlComponent,
     TabOauthComponent,
-    TabOIDCComponent,
     TabWsfedComponent,
-    TabBaseComponent,
+    TabBase,
     FormComponent,
     AccessStrategyComponent,
     AttributeReleaseComponent,
@@ -115,6 +113,7 @@ import { ServiceWizardComponent } from './service-wizard/service-wizard.componen
     RejectedattributesComponent,
     ReqhandlersComponent,
     SamlclientComponent,
+    SaveformtopComponent,
     ServicedescComponent,
     ServiceidComponent,
     ServicenameComponent,
@@ -147,7 +146,6 @@ import { ServiceWizardComponent } from './service-wizard/service-wizard.componen
     OptionalComponent,
     NameidComponent,
     MappedComponent,
-    ServiceWizardComponent,
   ],
   providers: [
     FormResolve,

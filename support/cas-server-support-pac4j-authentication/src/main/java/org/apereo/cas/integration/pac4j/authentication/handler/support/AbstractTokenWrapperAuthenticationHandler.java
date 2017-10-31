@@ -1,6 +1,7 @@
 package org.apereo.cas.integration.pac4j.authentication.handler.support;
 
 import org.apereo.cas.authentication.BasicIdentifiableCredential;
+import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.handler.PrincipalNameTransformer;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.services.ServicesManager;
@@ -39,7 +40,7 @@ public abstract class AbstractTokenWrapperAuthenticationHandler extends
 
     @Override
     protected TokenCredentials convertToPac4jCredentials(final BasicIdentifiableCredential casCredential)
-            throws GeneralSecurityException {
+            throws GeneralSecurityException, PreventedException {
         LOGGER.debug("CAS credentials: [{}]", casCredential);
 
         final String id = this.principalNameTransformer.transform(casCredential.getId());

@@ -35,12 +35,12 @@ public class MemcachedTicketRegistryTests extends AbstractTicketRegistryTests {
     }
 
     @Parameterized.Parameters
-    public static Collection<Object> getTestParameters() {
+    public static Collection<Object> getTestParameters() throws Exception {
         return Arrays.asList(false, true);
     }
 
     @Override
-    public TicketRegistry getNewTicketRegistry() {
+    public TicketRegistry getNewTicketRegistry() throws Exception {
         return registry;
     }
 

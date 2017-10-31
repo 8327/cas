@@ -60,7 +60,7 @@ public class LdapConsentRepositoryTests extends AbstractLdapTests {
     
     @Autowired
     @Qualifier("consentRepository")
-    private ConsentRepository repository;
+    private LdapConsentRepository repository;
     
     @BeforeClass
     public static void bootstrap() throws Exception {
@@ -82,7 +82,7 @@ public class LdapConsentRepositoryTests extends AbstractLdapTests {
     }
     
     @Test
-    public void verifyConsentDecisionIsNotFound() {
+    public void verifyConsentDecisionIsNotFound() throws Exception {
         final ConsentDecision d = this.repository.findConsentDecision(SVC, REG_SVC, CoreAuthenticationTestUtils.getAuthentication(USER_CN));
         assertNull(d);
     }

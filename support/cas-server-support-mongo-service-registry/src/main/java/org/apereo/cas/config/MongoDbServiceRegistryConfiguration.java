@@ -37,7 +37,7 @@ public class MongoDbServiceRegistryConfiguration {
     }
     
     @Bean
-    public ServiceRegistryDao serviceRegistryDao() {
+    public ServiceRegistryDao serviceRegistryDao() throws Exception {
         final MongoServiceRegistryProperties mongo = casProperties.getServiceRegistry().getMongo();
         return new MongoServiceRegistryDao(
                 mongoDbServiceRegistryTemplate(),

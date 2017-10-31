@@ -57,7 +57,7 @@ public class RestConsentRepository implements ConsentRepository {
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return new ArrayList<>(0);
+        return new ArrayList<>();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RestConsentRepository implements ConsentRepository {
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return new ArrayList<>(0);
+        return new ArrayList<>();
     }
 
     @Override

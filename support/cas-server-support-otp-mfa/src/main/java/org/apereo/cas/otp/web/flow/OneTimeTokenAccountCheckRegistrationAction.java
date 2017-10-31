@@ -34,7 +34,7 @@ public class OneTimeTokenAccountCheckRegistrationAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final String uid = WebUtils.getAuthentication(requestContext).getPrincipal().getId();
 
         final OneTimeTokenAccount acct = repository.get(uid);

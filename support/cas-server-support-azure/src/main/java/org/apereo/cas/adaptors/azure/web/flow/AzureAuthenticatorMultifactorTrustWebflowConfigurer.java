@@ -27,7 +27,7 @@ public class AzureAuthenticatorMultifactorTrustWebflowConfigurer extends Abstrac
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorTrustedAuthentication(this.flowDefinitionRegistry);
     }
 }
