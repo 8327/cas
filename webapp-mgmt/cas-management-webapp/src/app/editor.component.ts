@@ -12,6 +12,10 @@ declare var ace: any;
 export class EditorComponent implements OnInit {
   @Input()
   mode: String = 'text';
+
+  @Input()
+  theme: String;
+
   editor: any;
 
   ngOnInit() {
@@ -21,6 +25,9 @@ export class EditorComponent implements OnInit {
     const EditorMode = ace.require('ace/mode/' + this.mode).Mode;
     const Vim = ace.require('ace/keyboard/vim');
     this.editor.session.setMode(new EditorMode());
+    if (this.theme) {
+      this.editor.setTheme('ace/theme/' + this.theme);
+    }
     this.editor.setKeyboardHandler(Vim.handler);
     this.editor.setFontSize(14);
     this.editor.$blockScrolling = Infinity;
