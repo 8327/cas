@@ -54,8 +54,8 @@ import {HeaderService} from './header/header.service';
     SearchComponent,
     RevertComponent,
     InitComponent,
-    LocalChangesComponent
-    FooterComponent,
+    LocalChangesComponent,
+    FooterComponent
   ],
   entryComponents: [
     DeleteComponent,
