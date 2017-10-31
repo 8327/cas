@@ -1,12 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AttributeReleaseFiltersComponent } from './attribute-release-filters.component';
-import {SharedModule} from "../../shared/shared.module";
-import {FormsModule} from "@angular/forms";
-import {Messages} from "../../messages";
-import {Data} from "../data";
-import {FormData} from "../../../domain/service-view-bean";
-import {RegexRegisteredService} from "../../../domain/registered-service";
+import {SharedModule} from '../../shared/shared.module';
+import {FormsModule} from '@angular/forms';
+import {Messages} from '../../messages';
 
 describe('AttributeReleaseFiltersComponent', () => {
   let component: AttributeReleaseFiltersComponent;

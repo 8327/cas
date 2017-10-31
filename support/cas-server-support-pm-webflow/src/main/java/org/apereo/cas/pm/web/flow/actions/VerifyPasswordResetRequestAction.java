@@ -38,10 +38,11 @@ public class VerifyPasswordResetRequestAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) throws Exception {
+    protected Event doExecute(final RequestContext requestContext) {
         final PasswordManagementProperties pm = casProperties.getAuthn().getPm();
 
         final HttpServletRequest request = WebUtils.getHttpServletRequestFromExternalWebflowContext(requestContext);
+        LOGGER.debug("Checking for token at param [{}]", PARAMETER_NAME_TOKEN);
         final String token = request.getParameter(PARAMETER_NAME_TOKEN);
 
         if (StringUtils.isBlank(token)) {

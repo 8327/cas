@@ -471,6 +471,9 @@ To learn more about this topic, [please review this guide](Monitoring-Statistics
 # cas.monitor.endpoints.dashboard.enabled=false
 # cas.monitor.endpoints.dashboard.sensitive=true
 
+# cas.monitor.endpoints.discovery.enabled=false
+# cas.monitor.endpoints.discovery.sensitive=true
+
 # cas.monitor.endpoints.auditEvents.enabled=false
 # cas.monitor.endpoints.auditEvents.sensitive=true
 
@@ -2040,8 +2043,9 @@ If the password policy strategy is to be handed off to a Groovy script, the outl
 
 ```groovy
 import java.util.*
-import org.apereo.cas.authentication.*
 import org.ldaptive.auth.*
+import org.apereo.cas.*
+import org.apereo.cas.authentication.*
 import org.apereo.cas.authentication.support.*
 
 def List<MessageDescriptor> run(final Object... args) {
@@ -2269,7 +2273,9 @@ To learn more about this topic, [please review this guide](JWT-Authentication.ht
 # cas.authn.token.principalTransformation.prefix=
 ```
 
-### JWT Service Tickets
+### JWT Tickets
+
+Allow CAS tickets through various protocol channels to be created as JWTs. See [this guide](Configure-ServiceTicket-JWT.html) or [this guide](../protocol/REST-Protocol.html) for more info.
 
 ```properties
 # cas.authn.token.crypto.enabled=true
@@ -5815,6 +5821,9 @@ To learn more about this topic, [please review this guide](Password-Policy-Enfor
 # cas.authn.pm.reset.expirationMinutes=1
 # cas.authn.pm.reset.emailAttribute=mail
 # cas.authn.pm.reset.securityQuestionsEnabled=true
+
+# Automatically log in after successful password change
+# cas.authn.pm.autoLogin=false
 
 # Used to sign/encrypt the password-reset link
 # cas.authn.pm.reset.crypto.encryption.key=
