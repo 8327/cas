@@ -84,7 +84,7 @@ public class LdapConsentRepository implements ConsentRepository {
                         .collect(Collectors.toSet());
             }
         }
-        return new HashSet<>(0);
+        return new HashSet<>();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class LdapConsentRepository implements ConsentRepository {
             return CollectionUtils.wrap(decisions);
         }
         LOGGER.debug("No consent decision could be found");
-        return new HashSet<>(0);
+        return new HashSet<>();
     }
 
     @Override
@@ -231,7 +231,7 @@ public class LdapConsentRepository implements ConsentRepository {
         } catch (final LdapException e) {
             LOGGER.debug(e.getMessage(), e);
         }
-        return new HashSet<>(0);
+        return new HashSet<>();
     }
 
     private static ConsentDecision mapFromJson(final String json) {

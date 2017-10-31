@@ -5,6 +5,7 @@ import org.apereo.cas.authentication.BasicCredentialMetaData;
 import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.DefaultHandlerResult;
 import org.apereo.cas.authentication.HandlerResult;
+import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.apereo.cas.authentication.principal.Principal;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
@@ -47,7 +48,7 @@ public class JcifsSpnegoAuthenticationHandler extends AbstractPreAndPostProcessi
     }
 
     @Override
-    protected HandlerResult doAuthentication(final Credential credential) throws GeneralSecurityException {
+    protected HandlerResult doAuthentication(final Credential credential) throws GeneralSecurityException, PreventedException {
         final SpnegoCredential spnegoCredential = (SpnegoCredential) credential;
         final java.security.Principal principal;
         final byte[] nextToken;

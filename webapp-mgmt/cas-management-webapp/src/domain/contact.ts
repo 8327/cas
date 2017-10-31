@@ -7,14 +7,15 @@ export class RegisteredServiceContact {
 }
 
 export class DefaultRegisteredServiceContact extends RegisteredServiceContact {
-  static cName = 'org.apereo.cas.services.DefaultRegisteredServiceContact';
 
-  static instanceOf(obj: any): boolean {
-    return obj && obj['@class'] === DefaultRegisteredServiceContact.cName;
-  }
+  static cName = "org.apereo.cas.services.DefaultRegisteredServiceContact";
 
   constructor() {
     super();
-    this['@class'] = DefaultRegisteredServiceContact.cName;
+    this["@class"] = DefaultRegisteredServiceContact.cName;
+  }
+
+  static instanceOf(obj: any): boolean {
+    return obj && obj["@class"] === DefaultRegisteredServiceContact.cName;
   }
 }

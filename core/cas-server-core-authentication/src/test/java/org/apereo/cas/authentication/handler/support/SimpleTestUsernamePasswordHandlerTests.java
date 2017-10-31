@@ -25,7 +25,7 @@ public class SimpleTestUsernamePasswordHandlerTests {
     private SimpleTestUsernamePasswordAuthenticationHandler authenticationHandler;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.authenticationHandler = new SimpleTestUsernamePasswordAuthenticationHandler();
     }
 

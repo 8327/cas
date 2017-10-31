@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from "@angular/forms";
+import { RouterTestingModule } from "@angular/router/testing";
 
 import { ControlsComponent } from './controls.component';
-import {Messages} from '../messages';
-import {ControlsService} from './controls.service';
+import {Messages} from "../messages";
+import {ControlsService} from "./controls.service";
 
-const userServiceStub = {
+let userServiceStub = {
   getRoles(): Promise<String[]> {
     return Promise.resolve([]);
   },
@@ -15,7 +15,7 @@ const userServiceStub = {
   }
 };
 
-const controlsServiceStub = {
+let controlsServiceStub = {
 }
 
 describe('ControlsComponent', () => {

@@ -52,7 +52,7 @@ public abstract class AbstractServiceValidateControllerTests extends AbstractCen
         this.serviceValidateController.setApplicationContext(context);
     }
 
-    protected HttpServletRequest getHttpServletRequest() {
+    protected HttpServletRequest getHttpServletRequest() throws Exception {
         final AuthenticationResult ctx = CoreAuthenticationTestUtils.getAuthenticationResult(getAuthenticationSystemSupport(), SERVICE);
 
         final TicketGrantingTicket tId = getCentralAuthenticationService().createTicketGrantingTicket(ctx);

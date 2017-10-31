@@ -13,14 +13,6 @@ import org.apereo.services.persondir.IPersonAttributeDao;
  */
 public class SurrogatePrincipalResolver extends PersonDirectoryPrincipalResolver {
 
-    public SurrogatePrincipalResolver(final IPersonAttributeDao attributeRepository) {
-        super(attributeRepository);
-    }
-
-    public SurrogatePrincipalResolver(final IPersonAttributeDao attributeRepository, final String principalAttributeName) {
-        super(attributeRepository, principalAttributeName);
-    }
-    
     public SurrogatePrincipalResolver(final IPersonAttributeDao attributeRepository, final PrincipalFactory principalFactory,
                                       final boolean returnNullIfNoAttributes,
                                       final String principalAttributeName) {
@@ -30,10 +22,7 @@ public class SurrogatePrincipalResolver extends PersonDirectoryPrincipalResolver
     @Override
     protected String extractPrincipalId(final Credential credential, final Principal currentPrincipal) {
         if (!credential.getClass().equals(SurrogateUsernamePasswordCredential.class)) {
-            return super.extractPrincipalId(credential, currentPrincipal);
-        }
-        if (currentPrincipal == null) {
-            throw new IllegalArgumentException("Current principal resolved cannot be null");
+            super.extractPrincipalId(credential, currentPrincipal);
         }
         return currentPrincipal.getId();
     }

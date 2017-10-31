@@ -28,7 +28,7 @@ public class WsFederationWebflowConfigurer extends AbstractCasWebflowConfigurer 
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         final Flow flow = getLoginFlow();
         if (flow != null) {
             createEndState(flow, WS_FEDERATION_REDIRECT, "flowScope.WsFederationIdentityProviderUrl", true);

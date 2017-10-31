@@ -159,7 +159,7 @@ public class LdapServiceRegistryDaoTests extends AbstractLdapTests {
     }
 
     @Test
-    public void verifyDeletingSingleService() {
+    public void verifyDeletingSingleService() throws Exception {
         final RegisteredService rs = getRegexRegisteredService();
         final RegisteredService rs2 = getRegexRegisteredService();
         this.dao.save(rs2);
@@ -174,7 +174,7 @@ public class LdapServiceRegistryDaoTests extends AbstractLdapTests {
     }
 
     @Test
-    public void verifyDeletingServices() {
+    public void verifyDeletingServices() throws Exception {
         this.dao.save(getRegexRegisteredService());
         this.dao.save(getRegexRegisteredService());
         final List<RegisteredService> services = this.dao.load();

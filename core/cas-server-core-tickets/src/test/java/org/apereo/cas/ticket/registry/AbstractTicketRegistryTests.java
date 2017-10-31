@@ -85,8 +85,9 @@ public abstract class AbstractTicketRegistryTests {
      * return the TicketRegistry they wish to test.
      *
      * @return the TicketRegistry we wish to test
+     * @throws Exception the exception
      */
-    public abstract TicketRegistry getNewTicketRegistry();
+    public abstract TicketRegistry getNewTicketRegistry() throws Exception;
 
     /**
      * Determine whether the tested registry is able to iterate its tickets.
@@ -335,7 +336,7 @@ public abstract class AbstractTicketRegistryTests {
     }
 
     @Test
-    public void verifyWriteGetDelete() {
+    public void verifyWriteGetDelete() throws Exception {
         final Ticket ticket = new TicketGrantingTicketImpl(TicketGrantingTicket.PREFIX,
                 CoreAuthenticationTestUtils.getAuthentication(),
                 new NeverExpiresExpirationPolicy());
@@ -348,7 +349,7 @@ public abstract class AbstractTicketRegistryTests {
     }
 
     @Test
-    public void verifyExpiration() {
+    public void verifyExpiration() throws Exception {
         final String id = "ST-1234567890ABCDEFGHIJKL-exp1";
         final MockServiceTicket ticket = new MockServiceTicket(id, RegisteredServiceTestUtils.getService(), new MockTicketGrantingTicket("test"));
         ticket.setExpiration(new AlwaysExpiresExpirationPolicy());

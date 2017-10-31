@@ -58,7 +58,7 @@ public class SamlMetadataUIParserAction extends AbstractAction {
     }
 
     @Override
-    public Event doExecute(final RequestContext requestContext) {
+    public Event doExecute(final RequestContext requestContext) throws Exception {
         final String entityId = getEntityIdFromRequest(requestContext);
         if (StringUtils.isBlank(entityId)) {
             LOGGER.debug("No entity id found for parameter [{}]", this.entityIdParameterName);

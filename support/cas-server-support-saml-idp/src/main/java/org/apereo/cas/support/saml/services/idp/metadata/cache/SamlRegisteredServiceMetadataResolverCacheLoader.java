@@ -52,7 +52,7 @@ public class SamlRegisteredServiceMetadataResolverCacheLoader implements CacheLo
     }
 
     @Override
-    public ChainingMetadataResolver load(final SamlRegisteredService service) {
+    public ChainingMetadataResolver load(final SamlRegisteredService service) throws Exception {
         try {
             final ChainingMetadataResolver metadataResolver = new ChainingMetadataResolver();
             final List<MetadataResolver> metadataResolvers = new ArrayList<>();

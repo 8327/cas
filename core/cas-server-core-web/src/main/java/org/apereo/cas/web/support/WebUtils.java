@@ -26,6 +26,7 @@ import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.core.profile.UserProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -389,19 +390,8 @@ public final class WebUtils {
     public static Credential getCredential(final RequestContext context) {
         final Credential cFromRequest = (Credential) context.getRequestScope().get(PARAMETER_CREDENTIAL);
         final Credential cFromFlow = (Credential) context.getFlowScope().get(PARAMETER_CREDENTIAL);
-        final Credential cFromConversation = (Credential) context.getConversationScope().get(PARAMETER_CREDENTIAL);
 
-        Credential credential = cFromRequest;
-        if (credential == null || StringUtils.isBlank(credential.getId())) {
-            credential = cFromFlow;
-        }
-        if (credential == null || StringUtils.isBlank(credential.getId())) {
-            credential = cFromConversation;
-            if (credential != null && !StringUtils.isBlank(credential.getId())) {
-                //aup and some other modules look only in flow scope via expressions, push down if needed
-                context.getFlowScope().put(PARAMETER_CREDENTIAL, credential);
-            }
-        }
+        Credential credential = cFromRequest != null ? cFromRequest : cFromFlow;
 
         if (credential == null) {
             final FlowSession session = context.getFlowExecutionContext().getActiveSession();
@@ -423,11 +413,9 @@ public final class WebUtils {
         if (c == null) {
             context.getRequestScope().remove(PARAMETER_CREDENTIAL);
             context.getFlowScope().remove(PARAMETER_CREDENTIAL);
-            context.getConversationScope().remove(PARAMETER_CREDENTIAL);
         } else {
             context.getRequestScope().put(PARAMETER_CREDENTIAL, c);
             context.getFlowScope().put(PARAMETER_CREDENTIAL, c);
-            context.getConversationScope().put(PARAMETER_CREDENTIAL, c);
         }
     }
 
@@ -627,7 +615,7 @@ public final class WebUtils {
         }
         return null;
     }
-
+    
     /**
      * Gets http servlet request user agent.
      *
@@ -655,7 +643,7 @@ public final class WebUtils {
         }
         return headers;
     }
-
+    
     /**
      * Gets http servlet request geo location.
      *
@@ -802,6 +790,22 @@ public final class WebUtils {
      */
     public static boolean isRememberMeAuthenticationEnabled(final RequestContext context) {
         return context.getFlowScope().getBoolean("rememberMeAuthenticationEnabled", false);
+    }
+
+    /**
+     * Gets all multifactor authentication providers from application context.
+     *
+     * @param applicationContext the application context
+     * @return the all multifactor authentication providers from application context
+     */
+    public static Map<String, MultifactorAuthenticationProvider> getAvailableMultifactorAuthenticationProviders(
+            final ApplicationContext applicationContext) {
+        try {
+            return applicationContext.getBeansOfType(MultifactorAuthenticationProvider.class, false, true);
+        } catch (final Exception e) {
+            LOGGER.warn("Could not locate beans of type [{}]", MultifactorAuthenticationProvider.class);
+        }
+        return new HashMap<>(0);
     }
 
     /**

@@ -6,6 +6,7 @@ import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.DefaultHandlerResult;
 import org.apereo.cas.authentication.HandlerResult;
 import org.apereo.cas.authentication.OneTimePasswordCredential;
+import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
 
 import javax.security.auth.login.FailedLoginException;
@@ -34,7 +35,7 @@ public class TestOneTimePasswordAuthenticationHandler extends AbstractAuthentica
 
     @Override
     public HandlerResult authenticate(final Credential credential)
-            throws GeneralSecurityException {
+            throws GeneralSecurityException, PreventedException {
         final OneTimePasswordCredential otp = (OneTimePasswordCredential) credential;
         final String valueOnRecord = credentialMap.get(otp.getId());
         if (otp.getPassword().equals(valueOnRecord)) {

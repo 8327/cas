@@ -98,8 +98,10 @@ public abstract class AbstractWrapperAuthenticationHandler<I extends Credential,
      * @param casCredential the CAS credential
      * @return the pac4j credentials
      * @throws GeneralSecurityException On authentication failure.
+     * @throws PreventedException On the indeterminate case when authentication is prevented.
      */
-    protected abstract C convertToPac4jCredentials(I casCredential) throws GeneralSecurityException;
+    protected abstract C convertToPac4jCredentials(I casCredential) throws GeneralSecurityException,
+            PreventedException;
 
     /**
      * Return the CAS credential supported by this handler (to be converted in a pac4j credentials

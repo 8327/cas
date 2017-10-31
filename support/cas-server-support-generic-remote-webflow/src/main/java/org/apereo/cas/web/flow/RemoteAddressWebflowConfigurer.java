@@ -25,7 +25,7 @@ public class RemoteAddressWebflowConfigurer extends AbstractCasWebflowConfigurer
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         final Flow flow = getLoginFlow();
         if (flow != null) {
             final ActionState actionState = createActionState(flow, "startAuthenticate", createEvaluateAction("remoteAddressCheck"));

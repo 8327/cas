@@ -38,7 +38,7 @@ public class RestConsentRepositoryTests {
     }
 
     @Test
-    public void verifyConsentDecisionIsNotFound() {
+    public void verifyConsentDecisionIsNotFound() throws Exception {
         server.expect(manyTimes(), requestTo("/consent"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withServerError());
@@ -73,7 +73,7 @@ public class RestConsentRepositoryTests {
     }
     
     @Test
-    public void verifyConsentDecisionIsDeleted() {
+    public void verifyConsentDecisionIsDeleted() throws Exception {
         server.expect(manyTimes(), requestTo("/consent/1"))
                 .andExpect(method(HttpMethod.DELETE))
                 .andRespond(withSuccess());

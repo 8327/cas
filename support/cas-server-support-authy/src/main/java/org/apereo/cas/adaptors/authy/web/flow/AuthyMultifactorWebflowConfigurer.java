@@ -28,7 +28,7 @@ public class AuthyMultifactorWebflowConfigurer extends AbstractCasMultifactorWeb
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_AUTHY_EVENT_ID, this.flowDefinitionRegistry);
     }
 }

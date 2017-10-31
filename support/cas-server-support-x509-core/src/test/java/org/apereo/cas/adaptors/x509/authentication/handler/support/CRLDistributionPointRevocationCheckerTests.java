@@ -88,7 +88,7 @@ public class CRLDistributionPointRevocationCheckerTests extends AbstractCRLRevoc
      * @return Test parameter data.
      */
     @Parameters
-    public static Collection<Object[]> getTestParameters() {
+    public static Collection<Object[]> getTestParameters() throws Exception {
         CacheManager.getInstance().removeAllCaches();
         final Collection<Object[]> params = new ArrayList<>();
         Cache cache;
@@ -197,9 +197,10 @@ public class CRLDistributionPointRevocationCheckerTests extends AbstractCRLRevoc
     /**
      * Called once before every test.
      *
+     * @throws Exception On setup errors.
      */
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         LOGGER.debug("Stopping web server...");
         this.webServer.stop();
         LOGGER.debug("Web server stopped [{}]", !this.webServer.isRunning());

@@ -11,7 +11,6 @@ import org.apereo.cas.authentication.principal.PrincipalResolver;
 import org.apereo.cas.authentication.principal.ServiceFactory;
 import org.apereo.cas.authentication.principal.WebApplicationService;
 import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.discovery.CasServerProfileRegistrar;
 import org.apereo.cas.monitor.HealthStatus;
 import org.apereo.cas.monitor.Monitor;
 import org.apereo.cas.services.ServicesManager;
@@ -19,7 +18,6 @@ import org.apereo.cas.support.events.CasEventRepository;
 import org.apereo.cas.ticket.registry.TicketRegistrySupport;
 import org.apereo.cas.trusted.authentication.api.MultifactorAuthenticationTrustStorage;
 import org.apereo.cas.web.report.AuthenticationEventsController;
-import org.apereo.cas.web.report.CasServerDiscoveryProfileController;
 import org.apereo.cas.web.report.ConfigurationStateController;
 import org.apereo.cas.web.report.DashboardController;
 import org.apereo.cas.web.report.HealthCheckController;
@@ -56,7 +54,6 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
  * The {@link MvcEndpoint} instances in this configuration class
  * MUST NOT be marked as {@link org.springframework.cloud.context.config.annotation.RefreshScope}
  * because they are not quite reloadable and the proxy that is created interferes with web mvc.
- *
  * @author Misagh Moayyed
  * @since 5.0.0
  */
@@ -92,7 +89,7 @@ public class CasReportsConfiguration extends AbstractWebSocketMessageBrokerConfi
     @Autowired
     @Qualifier("cas1ServiceSuccessView")
     private View cas1ServiceSuccessView;
-
+    
     @Autowired
     @Qualifier("defaultTicketRegistrySupport")
     private TicketRegistrySupport ticketRegistrySupport;
@@ -138,7 +135,7 @@ public class CasReportsConfiguration extends AbstractWebSocketMessageBrokerConfi
 
     @Bean
     public MvcEndpoint personDirectoryAttributeResolutionController() {
-        return new PersonDirectoryAttributeResolutionController(casProperties, servicesManager,
+        return new PersonDirectoryAttributeResolutionController(casProperties, servicesManager, 
                 authenticationSystemSupport, personDirectoryPrincipalResolver, webApplicationServiceFactory,
                 principalFactory, cas3ServiceSuccessView, cas3ServiceJsonView, cas2ServiceSuccessView, cas1ServiceSuccessView);
     }
@@ -227,20 +224,6 @@ public class CasReportsConfiguration extends AbstractWebSocketMessageBrokerConfi
         }
     }
 
-    /**
-     * The type server discovery profile configuration.
-     */
-    @ConditionalOnClass(value = CasServerProfileRegistrar.class)
-    @Configuration("serverDiscoveryProfileConfiguration")
-    public class ServerDiscoveryProfileConfiguration {
-
-        @Autowired
-        @Bean
-        public MvcEndpoint discoveryController(@Qualifier("casServerProfileRegistrar") final CasServerProfileRegistrar casServerProfileRegistrar) {
-            return new CasServerDiscoveryProfileController(casProperties, servicesManager, casServerProfileRegistrar);
-        }
-    }
-    
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry config) {
         config.enableSimpleBroker("/logs");

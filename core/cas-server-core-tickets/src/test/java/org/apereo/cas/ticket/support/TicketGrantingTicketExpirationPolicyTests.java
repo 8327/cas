@@ -42,7 +42,7 @@ public class TicketGrantingTicketExpirationPolicyTests {
     private TicketGrantingTicket ticketGrantingTicket;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.expirationPolicy = new MovingTimeTicketExpirationPolicy();
         this.ticketGrantingTicket = new TicketGrantingTicketImpl(TGT_ID, CoreAuthenticationTestUtils.getAuthentication(), this.expirationPolicy);
     }

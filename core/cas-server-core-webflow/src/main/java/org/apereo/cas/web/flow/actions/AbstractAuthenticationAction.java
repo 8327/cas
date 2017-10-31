@@ -38,7 +38,7 @@ public abstract class AbstractAuthenticationAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final String agent = WebUtils.getHttpServletRequestUserAgent();
         final GeoLocationRequest geoLocation = WebUtils.getHttpServletRequestGeoLocation();
 

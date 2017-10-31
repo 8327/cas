@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {TabBaseComponent} from '../tab-base';
+import {TabBase} from "../tab-base";
 
 @Component({
   selector: 'app-tab-proxy',
   templateUrl: './tab-proxy.component.html'
 })
-export class TabProxyComponent extends TabBaseComponent {}
+export class TabProxyComponent extends TabBase {}

@@ -29,7 +29,7 @@ public class GoogleAuthenticatorMultifactorWebflowConfigurer extends AbstractCas
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_GAUTH_EVENT_ID, this.flowDefinitionRegistry);
     }
 }

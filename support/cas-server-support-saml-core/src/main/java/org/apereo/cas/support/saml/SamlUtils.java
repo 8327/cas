@@ -155,9 +155,10 @@ public final class SamlUtils {
      * @param resourceLoader            the resource loader
      * @param signatureResourceLocation the signature resource location
      * @return the metadata filter
+     * @throws Exception the exception
      */
     public static SignatureValidationFilter buildSignatureValidationFilter(final ResourceLoader resourceLoader,
-                                                                           final String signatureResourceLocation) {
+                                                                           final String signatureResourceLocation) throws Exception {
         try {
             final Resource resource = resourceLoader.getResource(signatureResourceLocation);
             return buildSignatureValidationFilter(resource);

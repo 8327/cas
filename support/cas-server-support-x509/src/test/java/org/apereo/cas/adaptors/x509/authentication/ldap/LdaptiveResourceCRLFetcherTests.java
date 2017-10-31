@@ -83,7 +83,7 @@ public class LdaptiveResourceCRLFetcherTests extends AbstractX509LdapTests {
     }
     
     @BeforeClass
-    public static void bootstrapTests() throws Exception {
+    public static void bootstrap() throws Exception {
         initDirectoryServer();
         AbstractX509LdapTests.bootstrap();
     }

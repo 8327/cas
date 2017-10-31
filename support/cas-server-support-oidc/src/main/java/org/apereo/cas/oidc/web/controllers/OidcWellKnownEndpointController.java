@@ -48,9 +48,10 @@ public class OidcWellKnownEndpointController extends BaseOAuth20Controller {
      * Gets well known discovery configuration.
      *
      * @return the well known discovery configuration
+     * @throws Exception the exception
      */
     @GetMapping(value = '/' + OidcConstants.BASE_OIDC_URL + "/.well-known", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OidcServerDiscoverySettings> getWellKnownDiscoveryConfiguration() {
+    public ResponseEntity<OidcServerDiscoverySettings> getWellKnownDiscoveryConfiguration() throws Exception {
         return new ResponseEntity(this.discovery, HttpStatus.OK);
     }
 

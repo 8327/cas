@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Transient;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -89,17 +90,17 @@ public class CachingPrincipalAttributesRepository extends AbstractPrincipalAttri
         } catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return new HashMap<>(0);
+        return new HashMap<>();
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
         this.cache.cleanUp();
     }
 
     private static class PrincipalAttributesCacheLoader implements CacheLoader<String, Map<String, Object>> {
         @Override
-        public Map<String, Object> load(final String key) {
+        public Map<String, Object> load(final String key) throws Exception {
             return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         }
     }

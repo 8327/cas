@@ -29,7 +29,7 @@ public class RedirectToServiceAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final WebApplicationService service = WebUtils.getService(requestContext);
         LOGGER.debug("Located service [{}] from the context", service);
 

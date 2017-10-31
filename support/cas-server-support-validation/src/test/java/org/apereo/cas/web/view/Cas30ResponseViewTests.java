@@ -102,7 +102,7 @@ public class Cas30ResponseViewTests extends AbstractServiceValidateControllerTes
             }
 
             @Override
-            public void render(final Map<String, ?> map, final HttpServletRequest request, final HttpServletResponse response) {
+            public void render(final Map<String, ?> map, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
                 LOGGER.warn("Setting attribute [{}]", map.keySet());
                 map.forEach(request::setAttribute);
             }

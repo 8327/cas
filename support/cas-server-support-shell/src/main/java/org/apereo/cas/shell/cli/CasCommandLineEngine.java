@@ -32,6 +32,7 @@ public class CasCommandLineEngine {
         }
 
         final boolean strict = parser.isStrictMatch(line);
+        final Pattern groupPattern = parser.getGroup(line);
         final Pattern propertyPattern = parser.getProperty(line);
 
         if (parser.isGeneratingKey(line)) {
@@ -42,7 +43,7 @@ public class CasCommandLineEngine {
             cmd.generate(parser.getSubject(line));
         } else {
             final FindPropertiesCommand cmd = new FindPropertiesCommand();
-            cmd.find(propertyPattern.pattern(), strict, parser.isSummary(line));
+            cmd.find(strict, parser.isSummary(line), groupPattern, propertyPattern);
         }
     }
 }

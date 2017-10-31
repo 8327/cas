@@ -79,8 +79,9 @@ public final class LdapTestUtils {
      *
      * @param connection Open LDAP connection used to connect to directory.
      * @param entries    Collection of LDAP entries.
+     * @throws Exception On LDAP errors.
      */
-    public static void createLdapEntries(final LDAPConnection connection, final Collection<LdapEntry> entries) {
+    public static void createLdapEntries(final LDAPConnection connection, final Collection<LdapEntry> entries) throws Exception {
         try {
             for (final LdapEntry entry : entries) {
                 final Collection<Attribute> attrs = new ArrayList<>(entry.getAttributeNames().length);

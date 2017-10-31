@@ -44,10 +44,11 @@ public class TrustedDevicesController extends BaseCasMvcEndpoint {
      * @param request  the request
      * @param response the response
      * @return the model and view
+     * @throws Exception the exception
      */
     @GetMapping
     protected ModelAndView handleRequestInternal(final HttpServletRequest request,
-                                                 final HttpServletResponse response) {
+                                                 final HttpServletResponse response) throws Exception {
         ensureEndpointAccessIsAuthorized(request, response);
 
         return new ModelAndView("monitoring/viewTrustedDevices");
@@ -59,11 +60,12 @@ public class TrustedDevicesController extends BaseCasMvcEndpoint {
      * @param request  the request
      * @param response the response
      * @return the records
+     * @throws Exception the exception
      */
     @GetMapping(value = "/getRecords")
     @ResponseBody
     public Set<MultifactorAuthenticationTrustRecord> getRecords(final HttpServletRequest request,
-                                                                final HttpServletResponse response) {
+                                                                final HttpServletResponse response) throws Exception {
         ensureEndpointAccessIsAuthorized(request, response);
 
         final TrustedDevicesMultifactorProperties trusted = casProperties.getAuthn().getMfa().getTrusted();
@@ -80,11 +82,12 @@ public class TrustedDevicesController extends BaseCasMvcEndpoint {
      * @param request  the request
      * @param response the response
      * @return the integer
+     * @throws Exception the exception
      */
     @PostMapping(value = "/revokeRecord")
     @ResponseBody
     public Integer revokeRecord(@RequestParam final String key, final HttpServletRequest request,
-                                final HttpServletResponse response) {
+                                final HttpServletResponse response) throws Exception {
         ensureEndpointAccessIsAuthorized(request, response);
 
         this.mfaTrustEngine.expire(key);

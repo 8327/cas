@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -67,7 +69,7 @@ public class GoogleAccountsServiceFactoryTests extends AbstractOpenSamlTests {
         assertNotNull(response);
     }
 
-    private static String encodeMessage(final String xmlString) {
+    private static String encodeMessage(final String xmlString) throws IOException {
         return CompressionUtils.deflate(xmlString);
     }
 }

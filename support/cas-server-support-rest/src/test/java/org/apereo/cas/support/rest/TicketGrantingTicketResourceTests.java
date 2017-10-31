@@ -10,8 +10,6 @@ import org.apereo.cas.authentication.DefaultAuthenticationSystemSupport;
 import org.apereo.cas.authentication.DefaultAuthenticationTransactionManager;
 import org.apereo.cas.authentication.DefaultPrincipalElectionStrategy;
 import org.apereo.cas.authentication.principal.WebApplicationServiceFactory;
-import org.apereo.cas.support.rest.factory.DefaultCredentialFactory;
-import org.apereo.cas.support.rest.factory.DefaultTicketGrantingTicketResourceEntityResponseFactory;
 import org.apereo.cas.support.rest.resources.TicketGrantingTicketResource;
 import org.apereo.cas.ticket.TicketGrantingTicket;
 import org.apereo.cas.ticket.registry.TicketRegistrySupport;
@@ -63,7 +61,7 @@ public class TicketGrantingTicketResourceTests {
     private MockMvc mockMvc;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         final AuthenticationManager mgmr = mock(AuthenticationManager.class);
         when(mgmr.authenticate(any(AuthenticationTransaction.class))).thenReturn(CoreAuthenticationTestUtils.getAuthentication());
         when(ticketSupport.getAuthenticationFrom(anyString())).thenReturn(CoreAuthenticationTestUtils.getAuthentication());
@@ -71,7 +69,7 @@ public class TicketGrantingTicketResourceTests {
         this.ticketGrantingTicketResourceUnderTest = new TicketGrantingTicketResource(
                 new DefaultAuthenticationSystemSupport(new DefaultAuthenticationTransactionManager(mgmr),
                         new DefaultPrincipalElectionStrategy()), new DefaultCredentialFactory(),
-                casMock, new WebApplicationServiceFactory(), new DefaultTicketGrantingTicketResourceEntityResponseFactory());
+                casMock, new WebApplicationServiceFactory());
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.ticketGrantingTicketResourceUnderTest)
                 .defaultRequest(get("/")
@@ -191,21 +189,21 @@ public class TicketGrantingTicketResourceTests {
                 .andExpect(status().isOk());
     }
 
-    private void configureCasMockToCreateValidTGT() {
+    private void configureCasMockToCreateValidTGT() throws Exception {
         final TicketGrantingTicket tgt = mock(TicketGrantingTicket.class);
         when(tgt.getId()).thenReturn("TGT-1");
         when(this.casMock.createTicketGrantingTicket(any(AuthenticationResult.class))).thenReturn(tgt);
 
     }
 
-    private void configureCasMockTGTCreationToThrowAuthenticationException() {
+    private void configureCasMockTGTCreationToThrowAuthenticationException() throws Exception {
         final Map<String, Class<? extends Throwable>> handlerErrors = new HashMap<>(1);
         handlerErrors.put("TestCaseAuthenticationHander", LoginException.class);
         when(this.casMock.createTicketGrantingTicket(any(AuthenticationResult.class)))
                 .thenThrow(new AuthenticationException(handlerErrors));
     }
 
-    private void configureCasMockTGTCreationToThrow(final Exception e) {
+    private void configureCasMockTGTCreationToThrow(final Exception e) throws Exception {
         when(this.casMock.createTicketGrantingTicket(any(AuthenticationResult.class))).thenThrow(e);
     }
 }

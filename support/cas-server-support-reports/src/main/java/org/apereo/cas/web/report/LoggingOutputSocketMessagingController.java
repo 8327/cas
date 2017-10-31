@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
@@ -72,7 +73,7 @@ public class LoggingOutputSocketMessagingController {
         }
     }
 
-    private void registerLogFileTailThreads() {
+    private void registerLogFileTailThreads() throws IOException {
         final Collection<String> outputFileNames = new HashSet<>();
         final Collection<Appender> loggerAppenders = this.loggerContext.getConfiguration().getAppenders().values();
         loggerAppenders.forEach(appender -> {
@@ -102,10 +103,11 @@ public class LoggingOutputSocketMessagingController {
      * Gets logs.
      *
      * @return the log output
+     * @throws Exception the exception
      */
 
     @SendTo("/logs/logoutput")
-    public String logoutput() {
+    public String logoutput() throws Exception {
         synchronized (LOCK) {
             final String log = LOG_OUTPUT.toString();
             LOG_OUTPUT = new StringBuilder();

@@ -27,7 +27,7 @@ public class GoogleAuthenticatorMultifactorTrustWebflowConfigurer extends Abstra
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorTrustedAuthentication(this.flowDefinitionRegistry);
     }
 }

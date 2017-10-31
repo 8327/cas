@@ -42,17 +42,17 @@ public class MockLoginModule implements LoginModule {
     }
 
     @Override
-    public boolean commit() {
+    public boolean commit() throws LoginException {
         return true;
     }
 
     @Override
-    public boolean abort() {
+    public boolean abort() throws LoginException {
         return true;
     }
 
     @Override
-    public boolean logout() {
+    public boolean logout() throws LoginException {
         return true;
     }
 }

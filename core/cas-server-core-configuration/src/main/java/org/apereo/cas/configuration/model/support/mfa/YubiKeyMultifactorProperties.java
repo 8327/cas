@@ -19,13 +19,7 @@ import java.util.Map;
  */
 @RequiresModule(name = "cas-server-support-yubikey")
 public class YubiKeyMultifactorProperties extends BaseMultifactorProviderProperties {
-    /**
-     * Provider id by default.
-     */
-    public static final String DEFAULT_IDENTIFIER = "mfa-yubikey";
-
     private static final long serialVersionUID = 9138057706201201089L;
-    
     /**
      * Yubikey client id.
      */
@@ -68,7 +62,7 @@ public class YubiKeyMultifactorProperties extends BaseMultifactorProviderPropert
     private MongoDb mongo = new MongoDb();
 
     public YubiKeyMultifactorProperties() {
-        setId(DEFAULT_IDENTIFIER);
+        setId("mfa-yubikey");
     }
 
     public boolean isTrustedDeviceEnabled() {

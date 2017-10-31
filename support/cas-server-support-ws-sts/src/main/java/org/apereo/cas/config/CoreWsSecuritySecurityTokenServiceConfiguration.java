@@ -244,7 +244,9 @@ public class CoreWsSecuritySecurityTokenServiceConfiguration {
 
     @Bean
     public TokenValidator transportSamlTokenValidator() {
-        return new SAMLTokenValidator();
+        final WsFederationProperties.IdentityProvider idp = casProperties.getAuthn().getWsfedIdp().getIdp();
+        final SAMLTokenValidator v = new SAMLTokenValidator();
+        return v;
     }
 
     @RefreshScope

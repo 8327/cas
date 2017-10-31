@@ -44,7 +44,7 @@ public class PatternMatchingEntityIdAttributeReleasePolicy extends BaseSamlRegis
         if (matched) {
             return authorizeReleaseOfAllowedAttributes(attributes);
         }
-        return new HashMap<>(0);
+        return new HashMap<>();
     }
 
     public String getEntityIds() {

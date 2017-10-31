@@ -24,7 +24,7 @@ public class AuthyAuthenticationRegistrationWebflowAction extends AbstractAction
     }
 
     @Override
-    protected Event doExecute(final RequestContext context) {
+    protected Event doExecute(final RequestContext context) throws Exception {
         final Principal principal = WebUtils.getAuthentication(context).getPrincipal();
         final User user = instance.getOrCreateUser(principal);
         if (!user.isOk()) {

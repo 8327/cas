@@ -11,13 +11,8 @@ import org.apereo.cas.configuration.support.RequiredProperty;
  */
 @RequiresModule(name = "cas-server-support-swivel")
 public class SwivelMultifactorProperties extends BaseMultifactorProviderProperties {
-    /**
-     * Provider id by default.
-     */
-    public static final String DEFAULT_IDENTIFIER = "mfa-swivel";
-
     private static final long serialVersionUID = -7409451053833491119L;
-    
+
     /**
      * URL endpoint response to generate a turing image.
      */
@@ -39,7 +34,7 @@ public class SwivelMultifactorProperties extends BaseMultifactorProviderProperti
     private boolean ignoreSslErrors;
 
     public SwivelMultifactorProperties() {
-        setId(DEFAULT_IDENTIFIER);
+        setId("mfa-swivel");
     }
 
     public String getSwivelTuringImageUrl() {

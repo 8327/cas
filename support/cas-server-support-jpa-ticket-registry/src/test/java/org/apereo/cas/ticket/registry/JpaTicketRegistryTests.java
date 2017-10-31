@@ -152,7 +152,7 @@ public class JpaTicketRegistryTests {
 
 
     @Test
-    public void verifyTicketCreationAndDeletion() {
+    public void verifyTicketCreationAndDeletion() throws Exception {
         // TGT
         final TicketGrantingTicket newTgt = newTGT();
         addTicketInTransaction(newTgt);
@@ -218,7 +218,7 @@ public class JpaTicketRegistryTests {
     }
 
     @Test
-    public void verifyConcurrentServiceTicketGeneration() {
+    public void verifyConcurrentServiceTicketGeneration() throws Exception {
         final TicketGrantingTicket newTgt = newTGT();
         addTicketInTransaction(newTgt);
         final ExecutorService executor = Executors.newFixedThreadPool(CONCURRENT_SIZE);
@@ -349,7 +349,7 @@ public class JpaTicketRegistryTests {
         }
 
         @Override
-        public String call() {
+        public String call() throws Exception {
             return new TransactionTemplate(txManager).execute(status -> {
                 final ServiceTicket st = newST((TicketGrantingTicket) jpaTicketRegistry.getTicket(parentTgtId));
                 jpaTicketRegistry.addTicket(st);

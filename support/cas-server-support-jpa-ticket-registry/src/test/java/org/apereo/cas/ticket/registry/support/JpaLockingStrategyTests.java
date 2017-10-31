@@ -122,9 +122,10 @@ public class JpaLockingStrategyTests {
     /**
      * Test basic acquire/release semantics.
      *
+     * @throws Exception On errors.
      */
     @Test
-    public void verifyAcquireAndRelease() {
+    public void verifyAcquireAndRelease() throws Exception {
         try {
             final String appId = "basic";
             final String uniqueId = appId + "-1";
@@ -181,7 +182,7 @@ public class JpaLockingStrategyTests {
      * Test concurrent acquire/release semantics.
      */
     @Test
-    public void verifyConcurrentAcquireAndRelease() {
+    public void verifyConcurrentAcquireAndRelease() throws Exception {
         final ExecutorService executor = Executors.newFixedThreadPool(CONCURRENT_SIZE);
         try {
             testConcurrency(executor, Arrays.asList(getConcurrentLocks("concurrent-new")));
@@ -197,7 +198,7 @@ public class JpaLockingStrategyTests {
      * Test concurrent acquire/release semantics for existing lock.
      */
     @Test
-    public void verifyConcurrentAcquireAndReleaseOnExistingLock() {
+    public void verifyConcurrentAcquireAndReleaseOnExistingLock() throws Exception {
         final LockingStrategy[] locks = getConcurrentLocks("concurrent-exists");
         locks[0].acquire();
         locks[0].release();
@@ -282,7 +283,7 @@ public class JpaLockingStrategyTests {
         }
 
         @Override
-        public Object invoke(final Object proxy, final Method method, final Object[] args) {
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
             return new TransactionTemplate(txManager).execute(status -> {
                 try {
                     final Object result = method.invoke(jpaLock, args);
@@ -308,7 +309,7 @@ public class JpaLockingStrategyTests {
         }
 
         @Override
-        public Boolean call() {
+        public Boolean call() throws Exception {
             try {
                 return lock.acquire();
             } catch (final Exception e) {
@@ -328,7 +329,7 @@ public class JpaLockingStrategyTests {
         }
 
         @Override
-        public Boolean call() {
+        public Boolean call() throws Exception {
             try {
                 lock.release();
                 return true;

@@ -44,9 +44,10 @@ public abstract class AbstractLogoutAction extends AbstractAction {
      * @param response the HTTP response.
      * @param context  the webflow context.
      * @return the event triggered by this actions.
+     * @throws Exception exception returned by this action.
      */
     protected abstract Event doInternalExecute(HttpServletRequest request, HttpServletResponse response,
-                                               RequestContext context);
+                                               RequestContext context) throws Exception;
 
     /**
      * Prevent caching by adding the appropriate headers.

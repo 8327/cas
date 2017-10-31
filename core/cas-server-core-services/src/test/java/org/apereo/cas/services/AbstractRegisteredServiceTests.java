@@ -87,7 +87,7 @@ public class AbstractRegisteredServiceTests {
     }
 
     @Test
-    public void verifyEquals() {
+    public void verifyEquals() throws Exception {
         assertTrue(r.equals(r.clone()));
         assertNotNull(new RegexRegisteredService());
         assertFalse(new RegexRegisteredService().equals(new Object()));
@@ -192,7 +192,7 @@ public class AbstractRegisteredServiceTests {
     }
 
     @Test
-    public void verifyServiceWithInvalidIdStillHasTheSameIdAfterCallingMatches() {
+    public void verifyServiceWithInvalidIdStillHasTheSameIdAfterCallingMatches() throws Exception {
         final String invalidId = "***";
         final AbstractRegisteredService service = RegisteredServiceTestUtils.getRegisteredService(invalidId);
 

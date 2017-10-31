@@ -31,7 +31,7 @@ public class AcceptableUsagePolicyWebflowConfigurer extends AbstractCasWebflowCo
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         final Flow flow = getLoginFlow();
 
         if (flow != null) {

@@ -20,7 +20,7 @@ public class ClearWebflowCredentialAction extends AbstractAction {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClearWebflowCredentialAction.class);
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         WebUtils.putCredential(requestContext, null);
         
         final String current = requestContext.getCurrentEvent().getId();

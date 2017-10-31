@@ -24,7 +24,7 @@ public class GroovyWebflowConfigurer extends AbstractCasWebflowConfigurer {
     }
 
     @Override
-    public void doInitialize() {
+    public void doInitialize() throws Exception {
         final Resource script = casProperties.getWebflow().getGroovy().getLocation();
         if (script != null) {
             final Object[] args = new Object[]{this, applicationContext, LOGGER};

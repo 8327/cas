@@ -134,7 +134,7 @@ public class AuthenticationExceptionHandlerAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final Event currentEvent = requestContext.getCurrentEvent();
         LOGGER.debug("Located current event [{}]", currentEvent);
 

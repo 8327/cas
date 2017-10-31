@@ -31,6 +31,7 @@ public interface RegisteredServicePublicKey extends Serializable {
      * Create instance.
      *
      * @return the public key
+     * @throws Exception the exception thrown if the public key cannot be created
      */
-    PublicKey createInstance();
+    PublicKey createInstance() throws Exception;
 }

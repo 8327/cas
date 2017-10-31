@@ -1,8 +1,6 @@
-import {RegexRegisteredService, RegisteredService} from './registered-service';
+import {RegexRegisteredService, RegisteredService} from "./registered-service";
 
 export class WSFederationRegisterdService extends RegexRegisteredService {
-  static readonly cName = 'org.apereo.cas.ws.idp.services.WSFederationRegisteredService';
-
   realm: String;
   protocol: String;
   tokenType: String;
@@ -14,12 +12,14 @@ export class WSFederationRegisterdService extends RegexRegisteredService {
   wsdlEndpoint: String;
   appliesTo: String;
 
-  static instanceOf(obj: any): boolean {
-    return obj && obj['@class'] === WSFederationRegisterdService.cName;
-  }
+  static readonly cName = "org.apereo.cas.ws.idp.services.WSFederationRegisteredService";
 
   constructor(service?: RegisteredService) {
     super(service);
-    this['@class'] = WSFederationRegisterdService.cName;
+    this["@class"] = WSFederationRegisterdService.cName;
+  }
+
+  static instanceOf(service: RegisteredService): boolean {
+    return service["@class"] === WSFederationRegisterdService.cName;
   }
 }

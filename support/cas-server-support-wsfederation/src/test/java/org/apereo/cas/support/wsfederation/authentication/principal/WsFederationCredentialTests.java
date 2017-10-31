@@ -34,27 +34,27 @@ public class WsFederationCredentialTests extends AbstractWsFederationTests {
     }
 
     @Test
-    public void verifyIsValidAllGood() {
+    public void verifyIsValidAllGood() throws Exception {
         final boolean result = standardCred.isValid(AUDIENCE, ISSUER, 2000);
         assertTrue("testIsValidAllGood() - True", result);
     }
 
     @Test
-    public void verifyIsValidBadAudience() {
+    public void verifyIsValidBadAudience() throws Exception {
         standardCred.setAudience("urn:NotUs");
         final boolean result = standardCred.isValid(AUDIENCE, ISSUER, 2000);
         assertFalse("testIsValidBadAudeience() - False", result);
     }
 
     @Test
-    public void verifyIsValidBadIssuer() {
+    public void verifyIsValidBadIssuer() throws Exception {
         standardCred.setIssuer("urn:NotThem");
         final boolean result = standardCred.isValid(AUDIENCE, ISSUER, 2000);
         assertFalse("testIsValidBadIssuer() - False", result);
     }
 
     @Test
-    public void verifyIsValidEarlyToken() {
+    public void verifyIsValidEarlyToken() throws Exception {
         standardCred.setNotBefore(ZonedDateTime.now(ZoneOffset.UTC).plusDays(1));
         standardCred.setNotOnOrAfter(ZonedDateTime.now(ZoneOffset.UTC).plusHours(1).plusDays(1));
         standardCred.setIssuedOn(ZonedDateTime.now(ZoneOffset.UTC).plusDays(1));
@@ -64,7 +64,7 @@ public class WsFederationCredentialTests extends AbstractWsFederationTests {
     }
 
     @Test
-    public void verifyIsValidOldToken() {
+    public void verifyIsValidOldToken() throws Exception {
         standardCred.setNotBefore(ZonedDateTime.now(ZoneOffset.UTC).minusDays(1));
         standardCred.setNotOnOrAfter(ZonedDateTime.now(ZoneOffset.UTC).plusHours(1).minusDays(1));
         standardCred.setIssuedOn(ZonedDateTime.now(ZoneOffset.UTC).minusDays(1));
@@ -74,7 +74,7 @@ public class WsFederationCredentialTests extends AbstractWsFederationTests {
     }
 
     @Test
-    public void verifyIsValidExpiredIssuedOn() {
+    public void verifyIsValidExpiredIssuedOn() throws Exception {
         standardCred.setIssuedOn(ZonedDateTime.now(ZoneOffset.UTC).minusSeconds(3));
         
         final boolean result = standardCred.isValid(AUDIENCE, ISSUER, 2000);

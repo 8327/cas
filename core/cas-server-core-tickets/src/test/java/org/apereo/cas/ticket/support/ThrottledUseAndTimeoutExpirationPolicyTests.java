@@ -31,7 +31,7 @@ public class ThrottledUseAndTimeoutExpirationPolicyTests {
     private TicketGrantingTicket ticket;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         this.expirationPolicy = new ThrottledUseAndTimeoutExpirationPolicy();
         this.expirationPolicy.setTimeToKillInSeconds(TIMEOUT);
         this.expirationPolicy.setTimeInBetweenUsesInSeconds(TIMEOUT / 5);
@@ -47,13 +47,13 @@ public class ThrottledUseAndTimeoutExpirationPolicyTests {
     }
 
     @Test
-    public void verifyTicketIsExpired() {
+    public void verifyTicketIsExpired() throws InterruptedException {
         expirationPolicy.setTimeToKillInSeconds(-TIMEOUT);
         assertTrue(this.ticket.isExpired());
     }
 
     @Test
-    public void verifyTicketUsedButWithTimeout() {
+    public void verifyTicketUsedButWithTimeout() throws InterruptedException {
         this.ticket.grantServiceTicket("test", RegisteredServiceTestUtils.getService(), this.expirationPolicy, false,
                 true);
         expirationPolicy.setTimeToKillInSeconds(TIMEOUT);

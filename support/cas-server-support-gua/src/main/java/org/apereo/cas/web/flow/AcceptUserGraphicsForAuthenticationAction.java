@@ -15,7 +15,7 @@ import org.springframework.webflow.execution.RequestContext;
 public class AcceptUserGraphicsForAuthenticationAction extends AbstractAction {
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         final String username = requestContext.getRequestParameters().get("username");
         WebUtils.putCredential(requestContext, new UsernamePasswordCredential(username, null));
         requestContext.getFlowScope().put("guaUsername", username);

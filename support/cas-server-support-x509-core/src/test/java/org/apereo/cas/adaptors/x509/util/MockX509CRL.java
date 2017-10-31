@@ -1,8 +1,13 @@
 package org.apereo.cas.adaptors.x509.util;
 
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.Principal;
 import java.security.PublicKey;
+import java.security.SignatureException;
+import java.security.cert.CRLException;
 import java.security.cert.Certificate;
 import java.security.cert.X509CRL;
 import java.security.cert.X509CRLEntry;
@@ -76,7 +81,7 @@ public class MockX509CRL extends X509CRL {
     }
 
     @Override
-    public byte[] getEncoded() {
+    public byte[] getEncoded() throws CRLException {
         return null;
     }
 
@@ -121,7 +126,7 @@ public class MockX509CRL extends X509CRL {
     }
 
     @Override
-    public byte[] getTBSCertList() {
+    public byte[] getTBSCertList() throws CRLException {
         return null;
     }
 
@@ -136,12 +141,15 @@ public class MockX509CRL extends X509CRL {
     }
 
     @Override
-    public void verify(final PublicKey key) {
+    public void verify(final PublicKey key) throws CRLException, NoSuchAlgorithmException,
+            InvalidKeyException, NoSuchProviderException, SignatureException {
         // Do nothing to indicate valid signature
     }
 
     @Override
-    public void verify(final PublicKey key, final String sigProvider) {
+    public void verify(final PublicKey key, final String sigProvider) throws CRLException,
+    NoSuchAlgorithmException, InvalidKeyException, NoSuchProviderException,
+    SignatureException {
         // Do nothing to indicate valid signature
     }
 

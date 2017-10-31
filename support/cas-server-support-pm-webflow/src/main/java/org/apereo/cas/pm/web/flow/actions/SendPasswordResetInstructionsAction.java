@@ -25,7 +25,7 @@ import static org.apereo.cas.pm.web.flow.PasswordManagementWebflowConfigurer.*;
  */
 public class SendPasswordResetInstructionsAction extends AbstractAction {
     /** Param name for the token. */
-    public static final String PARAMETER_NAME_TOKEN = "pswdrst";
+    public static final String PARAMETER_NAME_TOKEN = "t";
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SendPasswordResetInstructionsAction.class);
 
@@ -43,7 +43,7 @@ public class SendPasswordResetInstructionsAction extends AbstractAction {
     }
 
     @Override
-    protected Event doExecute(final RequestContext requestContext) {
+    protected Event doExecute(final RequestContext requestContext) throws Exception {
         if (!communicationsManager.isMailSenderDefined()) {
             LOGGER.warn("CAS is unable to send password-reset emails given no settings are defined to account for email servers");
             return error();
@@ -62,7 +62,9 @@ public class SendPasswordResetInstructionsAction extends AbstractAction {
             return error();
         }
         
-        final String url = buildPasswordResetUrl(username, passwordManagementService, casProperties);
+        final String token = passwordManagementService.createToken(username);
+        final String url = casProperties.getServer().getPrefix()
+                .concat('/' + FLOW_ID_PASSWORD_RESET + '?' + PARAMETER_NAME_TOKEN + '=').concat(token);
         
         LOGGER.debug("Generated password reset URL [{}]; Link is only active for the next [{}] minute(s)", url,
                 pm.getReset().getExpirationMinutes());
@@ -71,21 +73,6 @@ public class SendPasswordResetInstructionsAction extends AbstractAction {
         }
         LOGGER.error("Failed to notify account [{}]", to);
         return error();
-    }
-
-    /**
-     * Utility method to generate a password reset URL.
-     *
-     * @param username username
-     * @param passwordManagementService passwordManagementService
-     * @param casProperties casProperties
-     * @return URL a user can use to start the password reset process
-     */
-    public static String buildPasswordResetUrl(final String username,
-            final PasswordManagementService passwordManagementService, final CasConfigurationProperties casProperties) {
-        final String token = passwordManagementService.createToken(username);
-        return casProperties.getServer().getPrefix()
-                .concat('/' + FLOW_ID_LOGIN + '?' + PARAMETER_NAME_TOKEN + '=').concat(token);
     }
 
     /**

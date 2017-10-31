@@ -13,15 +13,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  */
 @RequiresModule(name = "cas-server-support-radius-mfa")
 public class RadiusMultifactorProperties extends BaseMultifactorProviderProperties {
-    /**
-     * Provider id by default.
-     */
-    public static final String DEFAULT_IDENTIFIER = "mfa-radius";
-
     private static final long serialVersionUID = 7021301814775348087L;
-    
     /**
-     * In the event that radius authentication fails due to a catastrophic event,
+     * In the event that radius authentication fails due to a catastraphic event,
      * fail over to the next server in the list.
      */
     private boolean failoverOnException;
@@ -49,7 +43,7 @@ public class RadiusMultifactorProperties extends BaseMultifactorProviderProperti
     private boolean trustedDeviceEnabled;
 
     public RadiusMultifactorProperties() {
-        setId(DEFAULT_IDENTIFIER);
+        setId("mfa-radius");
     }
 
     public boolean isTrustedDeviceEnabled() {

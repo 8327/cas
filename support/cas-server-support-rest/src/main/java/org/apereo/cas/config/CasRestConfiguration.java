@@ -6,11 +6,9 @@ import org.apereo.cas.authentication.AuthenticationSystemSupport;
 import org.apereo.cas.authentication.principal.ServiceFactory;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.support.rest.CredentialFactory;
-import org.apereo.cas.support.rest.factory.DefaultCredentialFactory;
-import org.apereo.cas.support.rest.factory.DefaultServiceTicketResourceEntityResponseFactory;
-import org.apereo.cas.support.rest.factory.DefaultTicketGrantingTicketResourceEntityResponseFactory;
-import org.apereo.cas.support.rest.factory.ServiceTicketResourceEntityResponseFactory;
-import org.apereo.cas.support.rest.factory.TicketGrantingTicketResourceEntityResponseFactory;
+import org.apereo.cas.support.rest.DefaultCredentialFactory;
+import org.apereo.cas.support.rest.DefaultServiceTicketResourceEntityResponseFactory;
+import org.apereo.cas.support.rest.ServiceTicketResourceEntityResponseFactory;
 import org.apereo.cas.support.rest.resources.ServiceTicketResource;
 import org.apereo.cas.support.rest.resources.TicketGrantingTicketResource;
 import org.apereo.cas.support.rest.resources.TicketStatusResource;
@@ -88,15 +86,9 @@ public class CasRestConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnMissingBean(name = "ticketGrantingTicketResourceEntityResponseFactory")
-    public TicketGrantingTicketResourceEntityResponseFactory ticketGrantingTicketResourceEntityResponseFactory() {
-        return new DefaultTicketGrantingTicketResourceEntityResponseFactory();
-    }
-
-    @Bean
     public TicketGrantingTicketResource ticketResourceRestController() {
-        return new TicketGrantingTicketResource(authenticationSystemSupport, credentialFactory,
-                centralAuthenticationService, webApplicationServiceFactory, ticketGrantingTicketResourceEntityResponseFactory());
+        return new TicketGrantingTicketResource(authenticationSystemSupport,
+                credentialFactory, centralAuthenticationService, webApplicationServiceFactory);
     }
 
     @ConditionalOnMissingBean(name = "restAuthenticationThrottle")

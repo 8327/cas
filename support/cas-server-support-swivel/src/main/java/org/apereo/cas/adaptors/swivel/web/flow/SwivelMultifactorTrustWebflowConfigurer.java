@@ -27,7 +27,7 @@ public class SwivelMultifactorTrustWebflowConfigurer extends AbstractMultifactor
     }
 
     @Override
-    protected void doInitialize() {
+    protected void doInitialize() throws Exception {
         registerMultifactorTrustedAuthentication(this.flowDefinitionRegistry);
     }
 }

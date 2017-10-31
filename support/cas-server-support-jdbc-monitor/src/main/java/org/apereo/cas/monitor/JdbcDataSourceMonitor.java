@@ -32,7 +32,7 @@ public class JdbcDataSourceMonitor extends AbstractPoolMonitor {
     }
 
     @Override
-    protected StatusCode checkPool() {
+    protected StatusCode checkPool() throws Exception {
         try {
             return this.jdbcTemplate.query(this.validationQuery, rs -> {
                 if (rs.next()) {

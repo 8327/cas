@@ -1,6 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Messages} from '../../messages';
-import {Data} from '../data';
+import {FormData} from "../../../domain/service-view-bean";
+import {Messages} from "../../messages";
+import {AbstractRegisteredService} from "../../../domain/registered-service";
+import {Data} from "../data";
 
 @Component({
   selector: 'app-attribute-release-checks',

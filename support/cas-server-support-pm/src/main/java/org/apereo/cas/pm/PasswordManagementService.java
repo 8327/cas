@@ -65,7 +65,7 @@ public interface PasswordManagementService {
      * @return the security questions
      */
     default Map<String, String> getSecurityQuestions(String username) {
-        return new LinkedHashMap<>(0);
+        return new LinkedHashMap<>();
     }
 
     /**

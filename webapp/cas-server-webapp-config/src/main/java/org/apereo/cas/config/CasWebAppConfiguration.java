@@ -71,7 +71,8 @@ public class CasWebAppConfiguration extends WebMvcConfigurerAdapter {
         return new ParameterizableViewController() {
             @Override
             protected ModelAndView handleRequestInternal(final HttpServletRequest request,
-                                                         final HttpServletResponse response) {
+                                                         final HttpServletResponse response)
+                    throws Exception {
                 final String queryString = request.getQueryString();
                 final String url = request.getContextPath() + "/login"
                         + (queryString != null ? '?' + queryString : StringUtils.EMPTY);
