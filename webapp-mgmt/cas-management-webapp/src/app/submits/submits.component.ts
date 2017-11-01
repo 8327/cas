@@ -30,6 +30,10 @@ export class SubmitsComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new Datasource(this.database, this.paginator);
+    this.refresh();
+  }
+
+  refresh() {
     this.service.getSubmits().then(resp => this.database.load(resp));
   }
 
@@ -76,10 +80,6 @@ export class SubmitsComponent implements OnInit {
         });
         this.refresh()
       });
-  }
-
-  refresh() {
-    this.ngOnInit();
   }
 
 }
