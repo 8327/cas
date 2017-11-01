@@ -47,6 +47,7 @@ export class PullComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new Datasource(this.database, this.paginator);
+    this.refresh();
   }
 
   refresh() {

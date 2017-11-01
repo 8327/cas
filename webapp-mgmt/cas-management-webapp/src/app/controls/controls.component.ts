@@ -25,11 +25,17 @@ export class ControlsComponent implements OnInit {
   @Input()
   showEdit: boolean;
 
+  @Input()
+  showRefresh: boolean;
+
   @ViewChild('publishModal')
   submitComp: PublishComponent;
 
   @Output()
   save: EventEmitter<void> = new EventEmitter<void>();
+
+  @Output()
+  refresh: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(public messages: Messages,
               public service: ControlsService,
