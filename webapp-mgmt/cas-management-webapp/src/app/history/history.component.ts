@@ -65,7 +65,11 @@ export class HistoryComponent implements OnInit {
   }
 
   viewJSON() {
-    this.router.navigate(['/json', this.selectedItem.id]);
+    this.router.navigate(['/viewJson', this.selectedItem.id]);
+  }
+
+  viewYaml() {
+    this.router.navigate(['/viewYaml', this.selectedItem.id]);
   }
 }
 

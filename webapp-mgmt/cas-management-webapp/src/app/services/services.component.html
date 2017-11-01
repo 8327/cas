@@ -1,5 +1,5 @@
-<div style="display:flex;margin-bottom:10px;">
-  <div style="margin-left:25px;padding-top: 3px;">
+<div style="display:flex;margin-bottom:10px;margin-left:25px;margin-right:25px;">
+  <div style="padding-top: 3px;">
     <mat-icon style="padding-top: 3px;">build</mat-icon>
     <h4 style="display: inline;position: relative;top: -5px;">
       <ng-container i18n>
@@ -95,6 +95,14 @@
     <ng-container i18n="management.services.table.button.edit">
       {{ messages.management_services_table_button_edit }}
     </ng-container>
+  </button>
+  <button mat-menu-item (click)="getYaml()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
+    <mat-icon>code</mat-icon>
+    <ng-container i18n>YAML</ng-container>
+  </button>
+  <button mat-menu-item (click)="getJson()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
+    <mat-icon>code</mat-icon>
+    <ng-container i18n>JSON</ng-container>
   </button>
   <button mat-menu-item (click)="serviceDuplicate()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>content_copy</mat-icon>

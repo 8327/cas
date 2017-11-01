@@ -22,9 +22,9 @@ export class JSONComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.route.data
-        .subscribe((data: { resp: AbstractRegisteredService }) => {
-          this.file = JSON.stringify(data.resp, null, 4);
-        });
+        .subscribe((data: { resp: String }) => {
+          this.file = data.resp;
+       });
     }, 100);
   }
 

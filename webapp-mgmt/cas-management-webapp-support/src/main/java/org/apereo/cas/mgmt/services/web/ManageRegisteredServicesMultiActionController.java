@@ -308,5 +308,7 @@ public class ManageRegisteredServicesMultiActionController extends AbstractManag
         manager.save(svcA);
         manager.save(svcB);
     }
+
+
 }
 

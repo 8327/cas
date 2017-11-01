@@ -61,6 +61,14 @@ export class ServicesComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/form', this.selectedItem.assignedId]);
   }
 
+  getYaml() {
+    this.router.navigate(['/yaml', this.selectedItem.assignedId]);
+  }
+
+  getJson() {
+    this.router.navigate(['/json', this.selectedItem.assignedId]);
+  }
+
   serviceDuplicate() {
     this.router.navigate(['/duplicate', this.selectedItem.assignedId]);
   }

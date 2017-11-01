@@ -14,6 +14,8 @@ import {DiffComponent} from './diff/diff.component';
 import {JSONComponent} from './json/json.component';
 import {JSONResolver} from './json/json.resolover';
 import {LocalChangesComponent} from './local-changes/local-changes.component';
+import {YamlComponent} from './yaml/yaml.component';
+import {YamlResolver} from './yaml/yaml.resolover';
 import {PullComponent} from './pull/pull.component';
 import {SubmitsComponent} from './submits/submits.component';
 import {ChangesComponent} from './changes/changes.component';
@@ -50,10 +52,37 @@ import {NotesComponent} from './notes/notes.component';
         component: DiffComponent
       },
       {
-        path: 'json/:fileId',
+        path: 'json/:id',
         component: JSONComponent,
         resolve: {
           resp: JSONResolver
+        }
+      },
+      {
+        path: 'viewJson/:id',
+        component: JSONComponent,
+        resolve: {
+          resp: JSONResolver
+        },
+        data: {
+          history: true
+        }
+      },
+      {
+        path: 'yaml/:id',
+        component: YamlComponent,
+        resolve: {
+          resp: YamlResolver
+        }
+      },
+      {
+        path: 'viewYaml/:id',
+        component: YamlComponent,
+        resolve: {
+          resp: YamlResolver
+        },
+        data: {
+          history: true
         }
       },
       {

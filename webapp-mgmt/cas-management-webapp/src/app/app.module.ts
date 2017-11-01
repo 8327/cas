@@ -29,6 +29,8 @@ import {ControlsService} from './controls/controls.service';
 import { FooterComponent } from './footer/footer.component';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
 import {HeaderService} from './header/header.service';
+import { YamlComponent } from './yaml/yaml.component';
+import {YamlResolver} from './yaml/yaml.resolover';
 import {PullModule} from './pull/pull.module';
 import {SubmitModule} from './submits/submits.module';
 import {NotesModule} from './notes/notes.module';
@@ -65,7 +67,8 @@ import {AcceptComponent} from './accept/accept.component';
     RejectComponent,
     InitComponent,
     LocalChangesComponent,
-    FooterComponent
+    FooterComponent,
+    YamlComponent
   ],
   entryComponents: [
     DeleteComponent,
@@ -78,6 +81,7 @@ import {AcceptComponent} from './accept/accept.component';
     SearchService,
     UserService,
     HeaderService,
+    YamlResolver,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
   ],
   bootstrap: [AppComponent]

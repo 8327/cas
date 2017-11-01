@@ -16,6 +16,7 @@ import org.apereo.cas.mgmt.services.web.factory.RepositoryFactory;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.services.util.DefaultRegisteredServiceJsonSerializer;
+import org.apereo.cas.services.util.RegisteredServiceYamlSerializer;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.notes.Note;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -395,6 +397,27 @@ public class ServiceRepsositoryController {
                                                         final @RequestParam String id) throws Exception {
         final GitUtil git = repositoryFactory.from(request, response);
         return new ResponseEntity<>(new DefaultRegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
+    }
+
+    @GetMapping("/viewJSON")
+    public ResponseEntity<String> viewJSON(final HttpServletRequest request,
+                                           final HttpServletResponse response,
+                                           final @RequestParam String id) throws Exception {
+        final GitUtil git = repositoryFactory.from(request, response);
+        return new ResponseEntity<String>(git.readObject(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/viewYaml")
+    public ResponseEntity<String> viewYaml(final HttpServletRequest request,
+                                           final HttpServletResponse response,
+                                           final @RequestParam String id) throws Exception {
+        final GitUtil git = repositoryFactory.from(request, response);
+        final DefaultRegisteredServiceJsonSerializer jsonSerializer = new DefaultRegisteredServiceJsonSerializer();
+        final RegisteredService service = jsonSerializer.from(git.readObject(id));
+        final RegisteredServiceYamlSerializer yamlSerializer = new RegisteredServiceYamlSerializer();
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        yamlSerializer.to(output, service);
+        return new ResponseEntity<String>(output.toString(), HttpStatus.OK);
     }
 
 

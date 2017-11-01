@@ -17,6 +17,18 @@ export class ServiceViewService extends Service {
     return this.get<ServiceItem[]>('getServices?domain=' + domain);
   }
 
+  getYaml(id: number): Promise<String> {
+    return this.http.get('getYaml?id=' + id)
+      .toPromise()
+      .then(resp => resp.text());
+  }
+
+  getJson(id: number): Promise<String> {
+    return this.http.get('getJson?id=' + id)
+      .toPromise()
+      .then(resp => resp.text());
+  }
+
   delete(id: number): Promise<String> {
     return this.get<String>('deleteRegisteredService?id=' + id);
   }

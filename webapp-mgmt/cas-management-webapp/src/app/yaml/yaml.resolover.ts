@@ -9,7 +9,7 @@ import {AbstractRegisteredService} from '../../domain/registered-service';
 import {ServiceViewService} from '../services/service.service';
 
 @Injectable()
-export class JSONResolver implements Resolve<String> {
+export class YamlResolver implements Resolve<String> {
 
   constructor(private service: ServiceViewService,
               private changeService: ChangesService,
@@ -23,9 +23,9 @@ export class JSONResolver implements Resolve<String> {
       return new Promise((resolve, reject) => resolve(null));
     } else {
       if (history) {
-        return this.changeService.viewJson(param).then(resp => resp ? resp : null);
+        return this.changeService.viewYaml(param).then(resp => resp ? resp : null);
       } else {
-        return this.service.getJson(+param).then(resp => resp ? resp : null);
+        return this.service.getYaml(+param).then(resp => resp ? resp : null);
       }
     }
   }
