@@ -29,6 +29,8 @@ import {ControlsService} from './controls/controls.service';
 import { FooterComponent } from './footer/footer.component';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
 import {HeaderService} from './header/header.service';
+import { YamlComponent } from './yaml/yaml.component';
+import {YamlResolver} from './yaml/yaml.resolover';
 
 
 @NgModule({
@@ -55,7 +57,8 @@ import {HeaderService} from './header/header.service';
     RevertComponent,
     InitComponent,
     LocalChangesComponent,
-    FooterComponent
+    FooterComponent,
+    YamlComponent
   ],
   entryComponents: [
     DeleteComponent,
@@ -66,6 +69,7 @@ import {HeaderService} from './header/header.service';
     SearchService,
     UserService,
     HeaderService,
+    YamlResolver,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
   ],
   bootstrap: [AppComponent]

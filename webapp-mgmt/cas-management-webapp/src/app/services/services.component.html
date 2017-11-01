@@ -96,6 +96,14 @@
       {{ messages.management_services_table_button_edit }}
     </ng-container>
   </button>
+  <button mat-menu-item (click)="getYaml()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
+    <mat-icon>code</mat-icon>
+    <ng-container i18n>YAML</ng-container>
+  </button>
+  <button mat-menu-item (click)="getJson()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
+    <mat-icon>code</mat-icon>
+    <ng-container i18n>JSON</ng-container>
+  </button>
   <button mat-menu-item (click)="serviceDuplicate()" *ngIf="selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>content_copy</mat-icon>
     <ng-container i18n="management.services.table.button.duplicate">

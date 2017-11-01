@@ -18,6 +18,18 @@ export class ChangesService extends Service {
     return this.get<DiffEntry[]>('changes?branch=' + branch);
   }
 
+  viewJson(id: String): Promise<String> {
+    return this.http.get('viewJSON?id=' + id)
+      .toPromise()
+      .then(resp => resp.text());
+  }
+
+  viewYaml(id: String): Promise<String> {
+    return this.http.get('viewYaml?id=' + id)
+      .toPromise()
+      .then(resp => resp.text());
+  }
+
   viewDiff(oldId: String, newId: String): Promise<String> {
     const data = [oldId, newId];
     return this.post<String>('viewDiff', data);

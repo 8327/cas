@@ -6,6 +6,8 @@ import org.apereo.cas.mgmt.services.web.factory.ManagerFactory;
 import org.apereo.cas.services.RegexRegisteredService;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.services.ServicesManager;
+import org.apereo.cas.services.util.DefaultRegisteredServiceJsonSerializer;
+import org.apereo.cas.services.util.RegisteredServiceYamlSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Handle adding/editing of RegisteredServices.
@@ -82,6 +85,35 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     public ResponseEntity<RegisteredService> getServiceById(final HttpServletRequest request,
                                                             final HttpServletResponse response,
                                                             @RequestParam(value = "id", required = false) final Long id) throws Exception {
+        final RegisteredService service = getService(request,response,id);
+        return new ResponseEntity<>(service, HttpStatus.OK);
+    }
+
+    @GetMapping("getYaml")
+    public ResponseEntity<String> getYaml(final HttpServletRequest request,
+                                          final HttpServletResponse response,
+                                          @RequestParam(value = "id", required = false) final Long id) throws Exception {
+        final RegisteredService service = getService(request,response,id);
+        final RegisteredServiceYamlSerializer yamlSerializer = new RegisteredServiceYamlSerializer();
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        yamlSerializer.to(output,service);
+        return new ResponseEntity<String>(output.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping("getJson")
+    public ResponseEntity<String> getJson(final HttpServletRequest request,
+                                          final HttpServletResponse response,
+                                          @RequestParam(value = "id", required = false) final Long id) throws Exception {
+        final RegisteredService service = getService(request,response,id);
+        final DefaultRegisteredServiceJsonSerializer serializer = new DefaultRegisteredServiceJsonSerializer();
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        serializer.to(output,service);
+        return new ResponseEntity<String>(output.toString(), HttpStatus.OK);
+    }
+
+    private RegisteredService getService(final HttpServletRequest request,
+                                         final HttpServletResponse response,
+                                         final Long id) throws Exception {
         final GitServicesManager manager = managerFactory.from(request, response);
         final RegisteredService service;
         if (id == -1) {
@@ -93,6 +125,6 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
                 throw new IllegalArgumentException("Service id " + id + " cannot be found");
             }
         }
-        return new ResponseEntity<>(service, HttpStatus.OK);
+        return service;
     }
 }
