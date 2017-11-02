@@ -4,7 +4,7 @@
 
 import {Injectable} from '@angular/core';
 import {Service} from '../service';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Change} from '../../domain/change';
 import {Commit} from '../../domain/commit';
 
@@ -14,7 +14,7 @@ export class ControlsService extends Service {
   changes: Change[];
   commits: Commit[];
 
-  constructor (protected http: Http) {
+  constructor(http: HttpClient) {
     super(http);
   }
 

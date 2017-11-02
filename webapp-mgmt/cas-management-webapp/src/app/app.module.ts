@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {Messages} from './messages';
@@ -27,6 +26,7 @@ import {InitComponent} from 'app/init.component';
 import {ControlsComponent} from './controls/controls.component';
 import {ControlsService} from './controls/controls.service';
 import { FooterComponent } from './footer/footer.component';
+import {HttpClientModule} from '@angular/common/http';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
 import {HeaderService} from './header/header.service';
 import { YamlComponent } from './yaml/yaml.component';
@@ -43,7 +43,7 @@ import {AcceptComponent} from './accept/accept.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     DomainsModule,
     ServicesModule,
     HistoryModule,
