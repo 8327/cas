@@ -4,13 +4,13 @@
 import {Injectable} from '@angular/core';
 import {DiffEntry} from '../../domain/diff-entry';
 import {Service} from '../service';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {AbstractRegisteredService} from '../../domain/registered-service';
 
 @Injectable()
 export class ChangesService extends Service {
 
-  constructor(protected http: Http) {
+  constructor(protected http: HttpClient) {
     super(http);
   }
 
@@ -19,15 +19,11 @@ export class ChangesService extends Service {
   }
 
   viewJson(id: String): Promise<String> {
-    return this.http.get('viewJSON?id=' + id)
-      .toPromise()
-      .then(resp => resp.text());
+    return this.getText('viewJSON?id=' + id);
   }
 
   viewYaml(id: String): Promise<String> {
-    return this.http.get('viewYaml?id=' + id)
-      .toPromise()
-      .then(resp => resp.text());
+    return this.getText('viewYaml?id=' + id);
   }
 
   viewDiff(oldId: String, newId: String): Promise<String> {

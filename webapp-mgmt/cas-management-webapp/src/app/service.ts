@@ -25,6 +25,13 @@ export abstract class Service {
       .catch(this.handleError);
   }
 
+  postText(url: string , data: any): Promise<String> {
+    return this.http.post(url, JSON.stringify(data), {responseType: 'text'})
+      .toPromise()
+      .then(resp => resp)
+      .catch(this.handleError);
+  }
+
   get<T>(url: string): Promise<T> {
     return this.http.get(url)
       .toPromise()

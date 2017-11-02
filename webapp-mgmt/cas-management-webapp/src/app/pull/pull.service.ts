@@ -4,12 +4,12 @@
 import {Injectable} from '@angular/core';
 import { Branch } from '../../domain/branch';
 import {Service} from '../service';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class PullService extends Service {
 
-  constructor(protected http: Http) {
+  constructor(protected http: HttpClient) {
     super(http);
   }
 
@@ -18,11 +18,11 @@ export class PullService extends Service {
   }
 
   accept(branch: Branch, note: String): Promise<String> {
-    return this.post<String>('acceptBranch', { branch: branch, note: note});
+    return this.postText('acceptBranch', { branch: branch, note: note});
   }
 
   reject(branch: Branch, note: String): Promise<String> {
-    return this.post<String>('rejectBranch', { branch: branch, note: note});
+    return this.postText('rejectBranch', { branch: branch, note: note});
   }
 
 }

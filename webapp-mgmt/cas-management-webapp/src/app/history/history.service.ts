@@ -5,11 +5,12 @@ import {Injectable} from '@angular/core';
 import {History} from '../../domain/history';
 import {Service} from '../service';
 import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class HistoryService extends Service {
 
-  constructor(protected http: Http) {
+  constructor(protected http: HttpClient) {
     super(http);
   }
 
@@ -18,7 +19,7 @@ export class HistoryService extends Service {
   }
 
   checkout(id: string, path: String): Promise<String> {
-    return this.get<String>('checkout?id=' + id + '&path=' + path);
+    return this.getText('checkout?id=' + id + '&path=' + path);
   }
 
 }

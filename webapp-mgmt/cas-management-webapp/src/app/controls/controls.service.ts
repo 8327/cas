@@ -19,15 +19,15 @@ export class ControlsService extends Service {
   }
 
   commit(msg: String): Promise<String> {
-    return this.get<String>('commit?msg=' + msg);
+    return this.getText('commit?msg=' + msg);
   }
 
   publish(): Promise<String> {
-    return this.get<String>('publish');
+    return this.getText('publish');
   }
 
   submit(msg): Promise<String> {
-    return this.post<String>('submit', msg);
+    return this.postText('submit', msg);
   }
 
   untracked(): Promise<Change[]> {

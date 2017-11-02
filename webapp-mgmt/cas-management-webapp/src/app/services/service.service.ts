@@ -18,31 +18,27 @@ export class ServiceViewService extends Service {
   }
 
   getYaml(id: number): Promise<String> {
-    return this.http.get('getYaml?id=' + id)
-      .toPromise()
-      .then(resp => resp.text());
+    return this.getText('getYaml?id=' + id);
   }
 
   getJson(id: number): Promise<String> {
-    return this.http.get('getJson?id=' + id)
-      .toPromise()
-      .then(resp => resp.text());
+    return this.getText('getJson?id=' + id);
   }
 
   delete(id: number): Promise<String> {
-    return this.get<String>('deleteRegisteredService?id=' + id);
+    return this.getText('deleteRegisteredService?id=' + id);
   }
 
   revert(fileName: string): Promise<String> {
-    return this.get<String>('revert?path=' + fileName);
+    return this.getText('revert?path=' + fileName);
   }
 
   revertDelete(fileName: string): Promise<String> {
-    return this.get<String>('revertDelete?path=' + fileName);
+    return this.getText('revertDelete?path=' + fileName);
   }
 
   updateOrder(a: ServiceItem, b: ServiceItem): Promise<String> {
-    return this.post<String>('updateOrder', [a, b]);
+    return this.postText('updateOrder', [a, b]);
   }
 
 }

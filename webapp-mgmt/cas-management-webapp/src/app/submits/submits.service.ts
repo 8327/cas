@@ -4,12 +4,12 @@
 import {Injectable} from '@angular/core';
 import { Branch } from '../../domain/branch';
 import {Service} from '../service';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class SubmitService extends Service {
 
-  constructor(protected http: Http) {
+  constructor(protected http: HttpClient) {
     super(http);
   }
 
@@ -18,7 +18,7 @@ export class SubmitService extends Service {
   }
 
   revert(name: string): Promise<String> {
-    return this.get<String>('revertSubmit?branchName=' + name);
+    return this.getText('revertSubmit?branchName=' + name);
   }
 
 }
