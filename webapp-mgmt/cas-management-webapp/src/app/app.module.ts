@@ -15,7 +15,6 @@ import {DomainsModule} from './domains/domains.module';
 import { SearchComponent } from './search/search.component';
 import {SearchService} from './search/SearchService';
 
-import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 import {UserService} from './user.service';
 import {HistoryModule} from './history/history.module';
 import {RevertComponent} from './revert/revert.component';
@@ -82,7 +81,6 @@ import {AcceptComponent} from './accept/accept.component';
     UserService,
     HeaderService,
     YamlResolver,
-    {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}
   ],
   bootstrap: [AppComponent]
 })
