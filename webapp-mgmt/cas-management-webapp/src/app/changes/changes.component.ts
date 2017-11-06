@@ -5,9 +5,6 @@ import {DiffEntry} from '../../domain/diff-entry';
 import {Location} from '@angular/common';
 import {Messages} from '../messages';
 import {MatPaginator, MatSnackBar} from '@angular/material';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {DataSource} from '@angular/cdk/collections';
-import {Observable} from 'rxjs/Observable';
 import {Database, Datasource} from '../database';
 
 @Component({

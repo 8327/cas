@@ -85,29 +85,47 @@ public class RegisteredServiceSimpleFormController extends AbstractManagementCon
     public ResponseEntity<RegisteredService> getServiceById(final HttpServletRequest request,
                                                             final HttpServletResponse response,
                                                             @RequestParam(value = "id", required = false) final Long id) throws Exception {
-        final RegisteredService service = getService(request,response,id);
+        final RegisteredService service = getService(request, response, id);
         return new ResponseEntity<>(service, HttpStatus.OK);
     }
 
+    /**
+     * Method will return a YAML representation of the service.
+     *
+     * @param request - HttpServletRequet
+     * @param response - HttpServletResponse
+     * @param id - Long representing id of the service
+     * @return - String representing the service in Yaml notation.
+     * @throws Exception - failed
+     */
     @GetMapping("getYaml")
     public ResponseEntity<String> getYaml(final HttpServletRequest request,
                                           final HttpServletResponse response,
                                           @RequestParam(value = "id", required = false) final Long id) throws Exception {
-        final RegisteredService service = getService(request,response,id);
+        final RegisteredService service = getService(request, response, id);
         final RegisteredServiceYamlSerializer yamlSerializer = new RegisteredServiceYamlSerializer();
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        yamlSerializer.to(output,service);
+        yamlSerializer.to(output, service);
         return new ResponseEntity<String>(output.toString(), HttpStatus.OK);
     }
 
+    /**
+     * Method that will return the service as an HJson string.
+     *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
+     * @param id - Long representing the id of the service
+     * @return - String representing the service in HJson
+     * @throws Exception -failed
+     */
     @GetMapping("getJson")
     public ResponseEntity<String> getJson(final HttpServletRequest request,
                                           final HttpServletResponse response,
                                           @RequestParam(value = "id", required = false) final Long id) throws Exception {
-        final RegisteredService service = getService(request,response,id);
+        final RegisteredService service = getService(request, response, id);
         final DefaultRegisteredServiceJsonSerializer serializer = new DefaultRegisteredServiceJsonSerializer();
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        serializer.to(output,service);
+        serializer.to(output, service);
         return new ResponseEntity<String>(output.toString(), HttpStatus.OK);
     }
 

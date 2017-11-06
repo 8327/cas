@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Messages} from '../messages';
 import {ActivatedRoute} from '@angular/router';
 
@@ -7,7 +7,7 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './yaml.component.html',
   styleUrls: ['./yaml.component.css']
 })
-export class YamlComponent implements OnInit {
+export class YamlComponent implements OnInit, AfterViewInit {
   file: String;
 
   constructor(public messages: Messages,

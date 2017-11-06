@@ -399,6 +399,15 @@ public class ServiceRepsositoryController {
         return new ResponseEntity<>(new DefaultRegisteredServiceJsonSerializer().from(git.readObject(id)), HttpStatus.OK);
     }
 
+    /**
+     * Method will return a previous version of a service in HJson.
+     *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
+     * @param id - String representing file in git repo
+     * @return - String representing service version in HJson
+     * @throws Exception - failed
+     */
     @GetMapping("/viewJSON")
     public ResponseEntity<String> viewJSON(final HttpServletRequest request,
                                            final HttpServletResponse response,
@@ -407,6 +416,15 @@ public class ServiceRepsositoryController {
         return new ResponseEntity<String>(git.readObject(id), HttpStatus.OK);
     }
 
+    /**
+     * Method will return a previous version of the services in Yaml.
+     *
+     * @param request - HttpServletRequest
+     * @param response - HttpServletResponse
+     * @param id - String representing id of the file in git repo
+     * @return - String representing the verison of the service in Yaml
+     * @throws Exception - failed
+     */
     @GetMapping("/viewYaml")
     public ResponseEntity<String> viewYaml(final HttpServletRequest request,
                                            final HttpServletResponse response,

@@ -2,14 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormData} from '../../../domain/form-data';
 import {Messages} from '../../messages';
 import {Data} from '../data';
-import {DataSource} from '@angular/cdk/table';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
 import {WsFederationClaimsReleasePolicy} from '../../../domain/attribute-release';
 import {Util} from '../../util/util';
+import {Database, Datasource, Row} from '../../database';
 
 
 @Component({
@@ -23,8 +18,8 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
   wsFedOnly: boolean;
 
   displayedColumns = ['source', 'mapped'];
-  attributeDatabase = new AttributeDatabase();
-  dataSource: AttributeDataSource | null;
+  attributeDatabase = new Database<Row>();
+  dataSource: Datasource<Row> | null;
 
 
   constructor(public messages: Messages,
@@ -43,48 +38,14 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
     });
 
     for (const key of Array.from(Object.keys(attrPolicy.allowedAttributes))) {
-      this.attributeDatabase.addRow(new Row(key as string));
+      this.attributeDatabase.addItem(new Row(key as string));
     };
 
-    this.dataSource = new AttributeDataSource(this.attributeDatabase);
+    this.dataSource = new Datasource(this.attributeDatabase);
   }
 
   isEmpty(data: any[]): boolean {
     return !data || data.length === 0;
   }
 
-}
-
-export class Row {
-  key: String;
-
-  constructor(source: String) {
-    this.key = source;
-  }
-}
-
-export class AttributeDatabase {
-  dataChange: BehaviorSubject<Row[]> = new BehaviorSubject<Row[]>([]);
-  get data(): Row[] { return this.dataChange.value; }
-
-  constructor() {
-  }
-
-  addRow(row: Row) {
-    const copiedData = this.data.slice();
-    copiedData.push(row);
-    this.dataChange.next(copiedData);
-  }
-}
-
-export class AttributeDataSource extends DataSource<any> {
-  constructor(private _attributeDatabase: AttributeDatabase) {
-    super();
-  }
-
-  connect(): Observable<Row[]> {
-    return this._attributeDatabase.dataChange;
-  }
-
-  disconnect() {}
 }

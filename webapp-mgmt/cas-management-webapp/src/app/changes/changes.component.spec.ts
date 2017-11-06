@@ -4,7 +4,6 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ChangesComponent } from './changes.component';
 import {DiffEntry} from '../../domain/diff-entry';
@@ -12,6 +11,7 @@ import {ChangesService} from './changes.service';
 import {Messages} from '../messages';
 import {ActivatedRouteStub} from '../../testing/router-stub';
 import {AbstractRegisteredService, RegexRegisteredService} from '../../domain/registered-service';
+import {RouterTestingModule} from '@angular/router/testing';
 
 
 const changesServiceStub = {
