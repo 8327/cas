@@ -24,7 +24,7 @@ export class FormService {
 
   saveService(service: AbstractRegisteredService): Promise<number> {
     return this.http
-      .post<number>('saveService', JSON.stringify(service))
+      .post('saveService', service)
       .toPromise()
       .then(resp => resp)
       .catch(this.handleError)
