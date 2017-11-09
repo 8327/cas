@@ -15,6 +15,7 @@ import {DomainsModule} from './domains/domains.module';
 import { SearchComponent } from './search/search.component';
 import {SearchService} from './search/SearchService';
 
+import {HeaderService} from './header/header.service';
 import {UserService} from './user.service';
 import {HistoryModule} from './history/history.module';
 import {RevertComponent} from './revert/revert.component';
@@ -27,7 +28,6 @@ import {ControlsService} from './controls/controls.service';
 import { FooterComponent } from './footer/footer.component';
 import {HttpClientModule} from '@angular/common/http';
 import { LocalChangesComponent } from './local-changes/local-changes.component';
-import {HeaderService} from './header/header.service';
 import { YamlComponent } from './yaml/yaml.component';
 import {YamlResolver} from './yaml/yaml.resolover';
 import {PullModule} from './pull/pull.module';
@@ -78,9 +78,9 @@ import {AcceptComponent} from './accept/accept.component';
   providers: [
     Messages,
     SearchService,
-    UserService,
     HeaderService,
-    YamlResolver,
+    UserService,
+    YamlResolver
   ],
   bootstrap: [AppComponent]
 })
