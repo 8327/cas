@@ -1,7 +1,6 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Messages} from '../messages';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
 import {Location} from '@angular/common';
 import {HeaderService} from './header.service';
 import {UserService} from '../user.service';
@@ -26,13 +25,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.service.getMangerType().then(resp => this.type = resp);
-    Observable.fromEvent(this.search.nativeElement, 'keyup')
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(() => {
-        this.router.navigate(['search', this.search.nativeElement.value]);
-      });
-    this.userService.getUser().then(resp => this.isAdmin = resp.administrator);
+  }
+
+  doSearch(val: string) {
+    console.log("in search");
+    this.router.navigate( ['search', val]);
   }
 
   logout() {
