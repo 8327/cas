@@ -131,6 +131,8 @@ subprojects {
         }
         
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
+        maven { url "https://dl.bintray.com/uniconiam/maven" }
+        maven { url "https://jitpack.io" }
         jcenter()
     }
 
@@ -304,7 +306,7 @@ task wrapper(type: Wrapper, description: "Gradle wrapper") {
     gradleVersion = project.gradleVersion
 }
 
-task javadoc(type: Javadoc, description: "Aggregate all Javadocs into a single directory") {
+task javadoc(type: Javadoc, description: "Aggregate all Javadocs into a single directory", overwrite: true) {
     source subprojects.collect { project -> project.sourceSets.main.allJava }
     destinationDir = new File(buildDir, "javadoc")
     classpath = files(subprojects.collect { project -> project.sourceSets.main.compileClasspath })
