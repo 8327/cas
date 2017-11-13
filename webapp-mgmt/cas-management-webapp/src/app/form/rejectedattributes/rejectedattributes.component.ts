@@ -1,15 +1,11 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Messages} from '../../messages';
-import {AbstractRegisteredService} from '../../../domain/registered-service';
 import {Data} from '../data';
-import {DataSource} from '@angular/cdk/table';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import {Util} from '../../util/util';
-import {Database, Datasource, Row} from '../../database';
+import {MatTableDataSource} from '@angular/material';
+import {Row} from '../row';
 
 @Component({
   selector: 'app-rejectedattributes',
@@ -19,8 +15,7 @@ import {Database, Datasource, Row} from '../../database';
 export class RejectedattributesComponent implements OnInit {
 
   displayedColumns = ['source', 'mapped', 'delete'];
-  attributeDatabase = new Database<Row>();
-  dataSource: Datasource<Row> | null;
+  dataSource: MatTableDataSource<Row> | null;
 
   @Input()
   attributes: Map<String, String[]>;
@@ -30,14 +25,15 @@ export class RejectedattributesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource([]);
     for (const p of Array.from(Object.keys(this.attributes))) {
-      this.attributeDatabase.addItem(new Row(p));
+      this.dataSource.data.push(new Row(p));
     }
-    this.dataSource = new Datasource(this.attributeDatabase);
+
   }
 
   addRow() {
-    this.attributeDatabase.addItem(new Row(''));
+    this.dataSource.data.push(new Row(''));
   }
 
   doChange(row: Row, val: string) {
@@ -48,7 +44,7 @@ export class RejectedattributesComponent implements OnInit {
 
   delete(row: Row) {
    delete this.attributes[row.key as string];
-   this.attributeDatabase.removeItem(row);
+   this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
   }
 }
 

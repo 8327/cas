@@ -25,10 +25,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.service.getMangerType().then(resp => this.type = resp);
+    this.userService.getUser().then(resp => this.isAdmin = resp.administrator);
   }
 
   doSearch(val: string) {
-    console.log("in search");
     this.router.navigate( ['search', val]);
   }
 

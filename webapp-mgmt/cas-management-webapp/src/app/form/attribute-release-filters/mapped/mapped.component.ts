@@ -2,7 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {RegisteredServiceMappedRegexAttributeFilter} from '../../../../domain/attribute-filter';
 import {Data} from '../../data';
 import {Messages} from '../../../messages';
-import {Database, Datasource, Row} from '../../../database';
+import {MatTableDataSource} from '@angular/material';
+import {Row} from '../../row';
 
 @Component({
   selector: 'app-mapped',
@@ -11,8 +12,7 @@ import {Database, Datasource, Row} from '../../../database';
 })
 export class MappedComponent implements OnInit {
     displayedColumns = ['source', 'mapped', 'delete'];
-    attributeDatabase = new Database<Row>();
-    dataSource: Datasource<Row> | null;
+    dataSource: MatTableDataSource<Row> | null;
     formData;
 
     @Input('filter')
@@ -24,16 +24,16 @@ export class MappedComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.dataSource = new Datasource(this.attributeDatabase);
+      this.dataSource = new MatTableDataSource([]);
       if (this.filter.patterns) {
           for (const p of Array.from(Object.keys(this.filter.patterns))) {
-              this.attributeDatabase.addItem(new Row(p));
+              this.dataSource.data.push(new Row(p));
           }
       }
   }
 
     addRow() {
-        this.attributeDatabase.addItem(new Row(''));
+        this.dataSource.data.push(new Row(''));
     }
 
     doChange(row: Row, val: string) {
@@ -45,7 +45,7 @@ export class MappedComponent implements OnInit {
 
     delete(row: Row) {
         delete this.filter.patterns[row.key as string];
-        this.attributeDatabase.removeItem(row);
+        this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
     }
 
 }

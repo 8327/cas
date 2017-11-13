@@ -7,8 +7,7 @@ import { Location } from '@angular/common';
 import {NotesService} from '../notes/notes.service';
 import {ChangesService} from '../changes/changes.service';
 import {DiffEntry} from '../../domain/diff-entry';
-import {Database, Datasource} from '../database';
-import {MatDialog, MatPaginator, MatSnackBar} from '@angular/material';
+import {MatDialog, MatPaginator, MatSnackBar, MatTableDataSource} from '@angular/material';
 import {AcceptComponent} from '../accept/accept.component';
 import {RejectComponent} from '../reject/reject.component';
 
@@ -22,8 +21,7 @@ import {RejectComponent} from '../reject/reject.component';
 export class PullComponent implements OnInit {
 
   displayedColumns = ['actions', 'branch', 'status', 'message'];
-  database: Database<Branch> = new Database<Branch>();
-  dataSource: Datasource<Branch> | null;
+  dataSource: MatTableDataSource<Branch>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -46,13 +44,14 @@ export class PullComponent implements OnInit {
               public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.dataSource = new Datasource(this.database, this.paginator);
+    this.dataSource = new MatTableDataSource([]);
+    this.dataSource.paginator = this.paginator;
     this.refresh();
   }
 
   refresh() {
     this.service.getBranches([this.showPending, this.showAccepted, this.showRejected])
-      .then(resp => this.database.load(resp));
+      .then(resp => this.dataSource.data = resp);
   }
 
   viewChanges(branch?: Branch) {

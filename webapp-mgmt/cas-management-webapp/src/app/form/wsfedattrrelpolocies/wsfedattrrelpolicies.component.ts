@@ -4,7 +4,8 @@ import {Messages} from '../../messages';
 import {Data} from '../data';
 import {WsFederationClaimsReleasePolicy} from '../../../domain/attribute-release';
 import {Util} from '../../util/util';
-import {Database, Datasource, Row} from '../../database';
+import {MatTableDataSource} from '@angular/material';
+import {Row} from '../row';
 
 
 @Component({
@@ -18,8 +19,7 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
   wsFedOnly: boolean;
 
   displayedColumns = ['source', 'mapped'];
-  attributeDatabase = new Database<Row>();
-  dataSource: Datasource<Row> | null;
+  dataSource: MatTableDataSource<Row>;
 
 
   constructor(public messages: Messages,
@@ -29,6 +29,8 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
 
   ngOnInit() {
     const attrPolicy: WsFederationClaimsReleasePolicy = this.data.service.attributeReleasePolicy as WsFederationClaimsReleasePolicy;
+    this.dataSource = new MatTableDataSource([]);
+
     if (Util.isEmpty(attrPolicy.allowedAttributes)) {
       attrPolicy.allowedAttributes = new Map();
     }
@@ -38,10 +40,8 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
     });
 
     for (const key of Array.from(Object.keys(attrPolicy.allowedAttributes))) {
-      this.attributeDatabase.addItem(new Row(key as string));
+      this.dataSource.data.push(new Row(key as string));
     };
-
-    this.dataSource = new Datasource(this.attributeDatabase);
   }
 
   isEmpty(data: any[]): boolean {

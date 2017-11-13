@@ -18,6 +18,7 @@ export class ServicesComponent implements OnInit, AfterViewInit {
   deleteItem: ServiceItem;
   domain: String;
   selectedItem: ServiceItem;
+  revertItem: ServiceItem;
   dataSource: MatTableDataSource<ServiceItem>;
   displayedColumns = ['actions', 'name', 'serviceId', 'description'];
 
@@ -173,16 +174,16 @@ export class ServicesComponent implements OnInit, AfterViewInit {
     if (!this.selectedItem) {
       return false;
     }
-    const index = this.serviceDatabase.data.indexOf(this.selectedItem);
-    return index < this.serviceDatabase.data.length - 1
-           && this.serviceDatabase.data[index + 1].status !== 'DELETE'
+    const index = this.dataSource.data.indexOf(this.selectedItem);
+    return index < this.dataSource.data.length - 1
+           && this.dataSource.data[index + 1].status !== 'DELETE'
            && this.selectedItem && this.selectedItem.status !== 'DELETE';
   }
   showMoveUp(): boolean {
     if (!this.selectedItem) {
       return false;
     }
-    const index = this.serviceDatabase.data.indexOf(this.selectedItem);
+    const index = this.dataSource.data.indexOf(this.selectedItem);
     return index > 0;
   }
 }

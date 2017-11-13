@@ -123,7 +123,7 @@
     <mat-icon>undo</mat-icon>
     <ng-container i18n>Revert</ng-container>
   </button>
-  <button mat-menu-item (click)="moveUp(selectedItem)" *ngIf="serviceDatabase.data.indexOf(selectedItem) > 0 && selectedItem && selectedItem.status !== 'DELETE'">
+  <button mat-menu-item (click)="moveUp(selectedItem)" *ngIf="dataSource.data.indexOf(selectedItem) > 0 && selectedItem && selectedItem.status !== 'DELETE'">
     <mat-icon>arrow_upward</mat-icon>
     <ng-container>Move Up</ng-container>
   </button>

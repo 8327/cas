@@ -1,14 +1,12 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {DataSource} from '@angular/cdk/table';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {Data} from '../data';
 import {FormData} from '../../../domain/form-data';
 import {Messages} from '../../messages';
-import {Database, Datasource, Row} from '../../database';
+import {MatTableDataSource} from '@angular/material';
+import {Row} from '../row';
 
 @Component({
   selector: 'app-mappedattributes',
@@ -18,8 +16,7 @@ import {Database, Datasource, Row} from '../../database';
 export class MappedattributesComponent implements OnInit {
   formData: FormData;
   displayedColumns = ['source', 'mapped'];
-  attributeDatabase = new Database<Row>();
-  dataSource: Datasource<Row> | null;
+  dataSource: MatTableDataSource<Row> | null;
 
   @Input()
   attributes: Map<String, String[]>;
@@ -32,11 +29,10 @@ export class MappedattributesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource([]);
     for (const key of Array.from(Object.keys(this.attributes))) {
-      this.attributeDatabase.addItem(new Row(key as string));
+      this.dataSource.data.push(new Row(key as string));
     };
-
-    this.dataSource = new Datasource(this.attributeDatabase);
     this.changeDetector.detectChanges();
   }
 

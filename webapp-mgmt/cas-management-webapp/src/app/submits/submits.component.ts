@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {SubmitService} from './submits.service';
 import { Branch } from '../../domain/branch';
-import {Database, Datasource} from '../database';
-import {MatDialog, MatPaginator, MatSnackBar} from '@angular/material';
+import {MatDialog, MatPaginator, MatSnackBar, MatTableDataSource} from '@angular/material';
 import {RevertComponent} from '../revert/revert.component';
 import {Router} from '@angular/router';
 
@@ -15,8 +14,7 @@ import {Router} from '@angular/router';
 export class SubmitsComponent implements OnInit {
 
   displayedColumns = ['actions', 'status', 'name', 'message'];
-  database: Database<Branch> = new Database<Branch>();
-  dataSource: Datasource<Branch> | null;
+  dataSource: MatTableDataSource<Branch>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -29,12 +27,13 @@ export class SubmitsComponent implements OnInit {
               public router: Router) { }
 
   ngOnInit() {
-    this.dataSource = new Datasource(this.database, this.paginator);
+    this.dataSource = new MatTableDataSource([]);
+    this.dataSource.paginator = this.paginator;
     this.refresh();
   }
 
   refresh() {
-    this.service.getSubmits().then(resp => this.database.load(resp));
+    this.service.getSubmits().then(resp => this.dataSource.data = resp);
   }
 
 

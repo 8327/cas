@@ -3,9 +3,9 @@ import {Messages} from '../../messages';
 import {Data } from '../data';
 import {Util} from '../../util/util';
 import {DefaultRegisteredServiceProperty} from '../../../domain/property';
-import {MatAutocompleteSelectedEvent} from '@angular/material';
+import {MatAutocompleteSelectedEvent, MatTableDataSource} from '@angular/material';
 import {FormData} from '../../../domain/form-data';
-import {Database, Datasource, Row} from '../../database';
+import {Row} from '../row';
 
 @Component({
   selector: 'app-propertiespane',
@@ -14,8 +14,7 @@ import {Database, Datasource, Row} from '../../database';
 })
 export class PropertiespaneComponent implements OnInit {
   displayedColumns = ['source', 'mapped', 'delete'];
-  attributeDatabase = new Database<Row>();
-  dataSource: Datasource<Row> | null;
+  dataSource: MatTableDataSource<Row>;
   selectedRow: Row;
   formData: FormData;
 
@@ -26,18 +25,18 @@ export class PropertiespaneComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.dataSource = new MatTableDataSource([]);
     if (Util.isEmpty(this.data.service.properties)) {
       this.data.service.properties = new Map();
     }
     for (const p of Array.from(Object.keys(this.data.service.properties))) {
-      this.attributeDatabase.addItem(new Row(p));
+      this.dataSource.data.push(new Row(p));
     }
-    this.dataSource = new Datasource(this.attributeDatabase);
+
   }
 
   addRow() {
-    this.attributeDatabase.addItem(new Row(''));
+    this.dataSource.data.push(new Row(''));
     this.changeRef.detectChanges();
   }
 
@@ -53,7 +52,7 @@ export class PropertiespaneComponent implements OnInit {
 
   delete(row: Row) {
     delete this.data.service.properties[row.key as string];
-    this.attributeDatabase.removeItem(row);
+    this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
   }
 
   selection(val: MatAutocompleteSelectedEvent) {

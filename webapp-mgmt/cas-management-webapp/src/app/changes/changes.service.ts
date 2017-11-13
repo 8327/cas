@@ -28,7 +28,7 @@ export class ChangesService extends Service {
 
   viewDiff(oldId: String, newId: String): Promise<String> {
     const data = [oldId, newId];
-    return this.post<String>('viewDiff', data);
+    return this.postText('viewDiff', data);
   }
 
   getChange(change: String): Promise<AbstractRegisteredService> {

@@ -4,8 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DiffEntry} from '../../domain/diff-entry';
 import {Location} from '@angular/common';
 import {Messages} from '../messages';
-import {MatPaginator, MatSnackBar} from '@angular/material';
-import {Database, Datasource} from '../database';
+import {MatPaginator, MatSnackBar, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-changes',
@@ -15,8 +14,7 @@ import {Database, Datasource} from '../database';
 
 export class ChangesComponent implements OnInit {
     displayedColumns = ['actions', 'file', 'change'];
-    database: Database<DiffEntry> = new Database<DiffEntry>();
-    dataSource: Datasource<DiffEntry> | null;
+    dataSource: MatTableDataSource<DiffEntry>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -30,10 +28,13 @@ export class ChangesComponent implements OnInit {
                 public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.dataSource = new Datasource(this.database, this.paginator);
+    this.dataSource = new MatTableDataSource([]);
+    this.dataSource.paginator = this.paginator;
     this.route.data
       .subscribe((data: { resp: DiffEntry[]}) => {
-        this.database.load(data.resp);
+      setTimeout(() => {
+        this.dataSource.data = data.resp;
+      },10);
       });
   }
 

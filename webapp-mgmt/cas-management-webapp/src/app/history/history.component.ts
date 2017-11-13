@@ -4,10 +4,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HistoryService} from './history.service';
 import {History} from '../../domain/history';
 import {Location} from '@angular/common';
-import {DiffEntry} from '../../domain/diff-entry';
 import {ChangesService} from '../changes/changes.service';
-import {MatPaginator, MatSnackBar} from '@angular/material';
-import {Database, Datasource} from '../database';
+import {MatPaginator, MatSnackBar, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-history',
@@ -17,8 +15,7 @@ import {Database, Datasource} from '../database';
 export class HistoryComponent implements OnInit {
 
   displayedColumns = ['actions', 'message', 'committer', 'time'];
-  database: Database<History> = new Database<History>();
-  dataSource: Datasource<History> | null;
+  dataSource: MatTableDataSource<History>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -36,15 +33,18 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new Datasource(this.database, this.paginator);
+    this.dataSource = new MatTableDataSource([]);
+    this.dataSource.paginator = this.paginator;
     this.route.data
       .subscribe((data: { resp: History[]}) => {
-        this.database.load(data.resp);
         if (!data.resp) {
           this.snackBar.open(this.messages.management_services_status_listfail, 'dismiss', {
               duration: 5000
           });
         }
+        setTimeout(() => {
+          this.dataSource.data = data.resp;
+        },10);
       });
     this.route.params.subscribe((params) => this.fileName = params['fileName']);
   }
@@ -61,7 +61,7 @@ export class HistoryComponent implements OnInit {
   }
 
   viewDiff() {
-    this.router.navigate(['/diff', {oldId: this.database.data[0].id, newId: this.selectedItem.id}]);
+    this.router.navigate(['/diff', {oldId: this.dataSource.data[0].id, newId: this.selectedItem.id}]);
   }
 
   viewJSON() {

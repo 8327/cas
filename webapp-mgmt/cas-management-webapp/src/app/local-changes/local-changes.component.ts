@@ -1,13 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Messages} from '../messages';
 import {ControlsService} from '../controls/controls.service';
-import {Database, Datasource} from '../database';
-import {MatDialog, MatPaginator, MatSnackBar} from '@angular/material';
+import {MatDialog, MatPaginator, MatSnackBar, MatTableDataSource} from '@angular/material';
 import {Change} from '../../domain/change';
 import {RevertComponent} from '../revert/revert.component';
 import {ServiceViewService} from '../services/service.service';
 import {Router} from '@angular/router';
-import {DiffEntry} from '../../domain/diff-entry';
 import {ChangesService} from '../changes/changes.service';
 
 @Component({
@@ -20,8 +18,7 @@ export class LocalChangesComponent implements OnInit {
   selectedItem: Change;
   revertItem: Change;
   displayedColumns = ['actions', 'serviceName', 'changeType'];
-  database: Database<Change> = new Database<Change>();
-  datasource: Datasource<Change> | null;
+  datasource: MatTableDataSource<Change>;
 
   @ViewChild('paginator')
   paginator: MatPaginator;
@@ -35,12 +32,13 @@ export class LocalChangesComponent implements OnInit {
               public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.datasource = new Datasource(this.database, this.paginator);
+    this.datasource = new MatTableDataSource([]);
+    this.datasource.paginator = this.paginator;
     this.refresh();
   }
 
   refresh() {
-    this.controlsService.untracked().then(resp => this.database.load(resp ? resp : []));
+    this.controlsService.untracked().then(resp => this.datasource.data = resp ? resp : []);
   }
 
   openModalRevert() {
