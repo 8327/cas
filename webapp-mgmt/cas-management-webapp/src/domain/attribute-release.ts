@@ -1,8 +1,6 @@
 import {DefaultPrincipalAttributesRepository, PrincipalAttributesRepository} from './attribute-repo';
 import {RegisteredServiceAttributeFilter} from './attribute-filter';
-import {DefaultRegisteredServiceConsentPolicy, RegisteredServiceConsentPolicy} from './consent-policy';
-
-
+import {DefaultRegisteredServiceConsentPolicy, RegisteredServiceConsentPolicy} from './consent';
 
 export abstract class RegisteredServiceAttributeReleasePolicy {
   attributeFilter: RegisteredServiceAttributeFilter;
