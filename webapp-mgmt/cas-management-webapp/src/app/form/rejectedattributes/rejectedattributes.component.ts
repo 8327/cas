@@ -4,8 +4,7 @@ import {Data} from '../data';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import {MatTableDataSource} from '@angular/material';
-import {Row} from '../row';
+import {Row, RowDataSource} from '../row';
 
 @Component({
   selector: 'app-rejectedattributes',
@@ -15,7 +14,7 @@ import {Row} from '../row';
 export class RejectedattributesComponent implements OnInit {
 
   displayedColumns = ['source', 'mapped', 'delete'];
-  dataSource: MatTableDataSource<Row> | null;
+  dataSource: RowDataSource;
 
   @Input()
   attributes: Map<String, String[]>;
@@ -25,15 +24,15 @@ export class RejectedattributesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource([]);
+    const rows = [];
     for (const p of Array.from(Object.keys(this.attributes))) {
-      this.dataSource.data.push(new Row(p));
+      rows.push(new Row(p));
     }
-
+    this.dataSource = new RowDataSource(rows);
   }
 
   addRow() {
-    this.dataSource.data.push(new Row(''));
+    this.dataSource.addRow();
   }
 
   doChange(row: Row, val: string) {
@@ -43,9 +42,7 @@ export class RejectedattributesComponent implements OnInit {
   }
 
   delete(row: Row) {
-   delete this.attributes[row.key as string];
-   this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
+    delete this.attributes[row.key as string];
+    this.dataSource.removeRow(row);
   }
 }
-
-

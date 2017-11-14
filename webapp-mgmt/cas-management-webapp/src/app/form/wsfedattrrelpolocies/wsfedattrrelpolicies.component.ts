@@ -4,8 +4,7 @@ import {Messages} from '../../messages';
 import {Data} from '../data';
 import {WsFederationClaimsReleasePolicy} from '../../../domain/attribute-release';
 import {Util} from '../../util/util';
-import {MatTableDataSource} from '@angular/material';
-import {Row} from '../row';
+import {Row, RowDataSource} from '../row';
 
 
 @Component({
@@ -19,7 +18,7 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
   wsFedOnly: boolean;
 
   displayedColumns = ['source', 'mapped'];
-  dataSource: MatTableDataSource<Row>;
+  dataSource: RowDataSource;
 
 
   constructor(public messages: Messages,
@@ -29,8 +28,7 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
 
   ngOnInit() {
     const attrPolicy: WsFederationClaimsReleasePolicy = this.data.service.attributeReleasePolicy as WsFederationClaimsReleasePolicy;
-    this.dataSource = new MatTableDataSource([]);
-
+    const rows = [];
     if (Util.isEmpty(attrPolicy.allowedAttributes)) {
       attrPolicy.allowedAttributes = new Map();
     }
@@ -40,8 +38,9 @@ export class WsfedattrrelpoliciesComponent implements OnInit {
     });
 
     for (const key of Array.from(Object.keys(attrPolicy.allowedAttributes))) {
-      this.dataSource.data.push(new Row(key as string));
-    };
+      rows.push(new Row(key as string));
+    }
+    this.dataSource = new RowDataSource(rows);
   }
 
   isEmpty(data: any[]): boolean {

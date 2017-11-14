@@ -2,8 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {RegisteredServiceMappedRegexAttributeFilter} from '../../../../domain/attribute-filter';
 import {Data} from '../../data';
 import {Messages} from '../../../messages';
-import {MatTableDataSource} from '@angular/material';
-import {Row} from '../../row';
+import {Row, RowDataSource} from '../../row';
 
 @Component({
   selector: 'app-mapped',
@@ -11,12 +10,12 @@ import {Row} from '../../row';
   styleUrls: ['./mapped.component.css']
 })
 export class MappedComponent implements OnInit {
-    displayedColumns = ['source', 'mapped', 'delete'];
-    dataSource: MatTableDataSource<Row> | null;
-    formData;
+  displayedColumns = ['source', 'mapped', 'delete'];
+  dataSource: RowDataSource;
+  formData;
 
-    @Input('filter')
-    filter: RegisteredServiceMappedRegexAttributeFilter;
+  @Input('filter')
+  filter: RegisteredServiceMappedRegexAttributeFilter;
 
   constructor(public messages: Messages,
               public data: Data) {
@@ -24,28 +23,29 @@ export class MappedComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.dataSource = new MatTableDataSource([]);
-      if (this.filter.patterns) {
-          for (const p of Array.from(Object.keys(this.filter.patterns))) {
-              this.dataSource.data.push(new Row(p));
-          }
-      }
+    const rows = [];
+    if (this.filter.patterns) {
+        for (const p of Array.from(Object.keys(this.filter.patterns))) {
+            rows.push(new Row(p));
+        }
+    }
+    this.dataSource = new RowDataSource(rows);
   }
 
-    addRow() {
-        this.dataSource.data.push(new Row(''));
-    }
+  addRow() {
+    this.dataSource.addRow();
+  }
 
-    doChange(row: Row, val: string) {
-        console.log(row.key + ' : ' + val);
-        this.filter.patterns[val] = this.filter.patterns[row.key as string];
-        delete this.filter.patterns[row.key as string];
-        row.key = val;
-    }
+  doChange(row: Row, val: string) {
+    console.log(row.key + ' : ' + val);
+    this.filter.patterns[val] = this.filter.patterns[row.key as string];
+    delete this.filter.patterns[row.key as string];
+    row.key = val;
+  }
 
-    delete(row: Row) {
-        delete this.filter.patterns[row.key as string];
-        this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
-    }
+  delete(row: Row) {
+    delete this.filter.patterns[row.key as string];
+    this.dataSource.removeRow(row);
+  }
 
 }

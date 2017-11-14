@@ -5,8 +5,7 @@ import 'rxjs/add/operator/map';
 import {Data} from '../data';
 import {FormData} from '../../../domain/form-data';
 import {Messages} from '../../messages';
-import {MatTableDataSource} from '@angular/material';
-import {Row} from '../row';
+import {Row, RowDataSource} from '../row';
 
 @Component({
   selector: 'app-mappedattributes',
@@ -16,7 +15,7 @@ import {Row} from '../row';
 export class MappedattributesComponent implements OnInit {
   formData: FormData;
   displayedColumns = ['source', 'mapped'];
-  dataSource: MatTableDataSource<Row> | null;
+  dataSource: RowDataSource;
 
   @Input()
   attributes: Map<String, String[]>;
@@ -29,10 +28,11 @@ export class MappedattributesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource([]);
+    const rows = [];
     for (const key of Array.from(Object.keys(this.attributes))) {
-      this.dataSource.data.push(new Row(key as string));
+      rows.push(new Row(key as string));
     };
+    this.dataSource = new RowDataSource(rows);
     this.changeDetector.detectChanges();
   }
 

@@ -3,8 +3,7 @@ import {SurrogateRegisteredServiceAccessStrategy} from '../../../../domain/acces
 import {Messages} from '../../../messages';
 import {Data} from '../../data';
 import {Util} from '../../../util/util';
-import {Row} from '../../row';
-import {MatTableDataSource} from '@angular/material';
+import {Row, RowDataSource} from '../../row';
 
 @Component({
   selector: 'app-surrogate',
@@ -16,7 +15,7 @@ export class SurrogateComponent implements OnInit {
   accessStrategy: SurrogateRegisteredServiceAccessStrategy;
 
   displayedColumns = ['source', 'mapped', 'delete'];
-  dataSource: MatTableDataSource<Row>;
+  dataSource: RowDataSource;
 
   constructor(public messages: Messages,
               private data: Data) {
@@ -24,17 +23,18 @@ export class SurrogateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource([]);
+    const rows = [];
     if (Util.isEmpty(this.accessStrategy.surrogateRequiredAttributes)) {
       this.accessStrategy.surrogateRequiredAttributes = new Map();
     }
     for (const p of Array.from(Object.keys(this.accessStrategy.surrogateRequiredAttributes))) {
-      this.dataSource.data.push(new Row(p));
+      rows.push(new Row(p));
     }
+    this.dataSource = new RowDataSource(rows);
   }
 
   addRow() {
-    this.dataSource.data.push(new Row(''));
+    this.dataSource.addRow();
   }
 
   doChange(row: Row, val: string) {
@@ -45,7 +45,7 @@ export class SurrogateComponent implements OnInit {
 
   delete(row: Row) {
     delete this.accessStrategy.surrogateRequiredAttributes[row.key as string];
-    this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
+    this.dataSource.removeRow(row);
   }
 }
 

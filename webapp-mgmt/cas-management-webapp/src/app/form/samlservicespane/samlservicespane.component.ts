@@ -3,8 +3,7 @@ import {Messages} from '../../messages';
 import {SamlRegisteredService} from '../../../domain/saml-service';
 import {Data} from '../data';
 import {Util} from '../../util/util';
-import {MatTableDataSource} from '@angular/material';
-import {Row} from '../row';
+import {Row, RowDataSource} from '../row';
 
 @Component({
   selector: 'app-samlservicespane',
@@ -14,7 +13,7 @@ import {Row} from '../row';
 export class SamlservicespaneComponent implements OnInit {
 
   displayedColumns = ['source', 'mapped', 'delete'];
-  dataSource: MatTableDataSource<Row>;
+  dataSource: RowDataSource;
 
   type: String;
 
@@ -24,17 +23,18 @@ export class SamlservicespaneComponent implements OnInit {
 
   ngOnInit() {
     const service: SamlRegisteredService = this.data.service as SamlRegisteredService;
-    this.dataSource = new MatTableDataSource([]);
+    const rows = [];
     if (Util.isEmpty(service.attributeNameFormats)) {
       service.attributeNameFormats = new Map();
     }
     for (const p of Array.from(Object.keys(service.attributeNameFormats))) {
-      this.dataSource.data.push(new Row(p));
+      rows.push(new Row(p));
     }
+    this.dataSource = new RowDataSource(rows);
   }
 
   addRow() {
-    this.dataSource.data.push(new Row(''));
+    this.dataSource.addRow();
   }
 
   doChange(row: Row, val: string) {
@@ -47,7 +47,7 @@ export class SamlservicespaneComponent implements OnInit {
   delete(row: Row) {
     const service: SamlRegisteredService = this.data.service as SamlRegisteredService
     delete service.attributeNameFormats[row.key as string];
-    this.dataSource.data.splice(this.dataSource.data.indexOf(row), 1);
+    this.dataSource.removeRow(row);
   }
 }
 
