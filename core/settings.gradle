@@ -1,0 +1,5 @@
+if ( file('./settings-override.gradle').exists()) {
+    apply from: './settings-override.gradle'
+} else {
+    apply from: './settings-all.gradle'
+}

@@ -1,0 +1,2 @@
+include "docs:cas-server-documentation"
+include "docs:cas-server-documentation-swagger"

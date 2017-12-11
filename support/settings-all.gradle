@@ -1,0 +1,771 @@
+// Core Support projects
+include "support:cas-server-support-person-directory"
+include "support:cas-server-support-jdbc-drivers"
+include "support:cas-server-support-configuration"
+include "support:cas-server-support-geolocation"
+include "support:cas-server-support-ldap"
+include "support:cas-server-support-ldap-core"
+include "support:cas-server-support-trusted-mfa"
+include "support:cas-server-support-pac4j-core"
+include "support:cas-server-support-cookie"
+include "support:cas-server-support-reports"
+include "support:cas-server-support-themes"
+include "support:cas-server-support-throttle-core"
+include "support:cas-server-support-throttle"
+include "support:cas-server-support-validation"
+include "support:cas-server-support-actions"
+
+
+// OAuth Projects
+include "support:cas-server-support-oauth"
+include "support:cas-server-support-oauth-api"
+include "support:cas-server-support-oauth-core"
+include "support:cas-server-support-oauth-services"
+include "support:cas-server-support-oauth-webflow"
+include "support:cas-server-support-memcached-ticket-registry"
+include "support:cas-server-support-memcached-core"
+include "support:cas-server-support-json-service-registry"
+
+
+
+//OIDC Projects (requires OAuth projects)
+include "support:cas-server-support-oidc-core"
+include "support:cas-server-support-oidc-services"
+include "support:cas-server-support-oidc"
+
+
+
+// SAML Support
+include "support:cas-server-support-saml"
+include "support:cas-server-support-saml-core"
+
+
+
+// SAML IdP (Requires SAML)
+include "support:cas-server-support-saml-idp"
+include "support:cas-server-support-saml-mdui-core"
+include "support:cas-server-support-saml-idp-core"
+include "support:cas-server-support-json-service-registry"
+
+
+
+// SAML IdP - Mongo
+include "support:cas-server-support-saml-idp-metadata-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// SAML IdP - JPA
+include "support:cas-server-support-saml-idp-metadata-jpa"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// WS STS
+include "support:cas-server-support-ws-sts"
+include "support:cas-server-support-ws-idp-api"
+include "support:cas-server-support-saml-core"
+
+// WS IdP (Requires WS Sts)
+include "support:cas-server-support-ws-idp"
+
+
+
+// REST
+include "support:cas-server-support-rest"
+
+
+
+// REST - Tokens
+include "support:cas-server-support-token-core"
+include "support:cas-server-support-rest"
+ 
+
+
+// REST - X509
+include "support:cas-server-support-rest"
+include "support:cas-server-support-x509-core"
+ 
+
+
+// OpenID
+include "support:cas-server-support-openid"
+include "support:cas-server-support-openid-webflow"
+
+
+// Delegated Authentication
+include "support:cas-server-support-pac4j-webflow"
+include "support:cas-server-support-pac4j"
+include "support:cas-server-support-pac4j-core-clients"
+
+
+
+// ADFS (Requires SAML)
+include "support:cas-server-support-wsfederation"
+include "support:cas-server-support-wsfederation-webflow"
+
+
+
+// JDBC
+include "support:cas-server-support-jdbc"
+include "support:cas-server-support-jdbc-authentication"
+
+
+
+// X509
+include "support:cas-server-support-x509-webflow"
+include "support:cas-server-support-x509"
+include "support:cas-server-support-x509-core"
+include "support:cas-server-support-generic"
+
+
+
+// Radius
+include "support:cas-server-support-radius-core"
+include "support:cas-server-support-radius"
+
+
+
+// Radius MFA (requires Radius)
+include "support:cas-server-support-radius-mfa"
+include "support:cas-server-support-radius-core-mfa"
+
+
+
+// SPNEGO
+include "support:cas-server-support-spnego"
+include "support:cas-server-support-spnego-webflow"
+
+
+
+// Remote
+include "support:cas-server-support-generic"
+include "support:cas-server-support-generic-remote-webflow"
+
+
+
+// Trusted
+include "support:cas-server-support-trusted"
+include "support:cas-server-support-trusted-webflow"
+
+
+
+// Cassandra
+include "support:cas-server-support-cassandra-core"
+include "support:cas-server-support-cassandra-authentication"
+
+
+
+// Apache Fortress
+include "support:cas-server-support-fortress"
+
+
+
+// Apache Shiro
+include "suppport:cas-server-support-generic"
+
+
+
+// JWT Token
+include "support:cas-server-support-token-core"
+include "support:cas-server-support-token-authentication"
+include "support:cas-server-support-token-webflow"
+
+
+
+// JWT Tickets
+include "support:cas-server-support-token-tickets"
+
+
+
+// REST Authentication
+include "support:cas-server-support-rest-authentication"
+
+
+
+// AWS Cloud Auth
+include "support:cas-server-support-cloud-directory-authentication"
+
+
+
+// Couchbase Auth
+include "support:cas-server-support-couchbase-core"
+include "support:cas-server-support-couchbase-authentication"
+
+
+
+// Basic Auth
+include "support:cas-server-support-basic"
+
+
+
+// Digest Auth
+include "support:cas-server-support-digest-authentication"
+
+
+
+// Mongo Auth
+include "support:cas-server-support-mongo"
+
+
+
+// Pac4j Auth
+include "support:cas-server-support-pac4j-authentication"
+
+
+
+// Whitelist/BlackList
+include "support:cas-server-support-generic"
+
+
+
+// Overlay
+include "support:cas-server-support-bom"
+
+
+
+// Discovery end point
+include "support:cas-server-support-discovery-profile"
+
+
+
+// Boot Admin Client
+include "support:cas-server-support-bootadmin-client"
+
+
+
+// Metrics Support
+include "support:cas-server-support-metrics"
+
+
+
+// Audit - Mongo
+include "support:cas-server-support-mongo"
+include "support:cas-server-support-audit-mongo"
+
+
+
+// Audit - JDBC
+include "support:cas-server-support-jdbc"
+include "support:cas-server-support-audit-jdbc"
+
+
+
+// Events - Mongo
+include "support:cas-server-support-mongo-core"
+include "support:cas-server-support-events-mongo"
+
+
+// Events - JPA
+include "support:cas-server-support-events-jdbc"
+include "support:cas-server-support-events-jpa"
+
+
+
+// Events - Memory
+include "support:cas-server-support-events-memory"
+
+
+
+// Events - InfluxDb
+include "support:cas-server-support-influxdb-core"
+include "support:cas-server-support-events-influxdb"
+
+
+
+// Service Registry - RESTful
+include "support:cas-server-support-rest-service-registry"
+
+
+
+// Service Registry - YAML
+include "support:cas-server-support-yaml-service-registry"
+
+
+
+// Service Registry - Cosmos DB
+include "support:cas-server-support-cosmosdb-core"
+include "support:cas-server-support-cosmosdb-service-registry"
+
+
+
+// Service Registry - Dynamo DB
+include "support:cas-server-support-dynamodb-service-registry"
+include "support:cas-server-support-dynamodb-ticket-registry"
+
+
+
+// Eureka Service Discovery
+include "support:cas-server-support-eureka-client"
+
+
+
+// ElectroFence
+include "support:cas-server-support-geolocation"
+include "support:cas-server-support-geolocation-googlemaps"
+include "support:cas-server-support-events-memory"
+include "support:cas-server-support-electrofence"
+
+
+
+// Ticket Registry - JMS
+include "support:cas-server-support-jms-ticket-registry"
+
+
+
+// Monitor - JDBC
+include "support:cas-server-support-jdbc-monitor"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Service Registry - JPA
+include "support:cas-server-support-jpa-service-registry"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+include "support:cas-server-support-oauth-services"
+include "support:cas-server-support-saml-idp-core"
+
+
+// Ticket Registry - JPA
+include "support:cas-server-support-jpa-ticket-registry"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Geolocation - Google Maps
+include "support:cas-server-support-geolocation-googlemaps"
+
+
+
+// Geolocation - Maxmind
+include "support:cas-server-support-geolocation-maxmind"
+
+
+
+// Sentry Monitoring
+include "support:cas-server-support-sentry"
+
+
+
+// Service Registry - Streaming
+include "support:cas-server-support-service-registry-stream"
+
+
+
+// Service Registry - Hazelcast Streaming
+include "support:cas-server-support-service-registry-stream"
+include "support:cas-server-support-service-registry-stream-hazelcast"
+
+
+
+// Sleuth
+include "support:cas-server-support-sleuth"
+
+
+
+// Service Registry - LDAP
+include "support:cas-server-support-ldap"
+include "support:cas-server-support-ldap-core"
+include "support:cas-server-support-ldap-service-registry"
+include "support:cas-server-support-saml-idp-core"
+
+
+
+// LDAP Monitor
+include "support:cas-server-support-ldap-monitor"
+
+
+
+// Authentication - Interrupt
+include "support:cas-server-support-interrupt-api"
+include "support:cas-server-support-interrupt-core"
+include "support:cas-server-support-interrupt-webflow"
+
+
+
+// SMS - Twilio
+include "support:cas-server-support-sms-twilio"
+
+
+
+// SMS - Text Magic
+include "support:cas-server-support-sms-textmagic"
+
+
+
+// SMS - Clickatell
+include "support:cas-server-support-sms-clickatell"
+
+
+
+// SCIM
+include "support:cas-server-support-scim"
+
+
+
+// GUA
+include "support:cas-server-support-gua"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+include "support:cas-server-support-ldap-core"
+include "support:cas-server-support-actions"
+
+
+
+// Surrogate
+include "support:cas-server-support-surrogate-api"
+include "support:cas-server-support-surrogate-authentication"
+include "support:cas-server-support-surrogate-webflow"
+
+
+
+// Surrogate - LDAP
+include "support:cas-server-support-surrogate-authentication-ldap"
+
+
+
+// Surrogate - JDBC
+include "support:cas-server-support-surrogate-authentication-jdbc"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Surrogate - REST
+include "support:cas-server-support-surrogate-authentication-rest"
+
+
+
+// Trusted MFA - JDBC
+include "support:cas-server-support-trusted-mfa"
+include "support:cas-server-support-trusted-mfa-jdbc"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Trusted MFA - Mongo
+include "support:cas-server-support-trusted-mfa"
+include "support:cas-server-support-trusted-mfa-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// Trusted MFA - REST
+include "support:cas-server-support-trusted-mfa"
+include "support:cas-server-support-trusted-mfa-rest"
+
+
+// Monitor - Mongo
+include "support:cas-server-support-mongo-core"
+include "support:cas-server-support-mongo-monitor"
+
+
+
+// Ticket Registry - Mongo
+include "support:cas-server-support-mongo-ticket-registry"
+include "support:cas-server-support-mongo-core"
+
+
+
+// Azure KeyVault
+include "support:cas-server-support-azure-core"
+include "support:cas-server-support-azure"
+include "support:cas-server-support-azure-core"
+include "support:cas-server-support-otp-mfa"
+include "support:cas-server-support-trusted-mfa"
+
+
+
+// Google Authentication
+include "support:cas-server-support-gauth-core-mfa"
+include "support:cas-server-support-gauth-core"
+include "support:cas-server-support-gauth"
+include "support:cas-server-support-otp-mfa"
+include "support:cas-server-support-trusted-mfa"
+
+
+
+// Google Authentication - JPA
+include "support:cas-server-support-gauth-jpa"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Google Authentication - Mongo
+include "support:cas-server-support-gauth-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// Service Registry - Couchbase
+include "support:cas-server-support-couchbase-core"
+include "support:cas-server-support-couchbase-service-registry"
+
+
+
+// Ticket Registry - Couchbase
+include "support:cas-server-support-couchbase-core"
+include "support:cas-server-support-couchbase-ticket-registry"
+
+
+
+// Google Apps
+include "support:cas-server-support-saml-googleapps-core"
+include "support:cas-server-support-saml-googleapps"
+include "support:cas-server-support-saml-core"
+include "support:cas-server-support-saml"
+include "support:cas-server-support-validation"
+
+
+// SAML SP Integrations
+include "support:cas-server-support-saml-idp"
+include "support:cas-server-support-saml-core"
+include "support:cas-server-support-saml-idp-core"
+include "support:cas-server-support-saml-sp-integrations"
+
+
+
+// Shibboleth Support
+include "support:cas-server-support-saml-core"
+include "support:cas-server-support-trusted"
+include "support:cas-server-support-shibboleth"
+
+
+
+// Ticket Registry - Ignite
+include "support:cas-server-support-ignite-ticket-registry"
+
+
+
+// Ticket Registry - Infinispan
+include "support:cas-server-support-infinispan-ticket-registry"
+
+
+
+// Ticket Registry - Redis
+include "support:cas-server-support-redis-core"
+include "support:cas-server-support-redis-ticket-registry"
+
+
+// Service Registry - Redis
+include "support:cas-server-support-redis-core"
+include "support:cas-server-support-redis-service-registry"
+
+
+
+// U2F MFA
+include "support:cas-server-support-u2f-core"
+include "support:cas-server-support-u2f"
+include "support:cas-server-support-trusted-mfa"
+
+
+
+// U2F MFA - JPA
+include "support:cas-server-support-u2f-jpa"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// U2F MFA - Mongo
+include "support:cas-server-support-u2f-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// OTP MFA
+include "support:cas-server-support-otp-mfa"
+include "support:cas-server-support-trusted-mfa"
+
+
+
+// Grouper
+include "support:cas-server-support-grouper-core"
+include "support:cas-server-support-grouper"
+include "support:cas-server-support-json-service-registry"
+
+
+
+// Monitor - Memcached
+include "support:cas-server-support-memcached-monitor"
+include "support:cas-server-support-memcached-core"
+include "support:cas-server-support-memcached-ticket-registry"
+
+
+
+// Ticket Registry - EhCache
+include "support:cas-server-support-ehcache-ticket-registry"
+
+
+
+// Monitor - EhCache
+include "support:cas-server-support-ehcache-monitor"
+include "support:cas-server-support-ehcache-ticket-registry"
+
+
+
+// Shell
+include "support:cas-server-support-shell"
+include "support:cas-server-support-oauth-services"
+include "support:cas-server-support-oidc-services"
+include "support:cas-server-support-saml-idp-core"
+include "support:cas-server-support-ws-idp-api"
+
+
+
+// Captcha
+include "support:cas-server-support-captcha"
+
+
+
+// Consent
+include "support:cas-server-support-consent-webflow"
+include "support:cas-server-support-consent-api"
+include "support:cas-server-support-consent-core"
+include "support:cas-server-support-pac4j-core"
+
+
+
+// Consent - JDBC
+include "support:cas-server-support-consent-jdbc"
+include "support:cas-server-support-jdb-drivers"
+
+
+
+// Consent - LDAP
+include "support:cas-server-support-consent-ldap"
+include "support:cas-server-support-ldap"
+include "support:cas-server-support-ldap-core"
+
+
+
+// Consent - REST
+include "support:cas-server-support-consent-rest"
+
+
+
+// Consent - Mongo
+include "support:cas-server-support-consent-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// REST - Services
+include "support:cas-server-support-rest-services"
+
+
+
+// Yubikey MFA
+include "support:cas-server-support-yubikey-core"
+include "support:cas-server-support-yubikey-core-mfa"
+include "support:cas-server-support-yubikey"
+
+
+
+// Yubikey MFA - JPA
+include "support:cas-server-support-yubikey-jpa"
+include "support:cas-server-support-jpa-util"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Yubikey MFA - Mongo
+include "support:cas-server-support-yubikey-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// Duo MFA
+include "support:cas-server-support-duo-core-mfa"
+include "support:cas-server-support-duo-core"
+include "support:cas-server-support-duo"
+
+
+// Authy MFA
+include "support:cas-server-support-authy-core"
+include "support:cas-server-support-authy"
+
+
+
+// Swivel MFA
+include "support:cas-server-support-swivel-core"
+include "support:cas-server-support-swivel"
+include "support:cas-server-support-trusted-mfa"
+
+
+
+// Hazelcast Ticket Registry
+include "support:cas-server-support-hazelcast-core"
+include "support:cas-server-support-hazelcast-ticket-registry"
+
+
+
+// Monitor - Hazelcast
+include "support:cas-server-support-hazelcast-monitor"
+
+
+
+// Service Registry - Mongo
+include "support:cas-server-support-mongo-service-registry"
+
+
+
+// Password Management
+include "support:cas-server-support-pm"
+include "support:cas-server-support-pm-webflow"
+
+
+
+// Password Management - JDBC
+include "support:cas-server-support-pm-jdbc"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// Password Management - LDAP
+include "support:cas-server-support-pm-ldap"
+
+
+
+// Password Management - REST
+include "support:cas-server-support-pm"
+include "support:cas-server-support-pm-rest"
+
+
+
+// Throttle - JDBC
+include "support:cas-server-support-throttle-jdbc"
+
+
+
+// AUP
+include "support:cas-server-support-aup-core"
+include "support:cas-server-support-aup-webflow"
+include "support:cas-server-support-actions"
+
+
+
+// AUP - Mongo
+include "support:cas-server-support-aup-mongo"
+include "support:cas-server-support-mongo-core"
+
+
+
+// AUP - JDBC
+include "support:cas-server-support-aup-jdbc"
+include "support:cas-server-support-jdbc-drivers"
+
+
+
+// AUP - REST
+include "support:cas-server-support-aup-rest"
+
+
+
+// AUP - LDAP
+include "support:cas-server-support-aup-ldap"
