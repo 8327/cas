@@ -80,6 +80,20 @@ Load settings from an internal/external Git repository.
 
 The above configuration also applies to online git-based repositories such as Github, BitBucket, etc.
 
+### Consul
+
+Load settings from [HashiCorp's Consul](Service-Discovery-Guide-Consul.html).
+
+```properties
+# spring.cloud.consul.config.enabled=true
+# spring.cloud.consul.config.prefix=configuration
+# spring.cloud.consul.config.defaultContext=apps
+# spring.cloud.consul.config.profileSeparator=::
+
+# spring.cloud.consul.config.watch.delay=1000
+# spring.cloud.consul.config.watch.enabled=false
+```
+
 ### Vault
 
 Load settings from [HashiCorp's Vault](Configuration-Properties-Security.html).
@@ -103,6 +117,18 @@ Load settings from a MongoDb instance.
 
 ```properties
 # cas.spring.cloud.mongo.uri=mongodb://casuser:Mellon@ds135522.mlab.com:35522/jasigcas
+```
+
+### Azure KeyVault Secrets
+
+Load settings from Microsoft Azure's KeyVault instance.
+
+```properties
+# azure.keyvault.enabled=true
+# azure.keyvault.uri=put-your-azure-keyvault-uri-here
+# azure.keyvault.client-id=put-your-azure-client-id-here
+# azure.keyvault.client-key=put-your-azure-client-key-here
+# azure.keyvault.token-acquire-timeout-seconds=60
 ```
 
 ### ZooKeeper
@@ -630,7 +656,8 @@ If multiple attribute repository sources are defined, they are added into a list
 and their results are cached and merged.
 
 ```properties
-# cas.authn.attributeRepository.expireInMinutes=30
+# cas.authn.attributeRepository.expirationTime=30
+# cas.authn.attributeRepository.expirationTimeUnit=MINUTES
 # cas.authn.attributeRepository.maximumCacheSize=10000
 # cas.authn.attributeRepository.merger=REPLACE|ADD|MERGE
 ```
@@ -2124,11 +2151,11 @@ Multifacor authentication bypass settings for this provider are available [here]
 # cas.authn.mfa.u2f.cleaner.schedule.repeatInterval=PT60S
 ```
 
-#### FIDO U2F MongoDb
+### FIDO U2F MongoDb
 
  Configuration settings for this feature are available [here](Configuration-Properties-Common.html#mongodb-configuration) under the configuration key `cas.authn.mfa.u2f`.
  
-#### FIDO U2F JPA
+### FIDO U2F JPA
 
 Database settings for this feature are available [here](Configuration-Properties-Common.html#database-settings) under the configuration key `cas.authn.mfa.u2f.jpa`.
 
@@ -2293,49 +2320,52 @@ To learn more about this topic, [please review this guide](../integration/Config
 
 <div class="alert alert-warning"><strong>Remember</strong><p>SAML2 service provider integrations listed here simply attempt to automate CAS configuration based on known and documented integration guidelines and recipes provided by the service provider owned by the vendor. These recipes can change and break CAS over time.</p></div>
 
-| Service Provider              | Settings              | Configuration Key
-|-----------------------|-----------------|----------------------------------------------------------
-| Gitlab          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.gitlab`.
-| Dropbox          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.dropbox`.
-| TestShib          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.testShib`.
-| OpenAthens          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.openAthens`.
-| Egnyte          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.egnyte`.
-| EverBridge          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.everBridge`.
-| Simplicity          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.simplicity`.
-| Yuja          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.yuja`.
-| Simplicity          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.simplicity`.
-| New Relic          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.newRelic`.
-|  Sunshine State Education and Research Computing Alliance          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.sserca`.
-| CherWell          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.cherWell`.
-| FAMIS          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.famis`.
-| Bynder          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.bynder`.
-| Web Advisor          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.webAdvisor`.
-| Adobe Creative Cloud          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.adobeCloud`.
-| Bynder          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.bynder`.
-| Securing The Human          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.sansSth`.
-| Easy IEP          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.easyIep`.
-| Infinite Campus          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.infiniteCampus`.
-| Slack          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.slack`.
-| Zendesk          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.zendesk`.
-| Gartner          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.gartner`.
-| Arc GIS          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.arcGIS`.
-| Benefit Focus          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.benefitFocus`.
-| Office365          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.office365`.
-| SAManage          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.saManage`.
-| Salesforce          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.salesforce`.
-| Workday          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.workday`.
-| Academic Works          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.academicWorks`.
-| ZOOM          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.zoom`.
-| Evernote          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.evernote`.
-| Tableau          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.tableau`.
-| Asana          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.asana`.
-| Box          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.box`.
-| Service Now          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.serviceNow`.
-| Net Partner          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.netPartner`.
-| Webex          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations)      | `cas.samlSp.webex`.
-| InCommon          | [Click here](Configuration-Properties-Common.html#saml2-service-provider-integrations). Multiple entity ids can be specified to filter [the InCommon metadata](https://spaces.internet2.edu/display/InCFederation/Metadata+Aggregates).
-EntityIds can be regular expression patterns and are mapped to CAS' `serviceId` field in the registry.
-The signature location MUST BE the public key used to sign the metadata.      | `cas.samlSp.inCommon`.
+Configuration settings for all SAML2 service providers are [available here](Configuration-Properties-Common.html#saml2-service-provider-integrations).
+
+| Service Provider                       | Configuration Key | Attributes
+|---------------------------|----------------------------------------------------------
+| Gitlab               | `cas.samlSp.gitlab` | `last_name`,`first_name`,`name`
+| Hipchat               | `cas.samlSp.hipchat` | `last_name`,`first_name`,`title`
+| Dropbox               | `cas.samlSp.dropbox` | `mail`
+| TestShib               | `cas.samlSp.testShib` | `eduPersonPrincipalName`
+| OpenAthens               | `cas.samlSp.openAthens` | `email`, `eduPersonPrincipalName`
+| Egnyte               | `cas.samlSp.egnyte` | N/A
+| EverBridge               | `cas.samlSp.everBridge` | N/A
+| Simplicity               | `cas.samlSp.simplicity` | N/A
+| App Dynamics               | `cas.samlSp.appDynamics` | `User.OpenIDName`, `User.email`, `User.fullName`, `AccessControl`, `Groups-Membership`
+| Yuja               | `cas.samlSp.yuja` | N/A
+| Simplicity               | `cas.samlSp.simplicity` | N/A
+| New Relic               | `cas.samlSp.newRelic` | N/A
+| Sunshine State Education and Research Computing Alliance               | `cas.samlSp.sserca` | N/A
+| CherWell               | `cas.samlSp.cherWell` | N/A
+| FAMIS               | `cas.samlSp.famis` | N/A
+| Bynder               | `cas.samlSp.bynder` | N/A
+| Web Advisor               | `cas.samlSp.webAdvisor` | `uid`
+| Adobe Creative Cloud               | `cas.samlSp.adobeCloud` | `firstName`, `lastName`, `email`
+| Securing The Human               | `cas.samlSp.sansSth` | `firstName`, `lastName`, `scopedUserId`, `department`, `reference`, `email`
+| Easy IEP               | `cas.samlSp.easyIep` | `employeeId`
+| Infinite Campus               | `cas.samlSp.infiniteCampus` | `employeeId`
+| Slack               | `cas.samlSp.slack` | `User.Email`, `User.Username`, `first_name`, `last_name`, `employeeId`
+| Zendesk               | `cas.samlSp.zendesk` | `organization`, `tags`, `phone`, `role`, `email`
+| Gartner               | `cas.samlSp.gartner` | `urn:oid:2.5.4.42`, `urn:oid:2.5.4.4`, `urn:oid:0.9.2342.19200300.100.1.3`
+| Arc GIS               | `cas.samlSp.arcGIS` | `arcNameId`, `mail`, `givenName`
+| Benefit Focus               | `cas.samlSp.benefitFocus` | `benefitFocusUniqueId`
+| Office365               | `cas.samlSp.office365` | `IDPEmail`, `ImmutableID`, `scopedImmutableID`
+| SAManage               | `cas.samlSp.saManage` | `mail`
+| Salesforce               | `cas.samlSp.salesforce` | `eduPersonPrincipalName`
+| Workday               | `cas.samlSp.workday` | N/A
+| Academic Works               | `cas.samlSp.academicWorks` | `displayName`
+| ZOOM               | `cas.samlSp.zoom` | `mail`, `sn`, `givenName`
+| Evernote               | `cas.samlSp.evernote` | `email`
+| Tableau               | `cas.samlSp.tableau` | `username`
+| Asana               | `cas.samlSp.asana` | `email`
+| Box               | `cas.samlSp.box` | `email`, `firstName`, `lastName`
+| Service Now               | `cas.samlSp.serviceNow` | `eduPersonPrincipalName`
+| Net Partner               | `cas.samlSp.netPartner` | `studentId`
+| Webex               | `cas.samlSp.webex` | `firstName`, `lastName` 
+| InCommon        |  `cas.samlSp.inCommon` | `eduPersonPrincipalName`
+
+**Note**: For InCommon and other metadata aggregates, multiple entity ids can be specified to filter [the InCommon metadata](https://spaces.internet2.edu/display/InCFederation/Metadata+Aggregates). EntityIds can be regular expression patterns and are mapped to CAS' `serviceId` field in the registry. The signature location MUST BE the public key used to sign the metadata. 
 
 ## OpenID Connect
 
@@ -2383,6 +2413,31 @@ To learn more about this topic, [please review this guide](../integration/Delega
 # cas.authn.pac4j.name=
 ```
 
+The following external identity providers share [common blocks of settings](Configuration-Properties-Common.html#delegated-authentication-settings) under the listed configuration keys listed below:
+
+| Identity Provider                       | Configuration Key
+|---------------------------|----------------------------------------------------------
+| Twitter               | `cas.authn.pac4j.twitter`
+| Paypal               | `cas.authn.pac4j.paypal`
+| Wordpress               | `cas.authn.pac4j.wordpress`
+| Yahoo               | `cas.authn.pac4j.yahoo`
+| Orcid               | `cas.authn.pac4j.orcid`
+| Dropbox               | `cas.authn.pac4j.dropbox`
+| GitHub               | `cas.authn.pac4j.github`
+| Foursquare               | `cas.authn.pac4j.foursquare`
+| WindowsLive               | `cas.authn.pac4j.windowsLive`
+|  Google               | `cas.authn.pac4j.google`
+
+See below for other identity providers such as CAS, SAML2 and more.
+
+### Google
+
+In addition to the [common block of settings](Configuration-Properties-Common.html#delegated-authentication-settings) , the following properties are additionally supported, when delegating authentication to Google:
+
+```properties
+# cas.authn.pac4j.google.scope=EMAIL|PROFILE|EMAIL_AND_PROFILE
+```
+
 ### CAS
 
 Delegate authentication to an external CAS server.
@@ -2393,37 +2448,6 @@ Delegate authentication to an external CAS server.
 # (Optional) Friendly name for CAS, e.g. "This Organization" or "That Organization"
 # cas.authn.pac4j.cas[0].clientName=
 ```
-
-### Facebook
-
-Delegate authentication to Facebook. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.facebook`.
-
-```properties
-# cas.authn.pac4j.facebook.fields=
-# cas.authn.pac4j.facebook.scope=
-```
-
-### LinkedIn
-
-Delegate authentication to LinkedIn. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.linkedin`.
-
-```properties
-# cas.authn.pac4j.linkedIn.fields=
-# cas.authn.pac4j.linkedIn.scope=
-```
-
-### Twitter
-
-Delegate authentication to Twitter. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.twitter`.
-
-
-### Paypal
-
-Delegate authentication to Paypal. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.paypal`.
-
-### Wordpress
-
-Delegate authentication to Wordpress. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.wordpress`.
 
 ### OAuth20
 
@@ -2453,13 +2477,12 @@ Delegate authentication to an external OpenID Connect server. Common settings fo
 # cas.authn.pac4j.oidc[0].customParams.param1=value1
 ```
 
-### SAML
+### SAML2
 
 Delegate authentication to an external SAML2 IdP (do not use the `resource:` or `classpath:`
 prefixes for the `keystorePath` or `identityProviderMetadataPath` property).
 
 ```properties
-
 # Settings required for CAS SP metadata generation process
 # The keystore will be automatically generated by CAS with
 # keys required for the metadata generation and/or exchange.
@@ -2500,37 +2523,24 @@ prefixes for the `keystorePath` or `identityProviderMetadataPath` property).
 
 Examine the generated metadata after accessing the CAS login screen to ensure all ports and endpoints are correctly adjusted.  Finally, share the CAS SP metadata with the delegated IdP and register CAS as an authorized relying party.
 
-### Yahoo
+### Facebook
 
-Delegate authentication to Yahoo. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.yahoo`.
-
-### Orcid
-
-Delegate authentication to Orcid.  Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.orcid`.
-
-### Dropbox
-
-Delegate authentication to Dropbox.  Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.dropbox`.
-
-### GitHub
-
-Delegate authentication to GitHub.  Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.github`.
-
-### Foursquare
-
-Delegate authentication to Foursquare.  Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.foursquare`.
-
-### WindowsLive
-
-Delegate authentication to WindowsLive.  Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.windowsLive`.
-
-### Google
-
-Delegate authentication to Google.  Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.google`.
+Delegate authentication to Facebook. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.facebook`.
 
 ```properties
-# cas.authn.pac4j.google.scope=EMAIL|PROFILE|EMAIL_AND_PROFILE
+# cas.authn.pac4j.facebook.fields=
+# cas.authn.pac4j.facebook.scope=
 ```
+
+### LinkedIn
+
+Delegate authentication to LinkedIn. Common settings for this identity provider are available [here](Configuration-Properties-Common.html#delegated-authentication-settings) under the configuration key `cas.authn.pac4j.linkedin`.
+
+```properties
+# cas.authn.pac4j.linkedIn.fields=
+# cas.authn.pac4j.linkedIn.scope=
+```
+
 
 ## WS Federation
 
@@ -2685,7 +2695,7 @@ Control how audit messages are formatted.
 To learn more about this topic, [please review this guide](Audits.html).
 
 ```properties
-# cas.audit.auditFormat=DEFAULT
+# cas.audit.auditFormat=DEFAULT|JSON
 # cas.audit.ignoreAuditFailures=false
 # cas.audit.singlelineSeparator=|
 # cas.audit.useSingleLine=false
@@ -2824,7 +2834,11 @@ Control how CAS should respond and validate incoming HTTP requests.
 
 ```properties
 # cas.httpWebRequest.header.xframe=true
+# cas.httpWebRequest.header.xframeOptions=DENY
+
 # cas.httpWebRequest.header.xss=true
+# cas.httpWebRequest.header.xssOptions=1; mode=block
+
 # cas.httpWebRequest.header.hsts=true
 # cas.httpWebRequest.header.xcontent=true
 # cas.httpWebRequest.header.cache=true
@@ -2845,9 +2859,9 @@ Control how CAS should respond and validate incoming HTTP requests.
 # cas.httpWebRequest.onlyPostParams=username,password
 # cas.httpWebRequest.paramsToCheck=ticket,service,renew,gateway,warn,method,target,SAMLart,pgtUrl,pgt,pgtId,pgtIou,targetService,entityId,token
 
-spring.http.encoding.charset=UTF-8
-spring.http.encoding.enabled=true
-spring.http.encoding.force=true
+# spring.http.encoding.charset=UTF-8
+# spring.http.encoding.enabled=true
+# spring.http.encoding.force=true
 ```
 
 ## Http Client
@@ -3540,7 +3554,7 @@ To learn more about this topic, [please review this guide](../integration/Shibbo
 
 ## Eureka Service Discovery
 
-To learn more about this topic, [please review this guide](Service-Discovery-Guide.html).
+To learn more about this topic, [please review this guide](Service-Discovery-Guide-Eureka.html).
 
 ```properties
 # eureka.client.serviceUrl.defaultZone=${EUREKA_SERVER_HOST:http://localhost:8761}/eureka/
@@ -3551,6 +3565,24 @@ To learn more about this topic, [please review this guide](Service-Discovery-Gui
 # eureka.client.healthcheck.enabled=true
 
 # spring.cloud.config.discovery.enabled=false
+```
+
+## Consul Service Discovery
+
+To learn more about this topic, [please review this guide](Service-Discovery-Guide-Consul.html).
+
+```properties
+# spring.cloud.consul.port=8500
+# spring.cloud.consul.enabled=true
+# spring.cloud.consul.host=localhost
+
+# spring.cloud.consul.discovery.healthCheckPath=${management.context-path}/health
+# spring.cloud.consul.discovery.healthCheckPath=15s
+# spring.cloud.consul.discovery.instanceId=${spring.application.name}:${random.value}
+
+# spring.cloud.consul.discovery.heartbeat.enabled=true
+# spring.cloud.consul.discovery.heartbeat.ttlValue=60
+# spring.cloud.consul.discovery.heartbeat.ttlUnit=s
 ```
 
 ## Provisioning

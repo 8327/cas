@@ -159,6 +159,7 @@ layout: null
         *   [Papertrail](/$version/installation/Logging-Papertrail.html)
         *   [Sentry](/$version/installation/Logging-Sentry.html)
         *   [SysLog](/$version/installation/Logging-SysLog.html)
+        *   [Splunk](/$version/installation/Logging-Splunk.html)
     *   [Audits](/$version/installation/Audits.html)
     
 * [Monitoring & Statistics](#monitoroverview)
@@ -188,6 +189,8 @@ layout: null
         *   [Locust](/$version/planning/Performance-Testing-Locust.html)
         *   [JMeter](/$version/planning/Performance-Testing-JMeter.html)
     *   [Service Discovery](/$version/installation/Service-Discovery-Guide.html)
+        *  [Eureka Service Discovery](/$version/installation/Service-Discovery-Guide-Eureka.html)
+        *  [Consul Service Discovery](/$version/installation/Service-Discovery-Guide-Consul.html)
     
 * [Protocols](#protocols)
     *   [Overview](/$version/protocol/Protocol-Overview.html)

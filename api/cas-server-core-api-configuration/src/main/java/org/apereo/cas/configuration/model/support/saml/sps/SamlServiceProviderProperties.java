@@ -21,7 +21,7 @@ public class SamlServiceProviderProperties implements Serializable {
     /**
      * {@code eduPersonPrincipalName} attribute to release.
      */
-    private static final String PRINCIPAL_NAME = "eduPersonPrincipalName";
+    private static final String EDU_PERSON_PRINCIPAL_NAME = "eduPersonPrincipalName";
     private static final long serialVersionUID = 8602328179113963081L;
 
     /**
@@ -176,7 +176,11 @@ public class SamlServiceProviderProperties implements Serializable {
      * Settings related to Symplicity acting as a SAML service provider.
      */
     private Symplicity symplicity = new Symplicity();
-
+    /**
+     * Settings related to AppDynamics acting as a SAML service provider.
+     */
+    private AppDynamics appDynamics = new AppDynamics();
+    
     public Gitlab getGitlab() {
         return gitlab;
     }
@@ -481,6 +485,14 @@ public class SamlServiceProviderProperties implements Serializable {
         this.hipchat = hipchat;
     }
 
+    public AppDynamics getAppDynamics() {
+        return appDynamics;
+    }
+
+    public void setAppDynamics(final AppDynamics appDynamics) {
+        this.appDynamics = appDynamics;
+    }
+
     @RequiresModule(name = "cas-server-support-saml-sp-integrations")
     public static class Dropbox extends AbstractSamlSPProperties {
         private static final long serialVersionUID = -8275173711355379058L;
@@ -528,7 +540,7 @@ public class SamlServiceProviderProperties implements Serializable {
         private static final long serialVersionUID = 4685484530782109454L;
 
         public Salesforce() {
-            setAttributes(Stream.of("mail", PRINCIPAL_NAME).collect(Collectors.toList()));
+            setAttributes(Stream.of("mail", EDU_PERSON_PRINCIPAL_NAME).collect(Collectors.toList()));
         }
     }
 
@@ -537,7 +549,7 @@ public class SamlServiceProviderProperties implements Serializable {
         private static final long serialVersionUID = 4329681021653966734L;
 
         public ServiceNow() {
-            setAttributes(Stream.of(PRINCIPAL_NAME).collect(Collectors.toList()));
+            setAttributes(Stream.of(EDU_PERSON_PRINCIPAL_NAME).collect(Collectors.toList()));
         }
     }
 
@@ -598,7 +610,7 @@ public class SamlServiceProviderProperties implements Serializable {
 
         public TestShib() {
             //setMetadata("http://www.testshib.org/metadata/testshib-providers.xml");
-            setAttributes(Stream.of(PRINCIPAL_NAME).collect(Collectors.toList()));
+            setAttributes(Stream.of(EDU_PERSON_PRINCIPAL_NAME).collect(Collectors.toList()));
         }
     }
 
@@ -629,7 +641,7 @@ public class SamlServiceProviderProperties implements Serializable {
         public InCommon() {
             //setMetadata("http://md.incommon.org/InCommon/InCommon-metadata.xml");
             //setSignatureLocation("/etc/cas/config/certs/inc-md-cert.pem");
-            setAttributes(Stream.of(PRINCIPAL_NAME).collect(Collectors.toList()));
+            setAttributes(Stream.of(EDU_PERSON_PRINCIPAL_NAME).collect(Collectors.toList()));
         }
     }
 
@@ -659,7 +671,7 @@ public class SamlServiceProviderProperties implements Serializable {
 
         public OpenAthens() {
             //setMetadata("https://login.openathens.net/saml/2/metadata-sp");
-            setAttributes(Stream.of(PRINCIPAL_NAME, EMAIL).collect(Collectors.toList()));
+            setAttributes(Stream.of(EDU_PERSON_PRINCIPAL_NAME, EMAIL).collect(Collectors.toList()));
         }
     }
 
@@ -831,4 +843,14 @@ public class SamlServiceProviderProperties implements Serializable {
             setAttributes(EMAIL, "last_name", "first_name", "title");
         }
     }
+
+    @RequiresModule(name = "cas-server-support-saml-sp-integrations")
+    public static class AppDynamics extends AbstractSamlSPProperties {
+        private static final long serialVersionUID = -6141931806328699054L;
+
+        public AppDynamics() {
+            setAttributes("User.OpenIDName", "User.email", "User.fullName", "AccessControl", "Groups-Membership");
+        }
+    }
+    
 }

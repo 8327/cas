@@ -21,6 +21,19 @@ ext.libraries = [
                     force = true
                 }
         ],
+        azuread                  : [
+                dependencies.create("com.microsoft.azure:adal4j:$azureActiveDirectoryVersion") {
+                    exclude(group: "org.slf4j", module: "slf4j-api")
+                    force = true
+                }
+        ],
+        
+        splunklogging : [
+                dependencies.create("com.splunk.logging:splunk-library-javalogging:$splunkLoggingVersion") {
+                    exclude(group: "org.slf4j", module: "slf4j-api")
+                    force = true
+                }
+        ],
         oshi                    : [
                 dependencies.create("com.github.oshi:oshi-core:$oshiVersion") {
                     exclude(group: "org.slf4j", module: "slf4j-api")
@@ -1128,6 +1141,11 @@ ext.libraries = [
                     force = true
                 }
         ],
+        azurekeyvault : [
+                dependencies.create("com.microsoft.azure:azure-keyvault-secrets-spring-boot-starter:$azureKeyVaultSecretsVersion") {
+                    exclude(group: "org.slf4j", module: "slf4j-api")
+                }
+        ],
         cosmosdb                : [
                 dependencies.create("com.microsoft.azure:azure-documentdb:$cosmosdbVersion") {
                     exclude(group: "org.slf4j", module: "slf4j-api")
@@ -2190,6 +2208,11 @@ ext.libraries = [
                     exclude(group: "com.google.guava", module: "guava")
                     exclude(group: "org.slf4j", module: "slf4j-api")
                     force = true
+                }
+        ],
+        springcloudconsul : [
+                dependencies.create("org.springframework.cloud:spring-cloud-starter-consul-all:$springCloudConsulVersion") {
+                    exclude(group: "org.slf4j", module: "slf4j-api")
                 }
         ],
         springcloudeureka       : [
