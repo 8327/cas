@@ -163,7 +163,7 @@ include "support:cas-server-support-fortress"
 
 
 // Apache Shiro
-include "suppport:cas-server-support-generic"
+include "support:cas-server-support-generic"
 
 
 
@@ -478,7 +478,8 @@ include "support:cas-server-support-azure-core"
 include "support:cas-server-support-otp-mfa"
 include "support:cas-server-support-trusted-mfa"
 
-
+// Azure AD Authentication
+include "support:cas-server-support-azure-ad-authentication"
 
 // Google Authentication
 include "support:cas-server-support-gauth-core-mfa"
@@ -769,3 +770,6 @@ include "support:cas-server-support-aup-rest"
 
 // AUP - LDAP
 include "support:cas-server-support-aup-ldap"
+
+// Consul Client
+include "support:cas-server-support-consul-client"
